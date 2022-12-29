@@ -1,0 +1,55 @@
+{
+  "name": "ruoyi",
+  "version": "3.6.0",
+  "description": "若依管理系统",
+  "author": "若依",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build:prod": "vite build",
+    "build:stage": "vite build --mode staging",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/y_project/RuoYi-Cloud.git"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "1.1.4",
+    "@mahdikhashan/vue3-click-outside": "^0.1.2",
+    "@vue/runtime-core": "3.2.37",
+    "@vueuse/core": "8.5.0",
+    "axios": "0.26.1",
+    "echarts": "5.3.2",
+    "echarts-gl": "^2.0.9",
+    "element-plus": "2.2.15",
+    "file-saver": "2.0.5",
+    "fuse.js": "6.5.3",
+    "js-base64": "3.7.3",
+    "js-cookie": "3.0.1",
+    "jsencrypt": "3.2.1",
+    "lodash": "^4.17.21",
+    "mermaid": "9.2.2",
+    "moment": "^2.29.4",
+    "nprogress": "0.2.0",
+    "pinia": "2.0.14",
+    "svg-pan-zoom": "3.6.1",
+    "vue": "3.2.37",
+    "vue-cropper": "1.0.3",
+    "vue-router": "4.0.14",
+    "vue3-eventbus": "^2.0.0",
+    "vue3-treeselect": "^0.1.10"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "2.3.3",
+    "@vue/compiler-sfc": "3.2.36",
+    "postcss-px-to-viewport": "^1.1.1",
+    "sass": "1.52.1",
+    "unplugin-auto-import": "0.8.5",
+    "vite": "2.9.14",
+    "vite-plugin-compression": "0.5.1",
+    "vite-plugin-svg-icons": "2.0.1",
+    "vite-plugin-vue-setup-extend": "0.4.0",
+    "vue-demi": "^0.13.11"
+  }
+}
