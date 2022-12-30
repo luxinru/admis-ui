@@ -32,6 +32,7 @@
 
         <div class="paging">
           <el-pagination
+            v-if="type !== 2"
             layout="prev, pager, next"
             :total="total"
             :page-size="20"
@@ -90,136 +91,225 @@
       </template>
 
       <template v-if="type === 2">
-        <section class="table_container">
-          <table border="1" style="z-index: 3">
-            <thead>
-              <tr>
-                <th>省(直辖市)</th>
-                <th>市</th>
-                <th>区(县)</th>
-                <th>房屋结构</th>
-                <th>建筑面积</th>
-                <th>地上总层</th>
-                <th>地下总层</th>
-                <th>备注</th>
-                <th>资产编号</th>
-                <th>资产名称</th>
-                <th>计量单位</th>
-                <th>贮存数量</th>
-                <th>投产日期</th>
-                <th>规格型号</th>
-                <th>原值</th>
-                <th>净值</th>
-                <th>已提减值准备</th>
-                <th>宗地编码</th>
-                <th>权属状况</th>
-                <th>使用权资产</th>
-                <th>土地面积</th>
-                <th>土地证号</th>
-                <th>土地使用人</th>
-                <th>房产证号</th>
-                <th>证载所有权人</th>
-                <th>办证情况</th>
-                <th>记账是否相符</th>
-                <th>无证原因</th>
-                <th>管理单位情况</th>
-                <th>使用单位情况</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr class="td" v-for="(item, index) in list" :key="index">
-                <td :title="item.province || '-'">
-                  {{ item.province || "-" }}
-                </td>
-                <td :title="item.city || '-'">
-                  {{ item.city || "-" }}
-                </td>
-                <td :title="item.county || '-'">
-                  {{ item.county || "-" }}
-                </td>
-                <td :title="item.houseStructureName || '-'">
-                  {{ item.houseStructureName || "-" }}
-                </td>
-                <td :title="item.buildArea || '-'">
-                  {{ item.buildArea || "-" }}
-                </td>
-                <td :title="item.floorsUpName || '-'">
-                  {{ item.floorsUpName || "-" }}
-                </td>
-                <td :title="item.floorsDownName || '-'">
-                  {{ item.floorsDownName || "-" }}
-                </td>
-                <td :title="item.remark || '-'">
-                  {{ item.remark || "-" }}
-                </td>
-                <td :title="item.assetsCode || '-'">
-                  {{ item.assetsCode || "-" }}
-                </td>
-                <td :title="item.assetsName || '-'">
-                  {{ item.assetsName || "-" }}
-                </td>
-                <td :title="item.unitCodeName || '-'">
-                  {{ item.unitCodeName || "-" }}
-                </td>
-                <td>{{ "-" }}</td>
-                <td :title="item.operateDate || '-'">
-                  {{ item.operateDate || "-" }}
-                </td>
-                <td :title="item.assetsStandard || '-'">
-                  {{ item.assetsStandard || "-" }}
-                </td>
-                <td :title="item.originalValue || '-'">
-                  {{ item.originalValue || "-" }}
-                </td>
-                <td :title="item.nowValue || '-'">
-                  {{ item.nowValue || "-" }}
-                </td>
-                <td :title="item.devalueValue || '-'">
-                  {{ item.devalueValue || "-" }}
-                </td>
-                <td :title="item.parcelCode || '-'">
-                  {{ item.parcelCode || "-" }}
-                </td>
-                <td :title="item.ownershipConditionName || '-'">
-                  {{ item.ownershipConditionName || "-" }}
-                </td>
-                <td :title="item.usedrightTypeName || '-'">
-                  {{ item.usedrightTypeName || "-" }}
-                </td>
-                <td :title="item.landArea || '-'">
-                  {{ item.landArea || "-" }}
-                </td>
-                <td :title="item.landCertificateNo || '-'">
-                  {{ item.landCertificateNo || "-" }}
-                </td>
-                <td :title="item.landUsedHolder || '-'">
-                  {{ item.landUsedHolder || "-" }}
-                </td>
-                <td :title="item.houseCertificateNo || '-'">
-                  {{ item.houseCertificateNo || "-" }}
-                </td>
-                <td :title="item.certificateHolder || '-'">
-                  {{ item.certificateHolder || "-" }}
-                </td>
-                <td :title="item.certificateHandlingName || '-'">
-                  {{ item.certificateHandlingName || "-" }}
-                </td>
-                <td :title="item.bookkeeping || '-'">
-                  {{ item.bookkeeping || "-" }}
-                </td>
-                <td :title="item.noCertificateReason || '-'">
-                  {{ item.noCertificateReason || "-" }}
-                </td>
-                <td :title="item.managerDepartThreeName || '-'">
-                  {{ item.managerDepartThreeName || "-" }}
-                </td>
-                <td :title="item.usedDepartThreeName || '-'">
-                  {{ item.usedDepartThreeName || "-" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <section
+          class="table_container"
+          :style="{
+            width: '100%',
+            'overflow': 'hidden',
+            'border': '1px solid rgba(57, 158, 233, 0.2)'
+          }"
+        >
+          <div class="details">
+            <div class="item">
+              <span class="label"> 省(直辖市) </span>
+              <span class="value" title="四川省">
+                <!-- {{ item.province || "-" }} -->
+                四川省
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 市 </span>
+              <span class="value" title="遂宁市">
+                <!-- {{ item.city || "-" }} -->
+                遂宁市
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 区(县) </span>
+              <span class="value" title="船山区">
+                <!-- {{ item.county || "-" }} -->
+                船山区
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 房屋结构 </span>
+              <span class="value" title="钢混">
+                <!-- {{ item.houseStructureName || "-" }} -->
+                钢混
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 建筑面积 </span>
+              <span class="value" title="2308㎡">
+                <!-- {{ item.buildArea || "-" }} -->
+                2308㎡
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 地上总层 </span>
+              <span class="value" :title="'-'">
+                <!-- {{ item.floorsUpName || "-" }} -->
+                -
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 地下总层 </span>
+              <span class="value" :title="'-'">
+                <!-- {{ item.floorsDownName || "-" }} -->
+                -
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 备注 </span>
+              <span class="value" :title="'0'">
+                <!-- {{ item.remark || "-" }} -->
+                0
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 资产编号 </span>
+              <span class="value" title="101000011464">
+                <!-- {{ item.assetsCode || "-" }} -->
+                101000011464
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 资产名称 </span>
+              <span class="value" title="二井沟通讯站房屋">
+                <!-- {{ item.assetsName || "-" }} -->
+                二井沟通讯站房屋
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 计量单位 </span>
+              <span class="value" title="台">
+                <!-- {{ item.unitCodeName || "-" }} -->
+                台
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 贮存数量 </span>
+              <span class="value" :title="'-'">
+                {{ "-" }}
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 投产日期 </span>
+              <span class="value" title="1990-12-30">
+                <!-- {{ item.operateDate || "-" }} -->
+                1990-12-30
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 规格型号 </span>
+              <span class="value" title="混合结枸(4栋)">
+                <!-- {{ item.assetsStandard || "-" }} -->
+                混合结枸(4栋)
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 原值 </span>
+              <span class="value" title="2992877.13">
+                <!-- {{ item.originalValue || "-" }} -->
+                2992877.13
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 净值 </span>
+              <span class="value" title="1699307.43">
+                <!-- {{ item.nowValue || "-" }} -->
+                1699307.43
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 已提减值准备 </span>
+              <span class="value" title="1549663.57">
+                <!-- {{ item.devalueValue || "-" }} -->
+                1549663.57
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 宗地编码 </span>
+              <span class="value" title="010616015">
+                <!-- {{ item.parcelCode || "-" }} -->
+                010616015
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 权属状况 </span>
+              <span class="value" title="土地登记">
+                <!-- {{ item.ownershipConditionName || "-" }} -->
+                土地登记
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 使用权资产 </span>
+              <span class="value" title="划拨">
+                <!-- {{ item.usedrightTypeName || "-" }} -->
+                划拨
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 土地面积 </span>
+              <span class="value" title="4935.7">
+                <!-- {{ item.landArea || "-" }} -->
+                4935.7
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 土地证号 </span>
+              <span class="value" title="川国用（96）018572号">
+                <!-- {{ item.landCertificateNo || "-" }} -->
+                川国用（96）018572号
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 土地使用人 </span>
+              <span class="value" title="川中油气公司（通信公司）">
+                <!-- {{ item.landUsedHolder || "-" }} -->
+                川中油气公司（通信公司）
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 房产证号 </span>
+              <span class="value" :title="'-'">
+                <!-- {{ item.houseCertificateNo || "-" }} -->
+                -
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 证载所有权人 </span>
+              <span class="value" :title="'-'">
+                <!-- {{ item.certificateHolder || "-" }} -->
+                -
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 办证情况 </span>
+              <span class="value" :title="'无法办理'">
+                <!-- {{ item.certificateHandlingName || "-" }} -->
+                无法办理
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 记账是否相符 </span>
+              <span class="value" :title="'否'">
+                <!-- {{ item.bookkeeping || "-" }} -->
+                否
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 无证原因 </span>
+              <span class="value" title="单位自行修建无地方建设批文">
+                <!-- {{ item.noCertificateReason || "-" }} -->
+                单位自行修建无地方建设批文
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 管理单位情况 </span>
+              <span class="value" title="四川石油管理局/矿服/川中公管中心">
+                <!-- {{ item.managerDepartThreeName || "-" }} -->
+                四川石油管理局/矿服/川中公管中心
+              </span>
+            </div>
+            <div class="item">
+              <span class="label"> 使用单位情况 </span>
+              <span class="value" title="四川石油管理局/矿服/川中公管中心">
+                <!-- {{ item.usedDepartThreeName || "-" }} -->
+                四川石油管理局/矿服/川中公管中心
+              </span>
+            </div>
+          </div>
         </section>
       </template>
 
@@ -376,7 +466,7 @@ export default {
         pageNum: 1,
         pageSize: 20,
       },
-      total: 0
+      total: 0,
     };
   },
 
@@ -390,7 +480,6 @@ export default {
   },
 
   methods: {
-
     async onTypeClick(value) {
       this.type = value;
 
@@ -408,13 +497,14 @@ export default {
           this.total = total1 || 0;
           break;
         case 2:
-          const { rows: rows4, total: total4 } = await fetchVisualList({
-            houseCode: house.id,
-            pageNum: this.page.pageNum,
-            pageSize: this.page.pageSize,
-          });
-          this.list = rows4 || [];
-          this.total = total4 || 0;
+          // todo 不请求接口，后续客户自己调整
+          // const { rows: rows4, total: total4 } = await fetchVisualList({
+          //   houseCode: house.id,
+          //   pageNum: this.page.pageNum,
+          //   pageSize: this.page.pageSize,
+          // });
+          // this.list = rows4 || [];
+          // this.total = total4 || 0;
           break;
         case 3:
           const { rows: rows5, total: total5 } = await fetchListFilesByKeyCode({
@@ -695,6 +785,49 @@ export default {
             &:nth-child(2n) {
               background-color: rgba(51, 133, 238, 0.1);
             }
+          }
+        }
+      }
+
+      .details {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-row-gap: 16px;
+        // grid-column-gap: 16px;
+        padding: 24px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        .item {
+          display: flex;
+          align-items: center;
+
+          .label {
+            width: 90px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #91ccff;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &::after {
+              content: "：";
+            }
+          }
+
+          .value {
+            flex: 1 0;
+            color: rgba(255, 255, 255, 1);
+            margin-right: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin-left: 10px;
           }
         }
       }

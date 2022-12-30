@@ -19,7 +19,7 @@
         :key="index"
         @click="onSearchItemClick(item)"
       >
-        {{ item.actualName }}
+        {{ item.assetsName }}
       </div>
     </div>
   </div>
@@ -51,14 +51,17 @@ export default {
 
     showHouseList() {
       return this.houseList.filter(
-        (item) => item.actualName.indexOf(this.value) > -1
+        (item) =>
+          item.assetsName.indexOf(this.value) > -1 ||
+          item.assetsCode.indexOf(this.value) > -1 ||
+          item.departCode.indexOf(this.value) > -1
       );
     },
   },
 
   methods: {
     onSearchItemClick(item) {
-      this.value = item.actualName;
+      this.value = item.assetsName;
       localStorage.setItem("currentHouse", JSON.stringify(item));
       bus.emit("onTopbarClick", 1);
       // bus.emit("onTopbarClick", 2); //todo
