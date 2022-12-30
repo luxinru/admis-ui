@@ -1,10 +1,25 @@
 <template>
   <div class="basic_info_root">
-    <ProductionValueInfo/>
+    <ProductionValueInfo />
 
     <HousingInfo />
 
     <RentalInfo />
+
+    <img
+      v-if="!isClose"
+      class="closeImg"
+      src="@/assets/images/screen/left1.png"
+      alt=""
+      @click="onCloseClick(true)"
+    />
+    <img
+      v-else
+      class="closeImg"
+      src="@/assets/images/screen/right1.png"
+      alt=""
+      @click="onCloseClick(false)"
+    />
   </div>
 </template>
 
@@ -30,6 +45,7 @@ export default {
       now: 0,
       acc: 0,
       currentDepart: {},
+      isClose: false,
     };
   },
 
@@ -57,6 +73,11 @@ export default {
       });
       bus.emit("fetchBasicStatsFun", data);
     },
+
+    onCloseClick (value) {
+      this.isClose = value
+      bus.emit('onLeftCloseClick', value)
+    }
   },
 };
 </script>
@@ -67,6 +88,16 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  .closeImg {
+    position: absolute;
+    width: 24px;
+    height: 83px;
+    right: -27px;
+    cursor: pointer;
+  }
 }
 </style>

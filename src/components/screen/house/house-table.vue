@@ -1,12 +1,5 @@
 <template>
   <div class="house_table_root">
-    <img
-      class="close"
-      src="@/assets/images/screen/close.png"
-      alt=""
-      @click="onClose"
-    />
-
     <section class="title">
       <img class="bac" src="@/assets/images/screen/title-2.png" alt="" />
       <span class="name">房屋明细信息</span>
@@ -49,303 +42,315 @@
       </div>
 
       <template v-if="type === 1">
-        <table border="1" style="z-index: 3">
-          <thead>
-            <tr>
-              <th>房屋名称</th>
-              <th>使用单位</th>
-              <th>原值</th>
-              <th>净值</th>
-              <th>折旧</th>
-              <th>使用性质</th>
-              <th>实际用途</th>
-              <th>使用状态</th>
-            </tr>
-          </thead>
+        <section class="table_container">
+          <table border="1" style="z-index: 3">
+            <thead>
+              <tr>
+                <th>房屋名称</th>
+                <th>使用单位</th>
+                <th>原值</th>
+                <th>净值</th>
+                <th>折旧</th>
+                <th>使用性质</th>
+                <th>实际用途</th>
+                <th>使用状态</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr class="td" v-for="(item, index) in list" :key="index">
-              <td :title="item.assetsName || '-'">
-                {{ item.assetsName || "-" }}
-              </td>
-              <td :title="item.usedDepartThreeName || '-'">
-                {{ item.usedDepartThreeName || "-" }}
-              </td>
-              <td :title="item.originalValue || '-'">
-                {{ item.originalValue || "-" }}
-              </td>
-              <td :title="item.nowValue || '-'">{{ item.nowValue || "-" }}</td>
-              <td :title="item.addDepreciate || '-'">
-                {{ item.addDepreciate || "-" }}
-              </td>
-              <td :title="item.usedNatureName || '-'">
-                {{ item.usedNatureName || "-" }}
-              </td>
-              <td :title="item.actualUsedName || '-'">
-                {{ item.actualUsedName || "-" }}
-              </td>
-              <td :title="item.usedStateName || '-'">
-                {{ item.usedStateName || "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="td" v-for="(item, index) in list" :key="index">
+                <td :title="item.assetsName || '-'">
+                  {{ item.assetsName || "-" }}
+                </td>
+                <td :title="item.usedDepartThreeName || '-'">
+                  {{ item.usedDepartThreeName || "-" }}
+                </td>
+                <td :title="item.originalValue || '-'">
+                  {{ item.originalValue || "-" }}
+                </td>
+                <td :title="item.nowValue || '-'">
+                  {{ item.nowValue || "-" }}
+                </td>
+                <td :title="item.addDepreciate || '-'">
+                  {{ item.addDepreciate || "-" }}
+                </td>
+                <td :title="item.usedNatureName || '-'">
+                  {{ item.usedNatureName || "-" }}
+                </td>
+                <td :title="item.actualUsedName || '-'">
+                  {{ item.actualUsedName || "-" }}
+                </td>
+                <td :title="item.usedStateName || '-'">
+                  {{ item.usedStateName || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </template>
 
       <template v-if="type === 2">
-        <table border="1" style="z-index: 3">
-          <thead>
-            <tr>
-              <th>省(直辖市)</th>
-              <th>市</th>
-              <th>区(县)</th>
-              <th>房屋结构</th>
-              <th>建筑面积</th>
-              <th>地上总层</th>
-              <th>地下总层</th>
-              <th>备注</th>
-              <th>资产编号</th>
-              <th>资产名称</th>
-              <th>计量单位</th>
-              <th>贮存数量</th>
-              <th>投产日期</th>
-              <th>规格型号</th>
-              <th>原值</th>
-              <th>净值</th>
-              <th>已提减值准备</th>
-              <th>宗地编码</th>
-              <th>权属状况</th>
-              <th>使用权资产</th>
-              <th>土地面积</th>
-              <th>土地证号</th>
-              <th>土地使用人</th>
-              <th>房产证号</th>
-              <th>证载所有权人</th>
-              <th>办证情况</th>
-              <th>记账是否相符</th>
-              <th>无证原因</th>
-              <th>管理单位情况</th>
-              <th>使用单位情况</th>
-            </tr>
-          </thead>
+        <section class="table_container">
+          <table border="1" style="z-index: 3">
+            <thead>
+              <tr>
+                <th>省(直辖市)</th>
+                <th>市</th>
+                <th>区(县)</th>
+                <th>房屋结构</th>
+                <th>建筑面积</th>
+                <th>地上总层</th>
+                <th>地下总层</th>
+                <th>备注</th>
+                <th>资产编号</th>
+                <th>资产名称</th>
+                <th>计量单位</th>
+                <th>贮存数量</th>
+                <th>投产日期</th>
+                <th>规格型号</th>
+                <th>原值</th>
+                <th>净值</th>
+                <th>已提减值准备</th>
+                <th>宗地编码</th>
+                <th>权属状况</th>
+                <th>使用权资产</th>
+                <th>土地面积</th>
+                <th>土地证号</th>
+                <th>土地使用人</th>
+                <th>房产证号</th>
+                <th>证载所有权人</th>
+                <th>办证情况</th>
+                <th>记账是否相符</th>
+                <th>无证原因</th>
+                <th>管理单位情况</th>
+                <th>使用单位情况</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr class="td" v-for="(item, index) in list" :key="index">
-              <td :title="item.province || '-'">
-                {{ item.province || "-" }}
-              </td>
-              <td :title="item.city || '-'">
-                {{ item.city || "-" }}
-              </td>
-              <td :title="item.county || '-'">
-                {{ item.county || "-" }}
-              </td>
-              <td :title="item.houseStructureName || '-'">
-                {{ item.houseStructureName || "-" }}
-              </td>
-              <td :title="item.buildArea || '-'">
-                {{ item.buildArea || "-" }}
-              </td>
-              <td :title="item.floorsUpName || '-'">
-                {{ item.floorsUpName || "-" }}
-              </td>
-              <td :title="item.floorsDownName || '-'">
-                {{ item.floorsDownName || "-" }}
-              </td>
-              <td :title="item.remark || '-'">
-                {{ item.remark || "-" }}
-              </td>
-              <td :title="item.assetsCode || '-'">
-                {{ item.assetsCode || "-" }}
-              </td>
-              <td :title="item.assetsName || '-'">
-                {{ item.assetsName || "-" }}
-              </td>
-              <td :title="item.unitCodeName || '-'">
-                {{ item.unitCodeName || "-" }}
-              </td>
-              <td>{{ "-" }}</td>
-              <td :title="item.operateDate || '-'">
-                {{ item.operateDate || "-" }}
-              </td>
-              <td :title="item.assetsStandard || '-'">
-                {{ item.assetsStandard || "-" }}
-              </td>
-              <td :title="item.originalValue || '-'">
-                {{ item.originalValue || "-" }}
-              </td>
-              <td :title="item.nowValue || '-'">
-                {{ item.nowValue || "-" }}
-              </td>
-              <td :title="item.devalueValue || '-'">
-                {{ item.devalueValue || "-" }}
-              </td>
-              <td :title="item.parcelCode || '-'">
-                {{ item.parcelCode || "-" }}
-              </td>
-              <td :title="item.ownershipConditionName || '-'">
-                {{ item.ownershipConditionName || "-" }}
-              </td>
-              <td :title="item.usedrightTypeName || '-'">
-                {{ item.usedrightTypeName || "-" }}
-              </td>
-              <td :title="item.landArea || '-'">
-                {{ item.landArea || "-" }}
-              </td>
-              <td :title="item.landCertificateNo || '-'">
-                {{ item.landCertificateNo || "-" }}
-              </td>
-              <td :title="item.landUsedHolder || '-'">
-                {{ item.landUsedHolder || "-" }}
-              </td>
-              <td :title="item.houseCertificateNo || '-'">
-                {{ item.houseCertificateNo || "-" }}
-              </td>
-              <td :title="item.certificateHolder || '-'">
-                {{ item.certificateHolder || "-" }}
-              </td>
-              <td :title="item.certificateHandlingName || '-'">
-                {{ item.certificateHandlingName || "-" }}
-              </td>
-              <td :title="item.bookkeeping || '-'">
-                {{ item.bookkeeping || "-" }}
-              </td>
-              <td :title="item.noCertificateReason || '-'">
-                {{ item.noCertificateReason || "-" }}
-              </td>
-              <td :title="item.managerDepartThreeName || '-'">
-                {{ item.managerDepartThreeName || "-" }}
-              </td>
-              <td :title="item.usedDepartThreeName || '-'">
-                {{ item.usedDepartThreeName || "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="td" v-for="(item, index) in list" :key="index">
+                <td :title="item.province || '-'">
+                  {{ item.province || "-" }}
+                </td>
+                <td :title="item.city || '-'">
+                  {{ item.city || "-" }}
+                </td>
+                <td :title="item.county || '-'">
+                  {{ item.county || "-" }}
+                </td>
+                <td :title="item.houseStructureName || '-'">
+                  {{ item.houseStructureName || "-" }}
+                </td>
+                <td :title="item.buildArea || '-'">
+                  {{ item.buildArea || "-" }}
+                </td>
+                <td :title="item.floorsUpName || '-'">
+                  {{ item.floorsUpName || "-" }}
+                </td>
+                <td :title="item.floorsDownName || '-'">
+                  {{ item.floorsDownName || "-" }}
+                </td>
+                <td :title="item.remark || '-'">
+                  {{ item.remark || "-" }}
+                </td>
+                <td :title="item.assetsCode || '-'">
+                  {{ item.assetsCode || "-" }}
+                </td>
+                <td :title="item.assetsName || '-'">
+                  {{ item.assetsName || "-" }}
+                </td>
+                <td :title="item.unitCodeName || '-'">
+                  {{ item.unitCodeName || "-" }}
+                </td>
+                <td>{{ "-" }}</td>
+                <td :title="item.operateDate || '-'">
+                  {{ item.operateDate || "-" }}
+                </td>
+                <td :title="item.assetsStandard || '-'">
+                  {{ item.assetsStandard || "-" }}
+                </td>
+                <td :title="item.originalValue || '-'">
+                  {{ item.originalValue || "-" }}
+                </td>
+                <td :title="item.nowValue || '-'">
+                  {{ item.nowValue || "-" }}
+                </td>
+                <td :title="item.devalueValue || '-'">
+                  {{ item.devalueValue || "-" }}
+                </td>
+                <td :title="item.parcelCode || '-'">
+                  {{ item.parcelCode || "-" }}
+                </td>
+                <td :title="item.ownershipConditionName || '-'">
+                  {{ item.ownershipConditionName || "-" }}
+                </td>
+                <td :title="item.usedrightTypeName || '-'">
+                  {{ item.usedrightTypeName || "-" }}
+                </td>
+                <td :title="item.landArea || '-'">
+                  {{ item.landArea || "-" }}
+                </td>
+                <td :title="item.landCertificateNo || '-'">
+                  {{ item.landCertificateNo || "-" }}
+                </td>
+                <td :title="item.landUsedHolder || '-'">
+                  {{ item.landUsedHolder || "-" }}
+                </td>
+                <td :title="item.houseCertificateNo || '-'">
+                  {{ item.houseCertificateNo || "-" }}
+                </td>
+                <td :title="item.certificateHolder || '-'">
+                  {{ item.certificateHolder || "-" }}
+                </td>
+                <td :title="item.certificateHandlingName || '-'">
+                  {{ item.certificateHandlingName || "-" }}
+                </td>
+                <td :title="item.bookkeeping || '-'">
+                  {{ item.bookkeeping || "-" }}
+                </td>
+                <td :title="item.noCertificateReason || '-'">
+                  {{ item.noCertificateReason || "-" }}
+                </td>
+                <td :title="item.managerDepartThreeName || '-'">
+                  {{ item.managerDepartThreeName || "-" }}
+                </td>
+                <td :title="item.usedDepartThreeName || '-'">
+                  {{ item.usedDepartThreeName || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </template>
 
       <template v-if="type === 3">
-        <table border="1" style="z-index: 3">
-          <thead>
-            <tr>
-              <th style="width: 500px">档案名称</th>
-              <th>档案类型</th>
-              <th>关联业务</th>
-            </tr>
-          </thead>
+        <section class="table_container">
+          <table border="1" style="z-index: 3">
+            <thead>
+              <tr>
+                <th style="width: 500px">档案名称</th>
+                <th>档案类型</th>
+                <th>关联业务</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr class="td" v-for="(item, index) in list" :key="index">
-              <td
-                :title="item.fileName || '-'"
-                style="width: 500px; cursor: pointer; color: #91ccff"
-                @click="onDownload(item)"
-              >
-                {{ item.fileName || "-" }}
-              </td>
-              <td :title="item.fileType || '-'">
-                {{ item.fileType || "-" }}
-              </td>
-              <td :title="item.busType || '-'">
-                {{ item.busType || "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="td" v-for="(item, index) in list" :key="index">
+                <td
+                  :title="item.fileName || '-'"
+                  style="width: 500px; cursor: pointer; color: #91ccff"
+                  @click="onDownload(item)"
+                >
+                  {{ item.fileName || "-" }}
+                </td>
+                <td :title="item.fileType || '-'">
+                  {{ item.fileType || "-" }}
+                </td>
+                <td :title="item.busType || '-'">
+                  {{ item.busType || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </template>
 
       <template v-if="type === 4">
-        <table border="1" style="z-index: 3">
-          <thead>
-            <tr>
-              <th>合同编号</th>
-              <th>合同名称</th>
-              <th>资产编码</th>
-              <th>资产名称</th>
-              <th>履行开始日期</th>
-              <th>履行结束日期</th>
-              <th>承租方单位名称</th>
-              <th>租赁金额（不含税）</th>
-            </tr>
-          </thead>
+        <section class="table_container">
+          <table border="1" style="z-index: 3">
+            <thead>
+              <tr>
+                <th>合同编号</th>
+                <th>合同名称</th>
+                <th>资产编码</th>
+                <th>资产名称</th>
+                <th>履行开始日期</th>
+                <th>履行结束日期</th>
+                <th>承租方单位名称</th>
+                <th>租赁金额（不含税）</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr class="td" v-for="(item, index) in list" :key="index">
-              <td :title="item.contractCode || '-'">
-                {{ item.contractCode || "-" }}
-              </td>
-              <td :title="item.contracName || '-'">
-                {{ item.contracName || "-" }}
-              </td>
-              <td :title="item.assetsCode || '-'">
-                {{ item.assetsCode || "-" }}
-              </td>
-              <td :title="item.assetsName || '-'">
-                {{ item.assetsName || "-" }}
-              </td>
-              <td :title="item.performStartDate || '-'">
-                {{ item.performStartDate || "-" }}
-              </td>
-              <td :title="item.performEndDate || '-'">
-                {{ item.performEndDate || "-" }}
-              </td>
-              <td :title="item.rentDepartName || '-'">
-                {{ item.rentDepartName || "-" }}
-              </td>
-              <td :title="item.rentMoney || '-'">
-                {{ item.rentMoney || "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="td" v-for="(item, index) in list" :key="index">
+                <td :title="item.contractCode || '-'">
+                  {{ item.contractCode || "-" }}
+                </td>
+                <td :title="item.contracName || '-'">
+                  {{ item.contracName || "-" }}
+                </td>
+                <td :title="item.assetsCode || '-'">
+                  {{ item.assetsCode || "-" }}
+                </td>
+                <td :title="item.assetsName || '-'">
+                  {{ item.assetsName || "-" }}
+                </td>
+                <td :title="item.performStartDate || '-'">
+                  {{ item.performStartDate || "-" }}
+                </td>
+                <td :title="item.performEndDate || '-'">
+                  {{ item.performEndDate || "-" }}
+                </td>
+                <td :title="item.rentDepartName || '-'">
+                  {{ item.rentDepartName || "-" }}
+                </td>
+                <td :title="item.rentMoney || '-'">
+                  {{ item.rentMoney || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </template>
 
       <template v-if="type === 5">
-        <table border="1" style="z-index: 3">
-          <thead>
-            <tr>
-              <th>合同编号</th>
-              <th>合同名称</th>
-              <th>资产编码</th>
-              <th>资产名称</th>
-              <th>开工时间</th>
-              <th>完工时间</th>
-              <th>合同金额</th>
-              <th>工程进度</th>
-              <th>结算金额</th>
-            </tr>
-          </thead>
+        <section class="table_container">
+          <table border="1" style="z-index: 3">
+            <thead>
+              <tr>
+                <th>合同编号</th>
+                <th>合同名称</th>
+                <th>资产编码</th>
+                <th>资产名称</th>
+                <th>开工时间</th>
+                <th>完工时间</th>
+                <th>合同金额</th>
+                <th>工程进度</th>
+                <th>结算金额</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr class="td" v-for="(item, index) in list" :key="index">
-              <td :title="item.contractCode || '-'">
-                {{ item.contractCode || "-" }}
-              </td>
-              <td :title="item.contracName || '-'">
-                {{ item.contracName || "-" }}
-              </td>
-              <td :title="item.assetsCode || '-'">
-                {{ item.assetsCode || "-" }}
-              </td>
-              <td :title="item.assetsName || '-'">
-                {{ item.assetsName || "-" }}
-              </td>
-              <td :title="item.startDate || '-'">
-                {{ item.startDate || "-" }}
-              </td>
-              <td :title="item.endDate || '-'">{{ item.endDate || "-" }}</td>
-              <td :title="item.contracMoney || '-'">
-                {{ item.contracMoney || "-" }}
-              </td>
-              <td :title="item.projectProgress || '-'">
-                {{ item.projectProgress || "-" }}
-              </td>
-              <td :title="item.settleMoney || '-'">
-                {{ item.settleMoney || "-" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr class="td" v-for="(item, index) in list" :key="index">
+                <td :title="item.contractCode || '-'">
+                  {{ item.contractCode || "-" }}
+                </td>
+                <td :title="item.contracName || '-'">
+                  {{ item.contracName || "-" }}
+                </td>
+                <td :title="item.assetsCode || '-'">
+                  {{ item.assetsCode || "-" }}
+                </td>
+                <td :title="item.assetsName || '-'">
+                  {{ item.assetsName || "-" }}
+                </td>
+                <td :title="item.startDate || '-'">
+                  {{ item.startDate || "-" }}
+                </td>
+                <td :title="item.endDate || '-'">{{ item.endDate || "-" }}</td>
+                <td :title="item.contracMoney || '-'">
+                  {{ item.contracMoney || "-" }}
+                </td>
+                <td :title="item.projectProgress || '-'">
+                  {{ item.projectProgress || "-" }}
+                </td>
+                <td :title="item.settleMoney || '-'">
+                  {{ item.settleMoney || "-" }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </template>
     </section>
   </div>
@@ -371,7 +376,7 @@ export default {
         pageNum: 1,
         pageSize: 20,
       },
-      total: 0,
+      total: 0
     };
   },
 
@@ -385,6 +390,7 @@ export default {
   },
 
   methods: {
+
     async onTypeClick(value) {
       this.type = value;
 
@@ -462,10 +468,6 @@ export default {
       this.page.pageNum = value;
       this.onTypeClick(this.type);
     },
-
-    onClose() {
-      bus.emit("onHouseTableOperate", false);
-    },
   },
 };
 </script>
@@ -521,15 +523,9 @@ export default {
   border-radius: 6px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
-
-  .close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 24px;
-    z-index: 1;
-  }
 
   .title {
     position: absolute;
@@ -588,8 +584,8 @@ export default {
     height: calc(100% - 62px);
     display: flex;
     flex-direction: column;
-    margin-top: 62px;
-    padding: 16px 13px 24px 29px;
+    margin-top: 42px;
+    padding: 16px 24px 0;
     box-sizing: border-box;
 
     .tabs {
@@ -637,65 +633,68 @@ export default {
       }
     }
 
-    table {
+    .table_container {
       width: 100%;
       flex: 1 0;
-      border: 1px solid rgba(57, 158, 233, 0.2);
-      border-collapse: collapse;
-      display: flex;
-      flex-direction: column;
-      overflow-x: scroll;
-      overflow-y: hidden;
-      tr {
+      overflow: scroll;
+      table {
         width: max-content;
-        height: 34px;
+        height: max-content;
+        min-width: 100%;
+        min-height: 100%;
+        border: 1px solid rgba(57, 158, 233, 0.2);
+        border-collapse: collapse;
         display: flex;
-        align-items: center;
-        th {
-          width: 200px;
+        flex-direction: column;
+        tr {
+          width: 100%;
           height: 34px;
-          font-size: 14px;
-          font-family: Microsoft YaHei;
-          font-weight: 400;
-          color: #91ccff;
-          text-align: center;
-          line-height: 34px;
-          border: 1px solid rgba(57, 158, 233, 0.2);
+          display: flex;
+          align-items: center;
+          th {
+            width: 200px;
+            height: 34px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #91ccff;
+            text-align: center;
+            line-height: 34px;
+            border: 1px solid rgba(57, 158, 233, 0.2);
+            background-color: #153456;
+          }
+          td {
+            width: 200px;
+            height: 34px;
+            font-size: 14px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #ffffff;
+            text-align: center;
+            line-height: 34px;
+            border: 1px solid rgba(57, 158, 233, 0.2);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 0 10px;
+            box-sizing: border-box;
+            text-align: center;
+          }
+        }
+
+        thead {
+          width: 100%;
           background-color: #153456;
         }
-        td {
-          width: 200px;
-          height: 34px;
-          font-size: 14px;
-          font-family: Microsoft YaHei;
-          font-weight: 400;
-          color: #ffffff;
-          text-align: center;
-          line-height: 34px;
-          border: 1px solid rgba(57, 158, 233, 0.2);
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          padding: 0 10px;
-          box-sizing: border-box;
-          text-align: center;
-        }
-      }
 
-      thead {
-        width: 100%;
-        background-color: #153456;
-      }
-
-      tbody {
-        min-width: 100%;
-        width: max-content;
-        flex: 1 0;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        tr {
-          &:nth-child(2n) {
-            background-color: rgba(51, 133, 238, 0.1);
+        tbody {
+          width: 100%;
+          width: 100%;
+          flex: 1 0;
+          tr {
+            &:nth-child(2n) {
+              background-color: rgba(51, 133, 238, 0.1);
+            }
           }
         }
       }

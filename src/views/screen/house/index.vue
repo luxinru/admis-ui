@@ -6,13 +6,18 @@
 
     <img class="top" src="@/assets/images/screen/on.png" alt="" />
     <img
-      v-if="type === 1"
+      v-if="type === 1 && !isRightClose"
       class="right"
       src="@/assets/images/screen/right.png"
       alt=""
     />
     <img class="bottom" src="@/assets/images/screen/Under.png" alt="" />
-    <img class="left" src="@/assets/images/screen/left.png" alt="" />
+    <img
+      class="left"
+      v-if="!isLeftClose"
+      src="@/assets/images/screen/left.png"
+      alt=""
+    />
 
     <div class="top_img">
       <img src="@/assets/images/screen/top.png" alt="" />
@@ -52,15 +57,23 @@
         <SearchInput />
       </section>
 
-      <section class="left_part">
+      <section class="left_part" :class="{ left_close: isLeftClose }">
         <BasicInfo />
       </section>
 
-      <section class="right_part" v-if="type === 1">
+      <section
+        class="right_part"
+        v-if="type === 1"
+        :class="{ left_close: isRightClose }"
+      >
         <AdvancedInfo />
       </section>
 
-      <section v-if="type === 2 && isShowHouseImgs" class="house_imgs">
+      <section
+        v-if="type === 2 && isShowHouseImgs"
+        class="house_imgs"
+        :class="{ left51: isLeftClose }"
+      >
         <HouseImgs />
       </section>
 
@@ -68,8 +81,27 @@
         <HouseInfo />
       </section>
 
-      <section v-if="type === 2" id="house_table" class="house_table">
-        <HouseTable v-if="isShowHouseTable" />
+      <section
+        v-if="type === 2"
+        id="house_table"
+        class="house_table"
+        :class="{ house_close: isTableClose, left51: isLeftClose }"
+      >
+        <img
+          v-if="!isTableClose"
+          class="closeImg"
+          src="@/assets/images/screen/upper1.png"
+          alt=""
+          @click="onTableCloseClick(true)"
+        />
+        <img
+          v-else
+          class="closeImg"
+          src="@/assets/images/screen/under1.png"
+          alt=""
+          @click="onTableCloseClick(false)"
+        />
+        <HouseTable />
       </section>
 
       <section class="modal" v-if="isShowModal">
@@ -112,24 +144,26 @@ export default {
       type: 1,
       isShowHouseInfo: false,
       isShowHouseImgs: false,
-      isShowHouseTable: false,
       isLoading: false,
+      isLeftClose: false,
+      isRightClose: false,
+      isTableClose: false,
     };
   },
 
   watch: {
     type: {
-      handler (newVal) {
+      handler(newVal) {
         if (newVal === 1) {
           localStorage.removeItem("currentHouse");
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   created() {
-    const self = this
+    const self = this;
     bus.on("onModalClose", () => {
       self.isShowModal = false;
     });
@@ -164,12 +198,16 @@ export default {
       self.isShowHouseImgs = show;
     });
 
-    bus.on("onHouseTableOperate", (show) => {
-      self.isShowHouseTable = show;
-    });
-
     bus.on("onDepartChange", () => {
       self.isLoading = true;
+    });
+
+    bus.on("onLeftCloseClick", (value) => {
+      self.isLeftClose = value;
+    });
+
+    bus.on("onRightCloseClick", (value) => {
+      self.isRightClose = value;
     });
   },
 
@@ -182,6 +220,12 @@ export default {
   beforeUnmount() {
     localStorage.removeItem("currentHouse");
     localStorage.removeItem("currentDepart");
+  },
+
+  methods: {
+    onTableCloseClick(value) {
+      this.isTableClose = value;
+    },
   },
 };
 </script>
@@ -370,12 +414,16 @@ export default {
     bottom: 65px;
   }
 
+  .left_close {
+    width: 0;
+  }
+
   .house_imgs {
     position: absolute;
     width: 435px;
     height: 42.68518%;
     top: 189px;
-    left: 507px;
+    left: 470px;
   }
 
   .house_info {
@@ -388,11 +436,29 @@ export default {
 
   .house_table {
     position: absolute;
-    width: 1402px;
     margin-top: 5px;
     bottom: 63px;
+    left: 470px;
     right: 51px;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .closeImg {
+      position: absolute;
+      width: 83px;
+      height: 24px;
+      top: -27px;
+      cursor: pointer;
+    }
+  }
+
+  .house_close {
+    height: 0 !important;
+  }
+
+  .left51 {
+    left: 51px;
   }
 
   .modal {

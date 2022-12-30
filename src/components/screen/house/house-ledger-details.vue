@@ -65,6 +65,9 @@
                       '房屋总量',
                       '房屋分类占比',
                       '房屋取得情况',
+                      '出租总收入',
+                      '租金增长率',
+                      '租金收入占比',
                     ].indexOf(type) > -1
                   "
                 >
@@ -72,14 +75,6 @@
                 </p>
                 <p v-if="['房屋面积'].indexOf(type) > -1">
                   {{ item.landArea }}
-                </p>
-                <p
-                  v-if="
-                    ['出租总收入', '租金增长率', '租金收入占比'].indexOf(type) >
-                    -1
-                  "
-                >
-                  {{ item.rentMoney }}
                 </p>
               </div>
             </div>
@@ -143,179 +138,181 @@
         </div>
 
         <div class="list">
-          <table
-            v-if="
-              ['出租总收入', '租金收入占比', '租金增长率'].indexOf(type) > -1
-            "
-          >
-            <thead>
-              <tr>
-                <th>资产编码</th>
-                <th>资产类型</th>
-                <th>
-                  资产名称
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  资产类别编码
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  租赁期实际开始日期
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  预计租赁终止日
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>承租方单位类型</th>
-                <th>承租方单位</th>
-                <th>租赁金额</th>
-              </tr>
-            </thead>
+          <section class="table_container">
+            <table
+              v-if="
+                ['出租总收入', '租金收入占比', '租金增长率'].indexOf(type) > -1
+              "
+            >
+              <thead>
+                <tr>
+                  <th>资产编码</th>
+                  <th>资产类型</th>
+                  <th>
+                    资产名称
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    资产类别编码
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    租赁期实际开始日期
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    预计租赁终止日
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>承租方单位类型</th>
+                  <th>承租方单位</th>
+                  <th>租赁金额</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              <tr v-for="(item, index) in list" :key="index">
-                <td :title="item.assetsCode || '-'">
-                  {{ item.assetsCode || "-" }}
-                </td>
-                <td :title="item.assetsType || '-'">
-                  {{ item.assetsType || "-" }}
-                </td>
-                <td :title="item.assetsName || '-'">
-                  {{ item.assetsName || "-" }}
-                </td>
-                <td :title="item.contentAssetsCode || '-'">
-                  {{ item.contentAssetsCode || "-" }}
-                </td>
-                <td :title="item.rentStartDate || '-'">
-                  {{ item.rentStartDate || "-" }}
-                </td>
-                <td :title="item.rentEndDate || '-'">
-                  {{ item.rentEndDate || "-" }}
-                </td>
-                <td :title="item.rentDepartTypeName || '-'">
-                  {{ item.rentDepartTypeName || "-" }}
-                </td>
-                <td :title="item.rentDepartName || '-'">
-                  {{ item.rentDepartName || "-" }}
-                </td>
-                <td :title="item.rentMoney || '-'">
-                  {{ item.rentMoney || "-" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr v-for="(item, index) in list" :key="index">
+                  <td :title="item.assetsCode || '-'">
+                    {{ item.assetsCode || "-" }}
+                  </td>
+                  <td :title="item.assetsType || '-'">
+                    {{ item.assetsType || "-" }}
+                  </td>
+                  <td :title="item.assetsName || '-'">
+                    {{ item.assetsName || "-" }}
+                  </td>
+                  <td :title="item.contentAssetsCode || '-'">
+                    {{ item.contentAssetsCode || "-" }}
+                  </td>
+                  <td :title="item.rentStartDate || '-'">
+                    {{ item.rentStartDate || "-" }}
+                  </td>
+                  <td :title="item.rentEndDate || '-'">
+                    {{ item.rentEndDate || "-" }}
+                  </td>
+                  <td :title="item.rentDepartTypeName || '-'">
+                    {{ item.rentDepartTypeName || "-" }}
+                  </td>
+                  <td :title="item.rentDepartName || '-'">
+                    {{ item.rentDepartName || "-" }}
+                  </td>
+                  <td :title="item.rentMoney || '-'">
+                    {{ item.rentMoney || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-          <table v-else>
-            <thead>
-              <tr>
-                <th>资产编码</th>
-                <th>资产类型</th>
-                <th>
-                  资产名称
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  资产类别编码
+            <table v-else>
+              <thead>
+                <tr>
+                  <th>资产编码</th>
+                  <th>资产类型</th>
+                  <th>
+                    资产名称
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    资产类别编码
 
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  规格型号
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    规格型号
 
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>
-                  所属单位
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>
+                    所属单位
 
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th>宗地编码</th>
-                <th>权属情况</th>
-                <th>
-                  使用权类型
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th>宗地编码</th>
+                  <th>权属情况</th>
+                  <th>
+                    使用权类型
 
-                  <div class="sort">
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                    <img src="@/assets/images/screen/triangular.png" alt="" />
-                  </div>
-                </th>
-                <th v-if="type === '原值'">原值</th>
-                <th v-if="type === '净值'">净值</th>
-                <th v-if="type === '折旧'">折旧</th>
-                <th v-if="type === '房屋面积'">土地面积</th>
-              </tr>
-            </thead>
+                    <div class="sort">
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                      <img src="@/assets/images/screen/triangular.png" alt="" />
+                    </div>
+                  </th>
+                  <th v-if="type === '原值'">原值</th>
+                  <th v-if="type === '净值'">净值</th>
+                  <th v-if="type === '折旧'">折旧</th>
+                  <th v-if="type === '房屋面积'">土地面积</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              <tr v-for="(item, index) in list" :key="index">
-                <td :title="item.assetsCode || '-'">
-                  {{ item.assetsCode || "-" }}
-                </td>
-                <td :title="item.assetsType || '-'">
-                  {{ item.assetsType || "-" }}
-                </td>
-                <td :title="item.assetsName || '-'">
-                  {{ item.assetsName || "-" }}
-                </td>
-                <td :title="item.contentAssetsCode || '-'">
-                  {{ item.contentAssetsCode || "-" }}
-                </td>
-                <td :title="item.assetsStandard || '-'">
-                  {{ item.assetsStandard || "-" }}
-                </td>
-                <td :title="item.departName || '-'">
-                  {{ item.departName || "-" }}
-                </td>
-                <td :title="item.parcelCode || '-'">
-                  {{ item.parcelCode || "-" }}
-                </td>
-                <td :title="item.ownershipConditionName || '-'">
-                  {{ item.ownershipConditionName || "-" }}
-                </td>
-                <td :title="item.usedrightTypeName || '-'">
-                  {{ item.usedrightTypeName || "-" }}
-                </td>
-                <td v-if="type === '原值'" :title="item.originalValue || '-'">
-                  {{ item.originalValue || "-" }}
-                </td>
-                <td v-if="type === '净值'" :title="item.nowValue || '-'">
-                  {{ item.nowValue || "-" }}
-                </td>
-                <td v-if="type === '折旧'" :title="item.addDepreciate || '-'">
-                  {{ item.addDepreciate || "-" }}
-                </td>
-                <td v-if="type === '房屋面积'" :title="item.landArea || '-'">
-                  {{ item.landArea || "-" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr v-for="(item, index) in list" :key="index">
+                  <td :title="item.assetsCode || '-'">
+                    {{ item.assetsCode || "-" }}
+                  </td>
+                  <td :title="item.assetsType || '-'">
+                    {{ item.assetsType || "-" }}
+                  </td>
+                  <td :title="item.assetsName || '-'">
+                    {{ item.assetsName || "-" }}
+                  </td>
+                  <td :title="item.contentAssetsCode || '-'">
+                    {{ item.contentAssetsCode || "-" }}
+                  </td>
+                  <td :title="item.assetsStandard || '-'">
+                    {{ item.assetsStandard || "-" }}
+                  </td>
+                  <td :title="item.departName || '-'">
+                    {{ item.departName || "-" }}
+                  </td>
+                  <td :title="item.parcelCode || '-'">
+                    {{ item.parcelCode || "-" }}
+                  </td>
+                  <td :title="item.ownershipConditionName || '-'">
+                    {{ item.ownershipConditionName || "-" }}
+                  </td>
+                  <td :title="item.usedrightTypeName || '-'">
+                    {{ item.usedrightTypeName || "-" }}
+                  </td>
+                  <td v-if="type === '原值'" :title="item.originalValue || '-'">
+                    {{ item.originalValue || "-" }}
+                  </td>
+                  <td v-if="type === '净值'" :title="item.nowValue || '-'">
+                    {{ item.nowValue || "-" }}
+                  </td>
+                  <td v-if="type === '折旧'" :title="item.addDepreciate || '-'">
+                    {{ item.addDepreciate || "-" }}
+                  </td>
+                  <td v-if="type === '房屋面积'" :title="item.landArea || '-'">
+                    {{ item.landArea || "-" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
 
           <div class="paging">
             <el-pagination
@@ -342,6 +339,7 @@ import {
   fetchVisualAmountNature,
   fetchVisualValueNature,
   fetchVisualValueRentDepart,
+  fetchVisualAmountRentDepart,
 } from "@/api/screen/house";
 
 export default {
@@ -432,6 +430,7 @@ export default {
     } else {
       this.fetchVisualRentHouseFun();
       await this.fetchVisualValueRentDepartFun();
+      await this.fetchVisualAmountRentDepartFun();
 
       this.initChart();
     }
@@ -508,8 +507,28 @@ export default {
 
       const { data } = await fetchVisualValueRentDepart(options);
 
-      this.chart1Data = data || [];
       this.chart2Data = data || [];
+    },
+
+    async fetchVisualAmountRentDepartFun() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+      };
+
+      if (this.type === "出租总收入" && localStorage.getItem("出租总收入")) {
+        options.statisticalDate = localStorage.getItem("出租总收入");
+      }
+
+      if (
+        (this.type === "租金增长率" || this.type === "租金收入占比") &&
+        localStorage.getItem("租金增长率")
+      ) {
+        options.city = localStorage.getItem("租金增长率");
+      }
+
+      const { data } = await fetchVisualAmountRentDepart(options);
+
+      this.chart1Data = data || [];
     },
 
     initChart() {
@@ -626,7 +645,7 @@ export default {
           data1 = this.chart1Data.map((item) => {
             return {
               name: item.rentDepartName,
-              value: Number(item.rentMoney),
+              value: Number(item.countValue),
             };
           });
           break;
@@ -975,87 +994,88 @@ export default {
         flex-direction: column;
         overflow: hidden;
 
-        table {
+        .table_container {
           width: 100%;
           flex: 1 0;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          border: 1px solid rgba(57, 158, 233, 0.2);
-          border-collapse: collapse;
-          overflow-x: scroll;
-          overflow-y: hidden;
-          thead {
-            width: calc(100% - 7px);
-            height: 33px;
+          overflow: scroll;
+          min-height: calc(100% - 63px);
 
-            tr {
-              width: 100%;
-              height: 100%;
-              display: flex;
-              align-items: center;
+          table {
+            width: max-content;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(57, 158, 233, 0.2);
+            border-collapse: collapse;
 
-              th {
-                width: 200px;
+            thead {
+              height: 33px;
+
+              tr {
+                width: max-content;
                 height: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                font-size: 14px;
-                font-family: Microsoft YaHei;
-                font-weight: 400;
-                color: #91ccff;
-                border: 1px solid rgba(57, 158, 233, 0.2);
-                background-color: rgba(51, 133, 238, 0.3);
 
-                .sort {
+                th {
+                  width: 200px;
+                  height: 100%;
                   display: flex;
-                  flex-direction: column;
-                  margin-left: 5px;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 14px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #91ccff;
+                  border: 1px solid rgba(57, 158, 233, 0.2);
+                  background-color: rgba(51, 133, 238, 0.3);
 
-                  img {
-                    width: 8px;
+                  .sort {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 5px;
 
-                    &:last-child {
-                      transform: rotate(180deg);
+                    img {
+                      width: 8px;
+
+                      &:last-child {
+                        transform: rotate(180deg);
+                      }
                     }
                   }
                 }
               }
             }
-          }
 
-          tbody {
-            width: max-content;
-            flex: 1 0;
-            overflow-y: scroll;
-            overflow-x: hidden;
+            tbody {
+              flex: 1 0;
 
-            tr {
-              width: 100%;
-              height: 40px;
-              display: flex;
-              align-items: center;
+              tr {
+                width: max-content;
+                height: 40px;
+                display: flex;
+                align-items: center;
 
-              &:nth-child(2n) {
-                background-color: rgba(51, 133, 238, 0.1);
-              }
+                &:nth-child(2n) {
+                  background-color: rgba(51, 133, 238, 0.1);
+                }
 
-              td {
-                width: 200px;
-                height: 100%;
-                font-size: 14px;
-                font-family: Microsoft YaHei;
-                font-weight: 400;
-                color: #ffffff;
-                border: 1px solid rgba(57, 158, 233, 0.2);
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                padding: 0 10px;
-                box-sizing: border-box;
-                line-height: 40px;
-                text-align: center;
+                td {
+                  width: 200px;
+                  height: 100%;
+                  font-size: 14px;
+                  font-family: Microsoft YaHei;
+                  font-weight: 400;
+                  color: #ffffff;
+                  border: 1px solid rgba(57, 158, 233, 0.2);
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  padding: 0 10px;
+                  box-sizing: border-box;
+                  line-height: 40px;
+                  text-align: center;
+                }
               }
             }
           }

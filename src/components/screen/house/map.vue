@@ -128,7 +128,6 @@ export default {
           bus.emit("onTopbarClick", 2);
           bus.emit("onHouseInfoOperate", true);
           bus.emit("onHouseImgsOperate", true);
-          bus.emit("onHouseTableOperate", true);
           // bus.emit("onSearchInputClick", list[i]);
         });
 

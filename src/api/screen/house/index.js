@@ -108,3 +108,11 @@ export function fetchVisualValueRentDepart(params) {
     params,
   })
 }
+
+export function fetchVisualAmountRentDepart(params) {
+  return request({
+    url: `data-visualization/house/visual/amount/rent/depart`,
+    method: 'get',
+    params,
+  })
+}

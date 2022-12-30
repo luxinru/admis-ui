@@ -2,7 +2,7 @@
   <div class="house_imgs_root">
     <img
       class="close"
-      src="@/assets/images/screen/close.png"
+      src="@/assets/images/screen/close1.png"
       alt=""
       @click="onClose"
     />
@@ -131,7 +131,7 @@ export default {
   flex-direction: column;
   background: url("../../../assets/images/screen/window-1.png") no-repeat;
   background-size: 100% 100%;
-  padding: 38px 25px 48px;
+  padding: 24px 25px 16px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -139,9 +139,10 @@ export default {
 
   .close {
     position: absolute;
-    right: 16px;
-    top: 38px;
+    right: 8px;
+    top: 30px;
     width: 24px;
+    cursor: pointer;
   }
 
   .title {
