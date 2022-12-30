@@ -3,8 +3,8 @@
     <Box title="房屋总量占比" @click="onItemClick('房屋分类占比')">
       <div class="container">
         <div class="chart_box">
-          <div id="chart7" class="chart7"></div>
           <img src="@/assets/images/screen/icon-bj3.png" alt="" />
+          <div id="chart7" class="chart7"></div>
         </div>
 
         <div class="labels">
