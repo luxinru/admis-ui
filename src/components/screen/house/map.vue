@@ -69,7 +69,7 @@ export default {
         }
 
         self.map.centerAndZoom(
-          new Bmap.Point(data.longitude, data.latitude),
+          new BMapGL.Point(data.longitude, data.latitude),
           15
         );
       });
@@ -129,6 +129,11 @@ export default {
           bus.emit("onHouseInfoOperate", true);
           bus.emit("onHouseImgsOperate", true);
           // bus.emit("onSearchInputClick", list[i]);
+
+          this.map.centerAndZoom(
+            new BMapGL.Point(list[i].longitude, list[i].latitude),
+            15
+          );
         });
 
         markers.houseId = list[i].id;
