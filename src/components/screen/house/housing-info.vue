@@ -114,6 +114,7 @@ export default {
       }
 
       .info {
+        flex: 1 0;
         display: flex;
         flex-direction: column;
         margin: 0 0 14px 0px;
@@ -128,20 +129,8 @@ export default {
           &:last-child {
             font-size: 24px;
             font-family: YouSheBiaoTiHei;
-            font-weight: 400;
-            color: #2177cf;
-            -webkit-text-stroke: 1px #ffffff;
-            text-stroke: 1px #ffffff;
-
-            background: linear-gradient(
-              0deg,
-              rgba(137, 162, 172, 0.94) 0%,
-              rgba(229, 245, 255, 0.94) 20.2880859375%,
-              rgba(255, 255, 255, 0.94) 79.4189453125%,
-              rgba(255, 255, 255, 0.94) 100%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+            color: #ffffff;
             margin: 16px 0 0 0;
           }
         }

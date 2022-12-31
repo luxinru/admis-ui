@@ -11,11 +11,25 @@
       src="@/assets/images/screen/right.png"
       alt=""
     />
+    <img
+      class="right_left"
+      v-if="isRightClose"
+      src="@/assets/images/screen/图层 1000.png"
+      alt=""
+    />
+
     <img class="bottom" src="@/assets/images/screen/Under.png" alt="" />
     <img
       class="left"
       v-if="!isLeftClose"
       src="@/assets/images/screen/left.png"
+      alt=""
+    />
+
+    <img
+      class="little_left"
+      v-if="isLeftClose"
+      src="@/assets/images/screen/图层 1000.png"
       alt=""
     />
 
@@ -284,6 +298,14 @@ export default {
     right: 0;
   }
 
+  .right_left {
+    position: absolute;
+    width: 93px;
+    height: 1073px;
+    right: 0;
+    transform: rotate(180deg);
+  }
+
   .bottom {
     position: absolute;
     width: 100%;
@@ -295,6 +317,13 @@ export default {
     position: absolute;
     height: 100%;
     top: 0;
+    left: 0;
+  }
+
+  .little_left {
+    position: absolute;
+    width: 93px;
+    height: 1073px;
     left: 0;
   }
 
@@ -346,7 +375,7 @@ export default {
     width: 64px;
     height: 811px;
     right: 0;
-    transform: rotate(180deg);
+    transform: rotateY(180deg);
   }
 
   .border_left_top {

@@ -269,6 +269,7 @@ export default {
             interval: 0,
             interval: 0,
             rotate: 35,
+            fontSize: 12
           },
         },
         yAxis: {

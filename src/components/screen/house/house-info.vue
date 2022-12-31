@@ -8,7 +8,7 @@
     />
 
     <div class="title">
-      {{ house.actualName }}
+      {{ house.assetsName }}
     </div>
 
     <div class="content">
@@ -291,7 +291,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+    font-size: 20px;
     font-family: Microsoft YaHei;
     font-weight: bold;
     color: #ffffff;
