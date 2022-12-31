@@ -48,7 +48,14 @@
                 :key="index"
               >
                 <img src="@/assets/images/screen/mark.png" alt="" />
-                <span>
+                <span
+                  :title="
+                    ['出租总收入', '租金增长率', '租金收入占比'].indexOf(type) >
+                    -1
+                      ? item.rentDepartName
+                      : item.usedNatureName
+                  "
+                >
                   {{
                     ["出租总收入", "租金增长率", "租金收入占比"].indexOf(type) >
                     -1
@@ -70,10 +77,14 @@
                       '租金收入占比',
                     ].indexOf(type) > -1
                   "
+                  :title="item.countValue"
                 >
                   {{ item.countValue }}
                 </p>
-                <p v-if="['房屋面积'].indexOf(type) > -1">
+                <p
+                  v-if="['房屋面积'].indexOf(type) > -1"
+                  :title="item.landArea"
+                >
                   {{ item.landArea }}
                 </p>
               </div>
@@ -97,7 +108,14 @@
                 :key="index"
               >
                 <img src="@/assets/images/screen/mark.png" alt="" />
-                <span>
+                <span
+                  :title="
+                    ['出租总收入', '租金增长率', '租金收入占比'].indexOf(type) >
+                    -1
+                      ? item.rentDepartName
+                      : item.usedNatureName
+                  "
+                >
                   {{
                     ["出租总收入", "租金增长率", "租金收入占比"].indexOf(type) >
                     -1
@@ -115,13 +133,17 @@
                       '房屋取得情况',
                     ].indexOf(type) > -1
                   "
+                  :title="item.originalValue"
                 >
                   {{ item.originalValue }}
                 </p>
-                <p v-if="['净值'].indexOf(type) > -1">
+                <p v-if="['净值'].indexOf(type) > -1" :title="item.nowValue">
                   {{ item.nowValue }}
                 </p>
-                <p v-if="['折旧'].indexOf(type) > -1">
+                <p
+                  v-if="['折旧'].indexOf(type) > -1"
+                  :title="item.addDepreciate"
+                >
                   {{ item.addDepreciate }}
                 </p>
                 <p
@@ -129,6 +151,7 @@
                     ['出租总收入', '租金增长率', '租金收入占比'].indexOf(type) >
                     -1
                   "
+                  :title="item.rentMoney"
                 >
                   {{ item.rentMoney }}
                 </p>
@@ -960,6 +983,7 @@ export default {
             grid-gap: 0 10px;
 
             .info_item {
+              width: 100%;
               display: flex;
               align-items: center;
 
@@ -969,18 +993,26 @@ export default {
               }
 
               span {
+                width: 90px;
                 font-size: 14px;
                 font-family: Microsoft YaHei;
                 font-weight: 400;
                 color: #ffffff;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
 
               p {
+                flex: 1 0;
                 font-size: 18px;
                 font-family: YouSheBiaoTiHei;
                 font-weight: bold;
                 color: rgba(0, 162, 255, 1);
                 margin: 0 0 0 10px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
             }
           }
