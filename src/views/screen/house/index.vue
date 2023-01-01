@@ -14,7 +14,7 @@
     <img
       class="right_left"
       v-if="isRightClose"
-      src="@/assets/images/screen/图层 1000.png"
+      src="@/assets/images/screen/图层1000.png"
       alt=""
     />
 
@@ -29,7 +29,7 @@
     <img
       class="little_left"
       v-if="isLeftClose"
-      src="@/assets/images/screen/图层 1000.png"
+      src="@/assets/images/screen/图层1000.png"
       alt=""
     />
 
