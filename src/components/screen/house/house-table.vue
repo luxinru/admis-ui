@@ -726,7 +726,7 @@ export default {
     .table_container {
       width: 100%;
       flex: 1 0;
-      overflow: scroll;
+      overflow: auto;
       table {
         width: max-content;
         height: max-content;
@@ -742,7 +742,8 @@ export default {
           display: flex;
           align-items: center;
           th {
-            width: 200px;
+            flex: 1 0;
+            min-width: 200px;
             height: 34px;
             font-size: 14px;
             font-family: Microsoft YaHei;
@@ -754,7 +755,8 @@ export default {
             background-color: #153456;
           }
           td {
-            width: 200px;
+            flex: 1 0;
+            min-width: 200px;
             height: 34px;
             font-size: 14px;
             font-family: Microsoft YaHei;

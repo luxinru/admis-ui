@@ -199,6 +199,25 @@ export default {
             if (houseTable) {
               houseTable.style.height = height + "px";
             }
+
+            const $bottomImgs = document.getElementsByClassName("bottom_img");
+            if ($bottomImgs && $bottomImgs.length) {
+              const $bottomImg = $bottomImgs[0];
+
+              const bottom = houseTable.clientHeight + $bottomImg.clientHeight;
+
+              const $houseImgs = document.getElementsByClassName("house_imgs");
+              if ($houseImgs && $houseImgs.length) {
+                const $houseImg = $houseImgs[0];
+                $houseImg.style.bottom = bottom + 5 + "px";
+              }
+
+              const $houseInfos = document.getElementsByClassName("house_info");
+              if ($houseInfos && $houseInfos.length) {
+                const $houseInfo = $houseInfos[0];
+                $houseInfo.style.bottom = bottom + 5 + "px";
+              }
+            }
           }
         });
       }
@@ -450,7 +469,7 @@ export default {
   .house_imgs {
     position: absolute;
     width: 435px;
-    height: 42.68518%;
+    bottom: 0;
     top: 189px;
     left: 470px;
   }
@@ -458,7 +477,7 @@ export default {
   .house_info {
     position: absolute;
     width: 435px;
-    height: 42.68518%;
+    bottom: 0;
     top: 189px;
     right: 51px;
   }
