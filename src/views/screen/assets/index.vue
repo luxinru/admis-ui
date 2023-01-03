@@ -1,7 +1,7 @@
 <template>
   <div class="page_root">
     <section v-if="isLoading" class="map">
-      <!-- <Map /> -->
+      <Map />
     </section>
 
     <img class="top" src="@/assets/images/screen/on.png" alt="" />
@@ -74,7 +74,7 @@
 <script>
 import bus from "vue3-eventbus";
 import TopBar from "@/components/screen/house/top-bar.vue";
-// import Map from "@/components/screen/house/map.vue";
+import Map from "@/components/screen/house/map.vue";
 import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 
