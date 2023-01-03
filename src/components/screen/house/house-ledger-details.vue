@@ -851,7 +851,7 @@ export default {
   flex-direction: column;
 
   .title_img {
-    width: 100%;
+    // width: 100%;
     height: 48px;
   }
 
@@ -986,6 +986,7 @@ export default {
               width: 100%;
               display: flex;
               align-items: center;
+              overflow: hidden;
 
               img {
                 width: 23px;

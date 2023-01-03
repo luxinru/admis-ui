@@ -42,7 +42,7 @@ export default {
         if (e.overlay) return; // 存在覆盖物退出
         if (this.marker) {
           this.marker.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(33.5, 54))
+            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         }
         bus.emit("onTopbarClick", 1);
@@ -57,14 +57,14 @@ export default {
       bus.on("onSearchInputClick", (data) => {
         if (this.marker) {
           this.marker.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(33.5, 54))
+            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         }
 
         const marker = this.markerList.find((item) => item.houseId === data.id);
         if (marker) {
           marker.setIcon(
-            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(33.5, 54))
+            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         }
 
@@ -77,7 +77,7 @@ export default {
       bus.on("onDepartChange", (depart) => {
         this.markerList.forEach((item) => {
           item.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(33.5, 54))
+            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         });
         self.fetchVisualListFun(depart);
@@ -103,7 +103,7 @@ export default {
         let points = new BMapGL.Point(list[i].longitude, list[i].latitude); //创建坐标点
         let icon = new BMapGL.Icon(
           "/images/position-2.png",
-          new BMapGL.Size(33.5, 54)
+          new BMapGL.Size(67 - 67 / 3, 72)
         );
         let markers = new BMapGL.Marker(points, {
           icon,
@@ -114,13 +114,13 @@ export default {
             this.marker.setIcon(
               new BMapGL.Icon(
                 "/images/position-2.png",
-                new BMapGL.Size(33.5, 54)
+                new BMapGL.Size(67 - 67 / 3, 72)
               )
             );
           }
           localStorage.setItem("currentHouse", JSON.stringify(list[i]));
           markers.setIcon(
-            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(33.5, 54))
+            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
           this.marker = markers;
 
