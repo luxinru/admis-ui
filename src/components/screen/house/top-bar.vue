@@ -101,7 +101,16 @@ export default {
   methods: {
     onItemClick(value) {
       const { proxy } = this.getCurrentInstance;
-      if (value !== 2) return proxy.$modal.msg("暂未开放！");
+      if (value === 3) return proxy.$modal.msg("暂未开放！");
+      switch (value) {
+        case 2:
+          this.$router.push('/screen/house')
+          break;
+      
+        default:
+          this.$router.push('/screen/assets')
+          break;
+      }
       this.type = value;
       // bus.emit("onTopbarClick", value);
     },

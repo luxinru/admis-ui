@@ -591,6 +591,12 @@ export const dynamicRoutes = [
     hidden: true,
     permissions: ['tool:gen:edit'],
     component: () => import('@/views/screen/house/index.vue')
+  },
+  {
+    path: '/screen/assets',
+    hidden: true,
+    permissions: ['tool:gen:edit'],
+    component: () => import('@/views/screen/assets/index.vue')
   }
 ]
 
