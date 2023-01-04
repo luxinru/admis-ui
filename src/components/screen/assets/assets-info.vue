@@ -24,7 +24,7 @@ export default {
   components: {
     ClassificationStatistics,
     BlockStatistics,
-    PipelineAssetDetails
+    PipelineAssetDetails,
   },
 
   data() {
@@ -43,5 +43,11 @@ export default {
   grid-template-columns: 1fr 1fr 2fr;
   grid-column-gap: 7px;
   overflow: hidden;
+
+  .item {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
 }
 </style>
