@@ -84,13 +84,17 @@ export default {
 
   data() {
     return {
-      type: 2,
       area: {},
       departList: [],
       isDepartListShow: false,
       currentDepart: {},
       getCurrentInstance: getCurrentInstance(),
     };
+  },
+
+  created () {
+    console.log('this.$route :>> ', this.$route);
+    this.type = this.$route.path.indexOf('assets') > -1 ? 1 : 2 
   },
 
   mounted() {
@@ -111,8 +115,9 @@ export default {
           this.$router.push('/screen/assets')
           break;
       }
-      this.type = value;
+      // this.type = value;
       // bus.emit("onTopbarClick", value);
+      this.onDepartClick(this.currentDepart)
     },
 
     onClickOutside() {

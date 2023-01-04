@@ -5,7 +5,6 @@
         <div class="tabs">
           <div class="paging">
             <el-pagination
-              v-if="type !== 2"
               layout="prev, pager, next"
               :total="total"
               :page-size="20"
@@ -72,6 +71,12 @@ export default {
       },
       total: 0,
     };
+  },
+
+  methods: {
+    onCurrentChange(value) {
+      this.page.pageNum = value;
+    },
   },
 };
 </script>

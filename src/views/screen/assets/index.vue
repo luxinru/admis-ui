@@ -74,7 +74,7 @@
 <script>
 import bus from "vue3-eventbus";
 import TopBar from "@/components/screen/house/top-bar.vue";
-import Map from "@/components/screen/house/map.vue";
+import Map from "@/components/screen/assets/map.vue";
 import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 
