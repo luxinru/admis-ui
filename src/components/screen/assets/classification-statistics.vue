@@ -5,7 +5,7 @@
         <section class="item">
           <div class="imgs">
             <img src="@/assets/images/screen/base-2.png" alt="" />
-            <img src="@/assets/images/screen/oil well.png" alt="" />
+            <img src="@/assets/images/screen/oilwell.png" alt="" />
           </div>
           <div class="labels">
             <span>油井</span>
@@ -15,7 +15,7 @@
         <section class="item">
           <div class="imgs">
             <img src="@/assets/images/screen/base-2.png" alt="" />
-            <img src="@/assets/images/screen/oil well.png" alt="" />
+            <img src="@/assets/images/screen/oilwell.png" alt="" />
           </div>
           <div class="labels">
             <span>其他油井</span>
@@ -25,7 +25,7 @@
         <section class="item">
           <div class="imgs">
             <img src="@/assets/images/screen/base-2.png" alt="" />
-            <img src="@/assets/images/screen/oil well.png" alt="" />
+            <img src="@/assets/images/screen/oilwell.png" alt="" />
           </div>
           <div class="labels">
             <span>一般气井</span>
@@ -35,7 +35,7 @@
         <section class="item">
           <div class="imgs">
             <img src="@/assets/images/screen/base-2.png" alt="" />
-            <img src="@/assets/images/screen/oil well.png" alt="" />
+            <img src="@/assets/images/screen/oilwell.png" alt="" />
           </div>
           <div class="labels">
             <span>三高气井</span>
