@@ -312,7 +312,7 @@ export default {
         display: flex;
         align-items: center;
         margin: 3px 12px 0;
-        padding: 0 26px;
+        padding: 0 16px;
         box-sizing: border-box;
 
         &:last-child {
