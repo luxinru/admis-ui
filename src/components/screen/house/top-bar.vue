@@ -217,7 +217,7 @@ export default {
         border: 1px solid rgba(10, 71, 167, 0.9);
         border-radius: 3px;
         z-index: 1;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         .content_item {
           width: 163px;

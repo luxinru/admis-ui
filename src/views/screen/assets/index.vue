@@ -1,7 +1,11 @@
 <template>
   <div class="page_root">
-    <section v-if="isLoading" class="map">
+    <section v-if="isLoading && assetsType === 2" class="map">
       <Map />
+    </section>
+
+    <section v-if="isLoading && assetsType === 1" class="map">
+      <AssetsMap />
     </section>
 
     <img class="top" src="@/assets/images/screen/on.png" alt="" />
@@ -43,31 +47,39 @@
       <TopBar />
     </section>
 
-    <section class="btns">
-      <Btns />
-    </section>
+    <template v-if="assetsType === 1">
+      <section class="assets">
+        <AssetsContainer />
+      </section>
+    </template>
 
-    <section
-      class="assets_info"
-      :class="{ assets_info_close: isAssetsInfoClose }"
-    >
-      <AssetsInfo />
+    <template v-else>
+      <section class="btns">
+        <Btns />
+      </section>
 
-      <img
-        v-if="!isAssetsInfoClose"
-        class="closeImg"
-        src="@/assets/images/screen/upper1.png"
-        alt=""
-        @click="onAssetsInfoCloseClick(true)"
-      />
-      <img
-        v-else
-        class="closeImg"
-        src="@/assets/images/screen/under1.png"
-        alt=""
-        @click="onAssetsInfoCloseClick(false)"
-      />
-    </section>
+      <section
+        class="assets_info"
+        :class="{ assets_info_close: isAssetsInfoClose }"
+      >
+        <AssetsInfo />
+
+        <img
+          v-if="!isAssetsInfoClose"
+          class="closeImg"
+          src="@/assets/images/screen/upper1.png"
+          alt=""
+          @click="onAssetsInfoCloseClick(true)"
+        />
+        <img
+          v-else
+          class="closeImg"
+          src="@/assets/images/screen/under1.png"
+          alt=""
+          @click="onAssetsInfoCloseClick(false)"
+        />
+      </section>
+    </template>
   </div>
 </template>
 
@@ -77,6 +89,8 @@ import TopBar from "@/components/screen/house/top-bar.vue";
 import Map from "@/components/screen/assets/map.vue";
 import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
+import AssetsContainer from "@/components/screen/assets/assets-container.vue";
+import AssetsMap from "@/components/screen/assets/assets-map.vue";
 
 export default {
   name: "AssetsIndex",
@@ -86,6 +100,8 @@ export default {
     Map,
     Btns,
     AssetsInfo,
+    AssetsContainer,
+    AssetsMap,
   },
 
   data() {
@@ -93,6 +109,7 @@ export default {
       type: 1,
       isLoading: false,
       isAssetsInfoClose: false,
+      assetsType: 1,
     };
   },
 
@@ -301,6 +318,15 @@ export default {
     width: 129px;
     top: 124px;
     left: 44px;
+  }
+
+  .assets {
+    position: absolute;
+    left: 38px;
+    right: 38px;
+    top: 106px;
+    bottom: 69px;
+    pointer-events: none;
   }
 
   .assets_info {
