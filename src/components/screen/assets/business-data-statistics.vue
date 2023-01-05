@@ -128,63 +128,66 @@ export default {
           show: false,
         },
         grid: {
-          top: "6%",
-          left: "4%",
+          top: "4%",
+          left: "2%",
           right: "4%",
           bottom: "5%",
           containLabel: true,
         },
         tooltip: {
-          trigger: 'item'
+          trigger: "item",
         },
         xAxis: [
           {
             type: "category",
-            axisTick: {
-              show: false,
+            boundaryGap: false,
+            axisLine: {
+              //坐标轴轴线相关设置。数学上的x轴
+              show: true,
+              lineStyle: {
+                color: "rgba(87, 107, 139, 0.66)",
+              },
+            },
+            axisLabel: {
+              //坐标轴刻度标签的相关设置
+              textStyle: {
+                color: "rgba(196, 225, 255, 1)",
+                fontSize: 12,
+              },
             },
             splitLine: {
               show: false,
             },
-            axisLine: {
-              lineStyle: {
-                color: "#1C82C5",
-              },
+            axisTick: {
+              show: false,
             },
-            axisLabel: {
-              align: "center",
-              textStyle: {
-                fontSize: 12,
-                color: "#fff",
-              },
-            },
-            boundaryGap: true,
             data: xData,
           },
         ],
-
         yAxis: {
           type: "value",
           axisLine: {
+            show: true,
             lineStyle: {
-              color: "#1C82C5",
+              width: 1,
+              color: "rgba(87, 107, 139, 0.66)",
+              type: "dashed",
             },
           },
           splitLine: {
             show: true,
             lineStyle: {
-              color: "rgba(28, 130, 197, .3)",
-              type: "solid",
-            },
-          },
-          axisLabel: {
-            color: "#DEEBFF",
-            textStyle: {
-              fontSize: 12,
+              width: 1,
+              color: "rgba(87, 107, 139, 0.66)",
+              type: "dashed",
             },
           },
           axisTick: {
             show: false,
+          },
+          axisLabel: {
+            fontSize: 12,
+            color: "rgba(196, 225, 255, 1)",
           },
         },
         series: [
