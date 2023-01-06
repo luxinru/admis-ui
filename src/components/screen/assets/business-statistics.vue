@@ -115,6 +115,8 @@ export default {
         display: flex;
         align-items: center;
         flex-shrink: 0;
+        background: url('@/assets/images/screen/Table-bj.png') no-repeat;
+        background-size: 100% 100%;
 
         span {
           flex: 1 0;
