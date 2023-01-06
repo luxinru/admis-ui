@@ -130,6 +130,10 @@ export default {
     bus.on("onDepartChange", () => {
       self.isLoading = true;
     });
+
+    bus.on("onAssetsTypeChange", (value) => {
+      self.assetsType = value;
+    });
   },
 
   mounted() {

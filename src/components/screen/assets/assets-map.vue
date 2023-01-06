@@ -10,6 +10,7 @@
 import bus from "vue3-eventbus";
 import * as echarts from "echarts";
 import provinceJson from "@/assets/json/province.json";
+import chengduJson from "@/assets/json/成都市.json";
 
 export default {
   name: "AssetsMap",
@@ -19,6 +20,7 @@ export default {
   data() {
     return {
       chart: null,
+      options: {}
     };
   },
 
@@ -39,10 +41,11 @@ export default {
       }
 
       echarts.registerMap("my", provinceJson);
+      echarts.registerMap("成都市", chengduJson);
 
       this.chart = echarts.init(document.getElementById("mapChart"));
 
-      const option = {
+      this.options = {
         grid: {
           left: "0", // 与容器左侧的距离
           right: "0", // 与容器右侧的距离
@@ -80,7 +83,7 @@ export default {
             },
             label: {
               normal: {
-                show: false,
+                show: true,
                 textStyle: {
                   color: "#fff",
                 },
@@ -124,7 +127,25 @@ export default {
           },
         ],
       };
-      this.chart.setOption(option);
+
+      this.chart.on("click", (params) => {
+        console.log("params :>> ", params);
+        if (params.componentSubType == "map") {
+          this.goDown(params.name);
+        }
+      });
+      this.chart.setOption(this.options);
+    },
+
+    async goDown(name) {
+      //获取地图数据之后，修改地图options
+      // if (!echarts.getMap(name)) {
+      //   const newMapJson = await getMapJson(name);
+      //   echarts.registerMap(mapname, newMapJson);
+      // }
+      this.options.geo.map = name;
+      this.options.series[0].map = name;
+      this.chart.setOption(this.options);
     },
   },
 };

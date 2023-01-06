@@ -32,6 +32,9 @@ export default {
   methods: {
     onItemClick(value) {
       this.type = value;
+      if (value === 1) {
+        bus.emit('onAssetsTypeChange', value)
+      }
     },
   },
 };
