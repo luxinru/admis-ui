@@ -98,6 +98,7 @@ export default {
     height: 83px;
     right: -27px;
     cursor: pointer;
+    z-index: 1;
   }
 }
 </style>

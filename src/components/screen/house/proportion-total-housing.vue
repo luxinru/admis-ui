@@ -1,7 +1,32 @@
 <template>
   <div class="housing_info_root">
-    <Box title="房屋总量占比" @click="onItemClick('房屋分类占比')">
-      <div class="container">
+    <Box title="房屋总量占比">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside"
+          @click="isShow = !isShow"
+        >
+          <span> {{ currentType === 0 ? "行政区域" : "所属单位" }} </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType === item.value,
+              }"
+              v-for="(item, index) in options"
+              :key="index"
+              @click="onOptionsClick(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
+
+      <div class="container" @click="onItemClick('房屋分类占比')">
         <div class="chart_box">
           <img src="@/assets/images/screen/icon-bj3.png" alt="" />
           <div id="chart7" class="chart7"></div>
@@ -26,6 +51,7 @@ import bus from "vue3-eventbus";
 import Box from "./box.vue";
 import * as echarts from "echarts";
 import "echarts-gl";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchVisualAmount } from "@/api/screen/house";
 
 export default {
@@ -33,6 +59,10 @@ export default {
 
   components: {
     Box,
+  },
+
+  directives: {
+    clickOutSide,
   },
 
   data() {
@@ -73,6 +103,18 @@ export default {
         "#ff7c7c",
         "#a06af0",
       ],
+      isShow: false,
+      currentType: 0,
+      options: [
+        {
+          label: "行政区域",
+          value: 0,
+        },
+        {
+          label: "所属单位",
+          value: 1,
+        },
+      ],
     };
   },
 
@@ -98,6 +140,16 @@ export default {
   },
 
   methods: {
+    onClickOutside() {
+      this.isShow = false;
+    },
+
+    onOptionsClick(data) {
+      this.currentType = data.value;
+      this.isShow = false;
+      this.fetchVisualAmountFun();
+    },
+
     onItemClick(value) {
       localStorage.setItem("tableType", value);
       bus.emit("onModalShow");
@@ -245,6 +297,7 @@ export default {
     async fetchVisualAmountFun() {
       const { data } = await fetchVisualAmount({
         departCode: this.currentDepart.departCode,
+        groupType: this.currentType,
       });
 
       this.list = data;
@@ -475,6 +528,66 @@ export default {
   width: 100%;
   flex: 1 0;
   overflow: hidden;
+
+  .select {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 3px;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+    }
+
+    .content {
+      position: absolute;
+      height: 84px;
+      top: 40px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 163px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 10px 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
 
   .container {
     position: relative;

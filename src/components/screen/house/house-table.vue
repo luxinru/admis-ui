@@ -95,8 +95,8 @@
           class="table_container"
           :style="{
             width: '100%',
-            'overflow': 'hidden',
-            'border': '1px solid rgba(57, 158, 233, 0.2)'
+            overflow: 'hidden',
+            border: '1px solid rgba(57, 158, 233, 0.2)',
           }"
         >
           <div class="details">
@@ -639,7 +639,7 @@ export default {
       font-size: 22px;
       font-family: YouSheBiaoTiHei;
       font-weight: 400;
-      line-height: 55px;
+      line-height: 45px;
       background: linear-gradient(0deg, #82c1ff 10%, #ffffff 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
