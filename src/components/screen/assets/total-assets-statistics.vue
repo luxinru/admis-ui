@@ -12,6 +12,7 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
+import { fetchAssetsCount } from "@/api/screen/assets/index";
 
 export default {
   name: "TotalAssetsStatistics",
@@ -36,13 +37,19 @@ export default {
 
   methods: {
     async init() {
+      const depart = JSON.parse(localStorage.getItem('currentDepart') || {})
+      const { data } = await fetchAssetsCount({
+        departCode: depart.departCode,
+        normType: 0
+      })
+
       this.chart = echarts.init(
         document.getElementById("total_assets_statistics")
       );
 
-      var xData = ["油气水井", "场站", "净化装置", "管线", "土地"];
-      var lastYearData = [3, 20, 42, 34, 35];
-      var thisYearData = [11, 38, 23, 39, 46];
+      var xData = data.map(item => item.assetsType);
+      var lastYearData = data.map(item => item.assetsCount);
+      var thisYearData = data.map(item => item.assetsValue);
       var timeLineData = [1];
       let legend = ["进库数", "出库数"];
       var background = "#0e2147"; //背景
@@ -166,7 +173,8 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  return 1134;
+                  const finded = data.find(item => item.assetsType === value)
+                  return finded.assetsCount;
                 },
               },
               data: xData,
@@ -224,7 +232,8 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  return 1134;
+                  const finded = data.find(item => item.assetsType === value)
+                  return finded.assetsValue.toFixed(2);
                 },
               },
               data: xData,
