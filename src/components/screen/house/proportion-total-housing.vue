@@ -26,14 +26,19 @@
         </div>
       </template>
 
-      <div class="container" @click="onItemClick('房屋分类占比')">
+      <div class="container">
         <div class="chart_box">
           <img src="@/assets/images/screen/icon-bj3.png" alt="" />
           <div id="chart7" class="chart7"></div>
         </div>
 
         <div class="labels">
-          <div class="item" v-for="(item, index) in list" :key="index">
+          <div
+            class="item"
+            v-for="(item, index) in list"
+            :key="index"
+            @click="onItemClick('房屋分类占比')"
+          >
             <img src="@/assets/images/screen/mark.png" alt="" />
             <span :title="item.name"> {{ item.name }} </span>
             <p>
@@ -291,6 +296,11 @@ export default {
 
         // 使用更新后的 option，渲染图表
         myChart.setOption(option);
+      });
+
+      myChart.on("click", (params) => {
+        console.log("params :>> ", params.seriesName);
+        this.onItemClick("房屋分类占比");
       });
     },
 
