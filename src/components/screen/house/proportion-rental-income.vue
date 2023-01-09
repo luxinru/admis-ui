@@ -1,6 +1,31 @@
 <template>
   <div class="proportion_rental_income_root">
     <Box title="租金收入占比">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside"
+          @click="isShow = !isShow"
+        >
+          <span> {{ currentType === 0 ? "行政区域" : "所属单位" }} </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType === item.value,
+              }"
+              v-for="(item, index) in options"
+              :key="index"
+              @click="onOptionsClick(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
+
       <div class="container">
         <!-- <div class="labels labels1">
           <div class="item">
@@ -53,6 +78,7 @@
 import bus from "vue3-eventbus";
 import Box from "./box.vue";
 import * as echarts from "echarts";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchVisualRentalIncome } from "@/api/screen/house";
 
 export default {
@@ -62,10 +88,26 @@ export default {
     Box,
   },
 
+  directives: {
+    clickOutSide,
+  },
+
   data() {
     return {
       all: 0,
       currentDepart: {},
+      isShow: false,
+      currentType: 0,
+      options: [
+        {
+          label: "行政区域",
+          value: 0,
+        },
+        {
+          label: "所属单位",
+          value: 1,
+        },
+      ],
     };
   },
 
@@ -91,6 +133,16 @@ export default {
   },
 
   methods: {
+    onClickOutside() {
+      this.isShow = false;
+    },
+
+    onOptionsClick(data) {
+      this.currentType = data.value;
+      this.isShow = false;
+      this.fetchVisualRentalIncomeFun();
+    },
+
     onItemClick(value, isAll = true) {
       if (isAll) {
         localStorage.removeItem("租金增长率");
@@ -209,9 +261,15 @@ export default {
       const results = areaName
         ? areaName.map((item, index) => {
             return {
-              name: item,
+              name:
+                item.length > 3
+                  ? item.slice(item.length - 3, item.length)
+                  : item,
               value: ((Number(areaValue[index]) / max) * 100).toFixed(2),
-              label: item,
+              label:
+                item.length > 3
+                  ? item.slice(item.length - 3, item.length)
+                  : item,
             };
           })
         : [];
@@ -269,7 +327,7 @@ export default {
             interval: 0,
             interval: 0,
             rotate: 35,
-            fontSize: 12
+            fontSize: 12,
           },
         },
         yAxis: {
@@ -376,7 +434,7 @@ export default {
     async fetchVisualRentalIncomeFun() {
       const { data } = await fetchVisualRentalIncome({
         departCode: this.currentDepart.departCode,
-        groupType: 0,
+        groupType: this.currentType,
       });
 
       this.initChart(data);
@@ -391,6 +449,66 @@ export default {
   flex: 1 0;
   overflow: hidden;
   margin-top: 5px;
+
+  .select {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 3px;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+    }
+
+    .content {
+      position: absolute;
+      height: 84px;
+      top: 40px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 163px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 10px 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
 
   .container {
     position: relative;

@@ -26,6 +26,7 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
+import { fetchRealAssetsCount } from "@/api/screen/assets/index";
 
 export default {
   name: "PhysicalAssetStatistics",
@@ -51,6 +52,19 @@ export default {
 
   methods: {
     async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchRealAssetsCount({
+        departCode: depart.departCode,
+        dimension: 0,
+        normType: 0,
+      });
+
+      console.log('data :>> ', data);
+
+      if (this.chart) {
+        echarts.dispose(document.getElementById("physical_asset_statistics"));
+      }
+
       this.chart = echarts.init(
         document.getElementById("physical_asset_statistics")
       );

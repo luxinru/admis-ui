@@ -51,7 +51,31 @@ function initChart(data) {
       },
     },
     legend: {
-      show: false,
+      show: true,
+      top: "middle",
+      right: "12%",
+      orient: "vertical",
+      icon: "none",
+      formatter: function (name) {
+        const finded = results.find((item) => item.name === name);
+        return `{b|${name}}：{c|${finded.value}%}`;
+      },
+      textStyle: {
+        color: "#fff",
+
+        rich: {
+          b: {
+            color: "#fff",
+            fontSize: 12,
+          },
+          c: {
+            color: "#4bb9f4",
+            fontSize: 14,
+          },
+        },
+      },
+
+      // formatter: "{b|{b}：}{c|{d}%}",
     },
     grid: {
       top: 0,
@@ -65,10 +89,7 @@ function initChart(data) {
         name: "房屋取得情况",
         type: "pie",
         radius: ["50%", "60%"],
-        center: ["50%", "50%"],
-        label: {
-          show: false,
-        },
+        center: ["35%", "50%"],
         data: results,
 
         itemStyle: {
@@ -78,26 +99,7 @@ function initChart(data) {
           },
         },
         label: {
-          show: true,
-          fontSize: 16,
-          // alignTo: "edge",
-          color: "#fff",
-          formatter: "{b|{b}：}{c|{d}%}",
-          rich: {
-            b: {
-              color: "#fff",
-              fontSize: 14,
-            },
-            c: {
-              color: "#4bb9f4",
-              fontSize: 14,
-            },
-          },
-        },
-        labelLine: {
           show: false,
-          length: 10,
-          length2: 0,
         },
       },
     ],
@@ -155,6 +157,7 @@ onBeforeUnmount(() => {
 
     .box {
       position: absolute;
+      left: 29%;
       width: 50px;
       height: 50px;
       border: 5px solid rgba(23, 154, 255, 0.1);

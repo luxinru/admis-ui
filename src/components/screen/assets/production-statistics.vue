@@ -12,6 +12,7 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
+import { fetchProductionCount } from "@/api/screen/assets/index";
 
 export default {
   name: "ProductionStatistics",
@@ -36,6 +37,20 @@ export default {
 
   methods: {
     async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchProductionCount({
+        departCode: depart.departCode,
+      });
+
+      console.log('data :>> ', data);
+
+      const names = data.map(item => item.groupName)
+      // const labels = data.forEchar
+
+      if (this.chart) {
+        echarts.dispose(document.getElementById("production_statistics"));
+      }
+
       this.chart = echarts.init(
         document.getElementById("production_statistics")
       );
@@ -59,10 +74,10 @@ export default {
           itemHeight: 4,
           data: [
             {
-              name: "油产量",
+              name: names[0],
             },
             {
-              name: "气产量",
+              name: names[1],
             },
           ],
         },
@@ -128,7 +143,7 @@ export default {
         },
         series: [
           {
-            name: "油产量",
+            name: names[0],
             type: "line",
             smooth: true,
             showAllSymbol: true,
@@ -165,7 +180,7 @@ export default {
             data: goToSchool,
           },
           {
-            name: "气产量",
+            name: names[1],
             type: "line",
             showAllSymbol: true,
             symbolSize: 0,

@@ -15,17 +15,46 @@
           </div>
 
           <div class="list">
-            <div class="item" v-for="index in 10" :key="index">
+            <div class="item" v-for="(item, index) in list" :key="index">
               <span>
-                <img v-if="index === 1" src="@/assets/images/screen/No1.png" alt="">
-                <img v-if="index === 2" src="@/assets/images/screen/No2.png" alt="">
-                <img v-if="index === 3" src="@/assets/images/screen/No3.png" alt="">
-                <p v-if="[1, 2, 3].indexOf(index) === -1">
-                  {{ index }}
+                <img
+                  v-if="index + 1 === 1"
+                  src="@/assets/images/screen/No1.png"
+                  alt=""
+                />
+                <img
+                  v-if="index + 1 === 2"
+                  src="@/assets/images/screen/No2.png"
+                  alt=""
+                />
+                <img
+                  v-if="index + 1 === 3"
+                  src="@/assets/images/screen/No3.png"
+                  alt=""
+                />
+                <p v-if="[1, 2, 3].indexOf(index + 1) === -1">
+                  {{ index + 1 }}
                 </p>
               </span>
-              <span>转资前</span>
-              <span> 22167 </span>
+              <span>
+                {{ item.groupName }}
+              </span>
+              <span>
+                {{ item.groupValue }}
+                <img v-if="item.trend === 0" src="" alt="" />
+                <img v-else src="" alt="" />
+
+                <p
+                  :style="{
+                    color:
+                      item.trend === 0
+                        ? 'rgba(147, 243, 137, 1)'
+                        : 'rgba(255, 0, 0, 1)',
+                  }"
+                >
+                  {{ item.trend === 0 ? "↑" : "↓" }}
+                </p>
+              </span>
             </div>
           </div>
         </div>
@@ -37,6 +66,7 @@
 <script>
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
+import { fetchBusinessCount } from "@/api/screen/assets/index";
 
 export default {
   name: "BusinessStatistics",
@@ -46,10 +76,26 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      list: [],
+    };
   },
 
-  methods: {},
+  mounted() {
+    this.init();
+  },
+
+  methods: {
+    async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchBusinessCount({
+        departCode: depart.departCode,
+        dimension: 0,
+        normType: 0,
+      });
+      this.list = data || [];
+    },
+  },
 };
 </script>
 
@@ -177,6 +223,12 @@ export default {
               font-family: Alibaba PuHuiTi;
               font-weight: 400;
               color: #00f0ff;
+
+              img {
+                width: 5px;
+                height: 15px;
+                margin-left: 5px;
+              }
             }
           }
         }

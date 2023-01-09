@@ -190,6 +190,7 @@ export default {
       self.type = value;
 
       if (value === 2) {
+        self.isTableClose = false
         nextTick(() => {
           const elements = document.getElementsByClassName("rental_info_root");
           if (elements && elements.length) {
@@ -498,6 +499,7 @@ export default {
       height: 24px;
       top: -27px;
       cursor: pointer;
+      z-index: 1;
     }
   }
 

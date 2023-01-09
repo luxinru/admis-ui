@@ -75,6 +75,7 @@ export default {
     left: -27px;
     cursor: pointer;
     transform: rotate(180deg);
+    z-index: 1;
   }
 }
 </style>

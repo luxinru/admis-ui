@@ -9,8 +9,9 @@ export function fetchBasicStats(params) {
 
 export function fetchVisualAmount(params) {
   return request({
-    url: `data-visualization/house/visual/amount/${params.departCode}`,
+    url: `data-visualization/house/visual/amount/proportion`,
     method: 'get',
+    params
   })
 }
 

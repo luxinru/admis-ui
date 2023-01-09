@@ -3,15 +3,15 @@
     <Box title="业务数据统计">
       <div class="container">
         <div class="legend">
-          <span :class="{ active: type === 1 }" @click="type = 1">
+          <span :class="{ active: type === 0 }" @click="type = 0">
             <p></p>
             当日
           </span>
-          <span :class="{ active: type === 2 }" @click="type = 2">
+          <span :class="{ active: type === 1 }" @click="type = 1">
             <p></p>
             当月
           </span>
-          <span :class="{ active: type === 3 }" @click="type = 3">
+          <span :class="{ active: type === 2 }" @click="type = 2">
             <p></p>
             当年
           </span>
@@ -23,7 +23,9 @@
               <img src="@/assets/images/screen/icon-11.png" alt="" />
               <span>
                 当日业务笔数
-                <p>1276</p>
+                <p>
+                  {{ businessCount }}
+                </p>
                 笔
               </span>
             </div>
@@ -31,7 +33,9 @@
               <img src="@/assets/images/screen/icon-12.png" alt="" />
               <span>
                 当日变动金额
-                <p>2344</p>
+                <p>
+                  {{ businessValue }}
+                </p>
                 万元
               </span>
             </div>
@@ -41,7 +45,9 @@
               <img src="@/assets/images/screen/icon-13.png" alt="" />
               <span>
                 当日折旧笔数
-                <p>1276</p>
+                <p>
+                  {{ depreciationCount }}
+                </p>
                 笔
               </span>
             </div>
@@ -49,7 +55,9 @@
               <img src="@/assets/images/screen/icon-14.png" alt="" />
               <span>
                 当日变动金额
-                <p>2344</p>
+                <p>
+                  {{ depreciationValue }}
+                </p>
                 万元
               </span>
             </div>
@@ -64,6 +72,7 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
+import { fetchBusinessAnalysis } from "@/api/screen/assets/index";
 
 export default {
   name: "BusinessDataStatistics",
@@ -75,8 +84,18 @@ export default {
   data() {
     return {
       chart: null,
-      type: 1,
+      type: 0,
+      businessCount: 0,
+      businessValue: 0,
+      depreciationCount: 0,
+      depreciationValue: 0,
     };
+  },
+
+  watch: {
+    type() {
+      this.init();
+    },
   },
 
   mounted() {
@@ -89,6 +108,29 @@ export default {
 
   methods: {
     async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchBusinessAnalysis({
+        departCode: depart.departCode,
+        dimension: this.type,
+        normType: 0,
+      });
+
+      console.log("data :>> ", data);
+      const {
+        businessCount,
+        businessValue,
+        depreciationCount,
+        depreciationValue,
+      } = data;
+      this.businessCount = businessCount.toFixed(2);
+      this.businessValue = businessValue.toFixed(2);
+      this.depreciationCount = depreciationCount.toFixed(2);
+      this.depreciationValue = depreciationValue.toFixed(2);
+
+      if (this.chart) {
+        echarts.dispose(document.getElementById("business_data_statistics"));
+      }
+
       this.chart = echarts.init(
         document.getElementById("business_data_statistics")
       );

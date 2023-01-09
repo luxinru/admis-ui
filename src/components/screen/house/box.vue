@@ -8,6 +8,10 @@
         <span>More</span>
         <img src="@/assets/images/screen/more-1.png" alt="" />
       </div> -->
+
+      <section class="more">
+        <slot name="more" />
+      </section>
     </section>
 
     <section class="content">
@@ -75,24 +79,8 @@ function onMoreClick() {
 
     .more {
       position: relative;
-      display: flex;
-      align-items: center;
+      flex: 1 0;
       margin-right: 5px;
-      line-height: 55px;
-      cursor: pointer;
-
-      span {
-        font-size: 14px;
-        font-family: Microsoft YaHei;
-        font-weight: 400;
-        color: rgba(220, 237, 255, 0.7);
-        line-height: 55px;
-      }
-
-      img {
-        height: 15px;
-        margin-left: 2px;
-      }
     }
   }
 
