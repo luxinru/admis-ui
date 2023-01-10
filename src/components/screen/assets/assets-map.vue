@@ -11,6 +11,7 @@ import bus from "vue3-eventbus";
 import * as echarts from "echarts";
 import provinceJson from "@/assets/json/province.json";
 import chengduJson from "@/assets/json/成都市.json";
+import { fetchDepartList } from "@/api/screen/assets/index";
 
 export default {
   name: "AssetsMap",
@@ -35,7 +36,13 @@ export default {
   },
 
   methods: {
-    init() {
+    async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchDepartList({
+        departCode: depart.departCode,
+      })
+      console.log('data :>> ', data);
+
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
       }

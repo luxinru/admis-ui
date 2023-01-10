@@ -18,31 +18,27 @@
           <table border="1" style="z-index: 3">
             <thead>
               <tr>
-                <th>资产类型</th>
-                <th>资产名称</th>
-                <th>所属单位</th>
                 <th>资产编码</th>
-                <th>资产类别</th>
-                <th>规格型号</th>
-                <th>资产状态</th>
+                <th>资产名称</th>
+                <th>资产类型</th>
+                <th>增加日期</th>
                 <th>原值</th>
                 <th>净值</th>
                 <th>累计折旧</th>
+                <th>减值准备</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr class="td" v-for="index in 20" :key="index">
-                <td>固定资产</td>
-                <td>遂宁气管道</td>
-                <td>川中油气矿</td>
-                <td>102154</td>
-                <td>102154</td>
-                <td>102154</td>
-                <td>在用</td>
-                <td>5200</td>
-                <td>5200</td>
-                <td>5200</td>
+              <tr class="td" v-for="item in list" :key="item.keyCode">
+                <td>{{ item.assetsCode || '-' }}</td>
+                <td>{{ item.assetsName || '-' }}</td>
+                <td>{{ item.assetsTypeName || '-' }}</td>
+                <td>{{ item.addVoucherDate || '-' }}</td>
+                <td>{{ item.originalValue || '-' }}</td>
+                <td>{{ item.nowValue || '-' }}</td>
+                <td>{{ item.addDepreciate || '-' }}</td>
+                <td>{{ item.devalueValue || '-' }}</td>
               </tr>
             </tbody>
           </table>
@@ -55,6 +51,7 @@
 <script>
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
+import { fetchAssetsList } from "@/api/screen/assets/index";
 
 export default {
   name: "PipelineAssetDetails",
@@ -70,10 +67,29 @@ export default {
         pageSize: 20,
       },
       total: 0,
+      list: [],
     };
   },
 
+  mounted() {
+    this.init();
+  },
+
   methods: {
+    async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+
+      const { rows, total } = await fetchAssetsList({
+        departCode: depart.departCode,
+        pageNum: this.page.pageNum,
+        pageSize: this.page.pageSize
+      });
+      this.list = rows || [];
+      this.total = total
+
+      console.log("rows :>> ", rows);
+    },
+
     onCurrentChange(value) {
       this.page.pageNum = value;
     },

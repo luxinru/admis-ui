@@ -42,9 +42,8 @@ export default {
         departCode: depart.departCode,
       });
 
-      console.log('data :>> ', data);
-
-      const names = data.map(item => item.groupName)
+      const names = data.map((item) => item.groupName);
+      const labels = data[0].groupValue.map((item) => item.month);
       // const labels = data.forEchar
 
       if (this.chart) {
@@ -55,13 +54,14 @@ export default {
         document.getElementById("production_statistics")
       );
 
-      let xLabel = ["1月", "2月", "3月", "4月", "5月", "6月"];
-      let goToSchool = ["40", "60", "22", "85", "50", "50"];
-      let goOutSchool = ["20", "50", "12", "65", "30", "50"];
+      let xLabel = labels;
+      let goToSchool = data[0].groupValue.map((item) => item.value);
+      let goOutSchool = data[1].groupValue.map((item) => item.value);
 
       const option = {
         tooltip: {
-          trigger: "item",
+          show: true,
+          trigger: "axis",
         },
         legend: {
           top: "0%",
@@ -69,7 +69,7 @@ export default {
             color: "rgba(255, 255, 255, 1)",
             fontSize: 12,
           },
-          icon: 'rect',
+          icon: "rect",
           itemWidth: 8,
           itemHeight: 4,
           data: [
@@ -229,6 +229,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  pointer-events: auto;
 
   .container {
     width: 100%;

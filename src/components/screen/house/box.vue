@@ -79,8 +79,10 @@ function onMoreClick() {
 
     .more {
       position: relative;
-      flex: 1 0;
+      flex: 1.5 0;
       margin-right: 5px;
+      display: flex;
+      justify-content: flex-end;
     }
   }
 

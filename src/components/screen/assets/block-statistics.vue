@@ -1,7 +1,58 @@
 <template>
   <div class="block_statistics_root">
     <Box title="区块统计">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside1"
+          @click="isShow1 = !isShow1"
+        >
+          <span>
+            {{ currentType1 === 0 ? "资产类型" : "资产类别" }}
+          </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow1">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType1 === item.value,
+              }"
+              v-for="(item, index) in options1"
+              :key="index"
+              @click="onOptionsClick1(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside2"
+          @click="isShow2 = !isShow2"
+        >
+          <span>
+            {{ currentType2 === 0 ? "财务准则" : "会计准则" }}
+          </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow2">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType2 === item.value,
+              }"
+              v-for="(item, index) in options2"
+              :key="index"
+              @click="onOptionsClick2(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
       <div class="container">
+        <img class="img" src="@/assets/images/screen/base-3.png" alt="" />
         <div id="container" class="chart"></div>
       </div>
     </Box>
@@ -11,6 +62,9 @@
 <script>
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
+import { fetchBlockCount } from "@/api/screen/assets/index";
+
 import Highcharts from "highcharts/highstock";
 import HighchartsMore from "highcharts/highcharts-more";
 import HighchartsDrilldown from "highcharts/modules/drilldown";
@@ -31,10 +85,37 @@ export default {
     Box,
   },
 
+  directives: {
+    clickOutSide,
+  },
+
   data() {
     return {
       chart: null,
-      img: img,
+      isShow1: false,
+      currentType1: 0,
+      options1: [
+        {
+          label: "资产类型",
+          value: 0,
+        },
+        {
+          label: "资产类别",
+          value: 1,
+        },
+      ],
+      isShow2: false,
+      currentType2: 0,
+      options2: [
+        {
+          label: "财务准则",
+          value: 0,
+        },
+        {
+          label: "会计准则",
+          value: 1,
+        },
+      ],
     };
   },
 
@@ -43,44 +124,52 @@ export default {
   },
 
   methods: {
-    init() {
+    onClickOutside1() {
+      this.isShow1 = false;
+    },
+
+    onOptionsClick1(data) {
+      this.currentType1 = data.value;
+      this.isShow1 = false;
+      this.init();
+    },
+
+    onClickOutside2() {
+      this.isShow2 = false;
+    },
+
+    onOptionsClick2(data) {
+      this.currentType2 = data.value;
+      this.isShow2 = false;
+      this.init();
+    },
+
+    async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchBlockCount({
+        departCode: depart.departCode,
+        dimension: this.currentType1, // 0资产类型 1资产类别
+        normType: this.currentType2, // 0财务准则 1会计准则
+      });
+
+      console.log("data :>> ", data);
+
       if (this.chart) {
         this.chart.destroy();
       }
 
-      const arr = [
-        {
-          label: "区块一",
-          value: 8,
-        },
-        {
-          label: "区块二",
-          value: 3,
-        },
-        {
-          label: "区块三",
-          value: 1,
-        },
-        {
-          label: "区块四",
-          value: 6,
-        },
-        {
-          label: "区块五",
-          value: 1,
-        },
-        {
-          label: "区块六",
-          value: 6,
-        },
-      ];
+      const arr = data.map((item) => {
+        return {
+          label: item.groupName,
+          value: Number(item.groupValue),
+        };
+      });
       const self = this;
       // 初始化 Highcharts 图表
       this.chart = Highcharts.chart("container", {
         chart: {
           type: "pie",
           backgroundColor: null,
-          plotBackgroundImage: self.img,
           options3d: {
             enabled: true,
             alpha: 65,
@@ -104,7 +193,7 @@ export default {
         },
         plotOptions: {
           pie: {
-            size: "110%",
+            size: "140%",
             innerSize: "40%",
             depth: 45,
             allowPointSelect: true,
@@ -135,6 +224,68 @@ export default {
   height: 100%;
   overflow: hidden;
 
+  .select {
+    position: relative;
+    width: max-content;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 3px;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+    }
+
+    .content {
+      position: absolute;
+      height: max-content;
+      top: 40px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 163px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 10px 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
+
   .container {
     position: relative;
     width: 100%;
@@ -142,6 +293,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .img {
+      position: absolute;
+      height: 341px;
+    }
 
     .chart {
       position: absolute;

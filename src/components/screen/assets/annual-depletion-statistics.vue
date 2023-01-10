@@ -1,6 +1,60 @@
 <template>
   <div class="annual_depletion_statistics_root">
     <Box title="年折耗统计">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside1"
+          @click="isShow1 = !isShow1"
+        >
+          <span>
+            {{
+              currentType1 === 0
+                ? "资产类型"
+                : currentType1 === 1
+                ? "资产类别"
+                : "资金渠道"
+            }}
+          </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow1">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType1 === item.value,
+              }"
+              v-for="(item, index) in options1"
+              :key="index"
+              @click="onOptionsClick1(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside2"
+          @click="isShow2 = !isShow2"
+        >
+          <span> {{ "全部分类" }} </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow2">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType2 === item.value,
+              }"
+              v-for="(item, index) in options2"
+              :key="index"
+              @click="onOptionsClick1(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
       <div class="container">
         <div class="label">
           <span>
@@ -19,6 +73,8 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
+import { fetchDepletionCount } from "@/api/screen/assets/index";
 
 export default {
   name: "AnnualDepletionStatistics",
@@ -27,9 +83,37 @@ export default {
     Box,
   },
 
+  directives: {
+    clickOutSide,
+  },
+
   data() {
     return {
       chart: null,
+      isShow1: false,
+      currentType1: 0,
+      options1: [
+        {
+          label: "资产类型",
+          value: 0,
+        },
+        {
+          label: "资产类别",
+          value: 1,
+        },
+        {
+          label: "资金渠道",
+          value: 1,
+        },
+      ],
+      isShow2: false,
+      currentType2: "all",
+      options2: [
+        {
+          label: "全部分类",
+          value: "all",
+        },
+      ],
     };
   },
 
@@ -42,7 +126,40 @@ export default {
   },
 
   methods: {
+    onClickOutside1() {
+      this.isShow1 = false;
+    },
+
+    onOptionsClick1(data) {
+      this.currentType1 = data.value;
+      this.isShow1 = false;
+      this.init();
+    },
+
+    onClickOutside2() {
+      this.isShow2 = false;
+    },
+
+    onOptionsClick2(data) {
+      this.currentType1 = data.value;
+      this.isShow2 = false;
+      this.init();
+    },
+
     async init() {
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchDepletionCount({
+        departCode: depart.departCode,
+        dimension: this.currentType1, // 0资产类型 1资产类别 2资金渠道
+        dictCode: "",
+        normType: 0, // 0财务准则 1会计准则
+      });
+      console.log("data :>> ", data);
+
+      if (this.chart) {
+        echarts.dispose(document.getElementById("annual_depletion_statistics"));
+      }
+
       this.chart = echarts.init(
         document.getElementById("annual_depletion_statistics")
       );
@@ -69,31 +186,18 @@ export default {
         series: [
           {
             name: "月计提",
-            data: [269, 460, 400, 170, 269, 460, 400, 170, 269, 460, 269, 460],
+            data: data.map((item) => item.accrualValue),
           },
           {
             name: "月补提",
-            data: [39, 50, 40, 100, 39, 50, 40, 100, 39, 50, 40, 100],
+            data: data.map((item) => item.recoilValue),
           },
           {
             name: "累计折旧",
-            data: [15, 200, 80, 60, 15, 200, 80, 60, 15, 200, 80, 60],
+            data: data.map((item) => item.cumulativeValue),
           },
         ],
-        chartList: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-        ],
+        chartList: data.map((item) => item.month.replace("月", "")),
       };
       function colorRgba(str, alpha) {
         let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
@@ -270,7 +374,7 @@ export default {
           trigger: "item",
         },
         grid: {
-          top: '18%',
+          top: "18%",
           left: "2%",
           right: "4%",
           bottom: fontSize,
@@ -302,6 +406,7 @@ export default {
           },
           axisLabel: {
             //坐标轴刻度标签的相关设置
+            interval: 0,
             textStyle: {
               color: "rgba(196, 225, 255, 1)",
               fontSize: 14,
@@ -357,6 +462,68 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  .select {
+    position: relative;
+    flex: 1 0;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 3px;
+    }
+
+    span {
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+    }
+
+    .content {
+      position: absolute;
+      height: max-content;
+      top: 40px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 163px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 10px 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
 
   .container {
     position: relative;
