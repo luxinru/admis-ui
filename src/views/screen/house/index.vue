@@ -505,7 +505,7 @@ export default {
     width: 435px;
     bottom: 0;
     top: 189px;
-    left: 470px;
+    left: 445px;
   }
 
   .house_info {
@@ -520,7 +520,7 @@ export default {
     position: absolute;
     margin-top: 5px;
     bottom: 63px;
-    left: 470px;
+    left: 445px;
     right: 51px;
     display: flex;
     align-items: center;
