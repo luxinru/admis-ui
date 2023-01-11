@@ -66,7 +66,7 @@ function onMoreClick() {
 
     .name {
       position: relative;
-      flex: 1 0;
+      flex: 1.1 0;
       font-size: 22px;
       font-family: YouSheBiaoTiHei;
       font-weight: 400;

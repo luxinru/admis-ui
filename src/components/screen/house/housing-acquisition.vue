@@ -3,7 +3,6 @@
     <Box title="房产证取得情况">
       <div class="container" @click="onItemClick('房屋取得情况')">
         <div id="chart6" class="chart6"></div>
-        <div class="box"></div>
       </div>
     </Box>
   </div>
@@ -35,75 +34,266 @@ function initChart(data) {
     };
   });
 
-  myChart.setOption({
-    title: {
-      show: false,
+  let dataPie2 = results;
+  let dataColor2 = [
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(5, 75, 170, 1)" },
+        { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
+        { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
+        { offset: 1, color: "rgba(11, 151, 232, 1)" },
+      ],
     },
-    // color: colorList,
-    tooltip: {
-      show: true,
-      trigger: "item",
-      padding: [8, 15],
-      backgroundColor: "rgba(12, 51, 115,0.8)",
-      borderColor: "rgba(3, 11, 44, 0.5)",
-      textStyle: {
-        color: "rgba(255, 255, 255, 1)",
-      },
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(3, 120, 134, 1)" },
+        { offset: 1, color: "rgba(0, 200, 188, 1)" },
+      ],
     },
-    legend: {
-      show: true,
-      top: "middle",
-      right: "12%",
-      orient: "vertical",
-      icon: "none",
-      formatter: function (name) {
-        const finded = results.find((item) => item.name === name);
-        return `{b|${name}}：{c|${finded.value}%}`;
-      },
-      textStyle: {
-        color: "#fff",
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(241, 108, 114, 1)" },
+        { offset: 1, color: "rgba(169, 14, 69, 1)" },
+      ],
+    },
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(5, 75, 170, 1)" },
+        { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
+        { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
+        { offset: 1, color: "rgba(11, 151, 232, 1)" },
+      ],
+    },
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(3, 120, 134, 1)" },
+        { offset: 1, color: "rgba(0, 200, 188, 1)" },
+      ],
+    },
+    {
+      type: "linear",
+      x: 0,
+      x2: 0,
+      y: 1,
+      y2: 0,
+      colorStops: [
+        { offset: 0, color: "rgba(241, 108, 114, 1)" },
+        { offset: 1, color: "rgba(169, 14, 69, 1)" },
+      ],
+    },
+  ];
+  let legendData = [],
+    seriesData = [],
+    radiusValue = 60,
+    total = 0;
+  let startAngle = [];
 
-        rich: {
-          b: {
-            color: "#fff",
-            fontSize: 12,
+  total = dataPie2.reduce((a, c) => a + c.value, 0);
+
+  dataPie2.reduce((a, c) => {
+    startAngle.push((a / total) * 360);
+    return a + c.value;
+  }, 0);
+  for (var i = 0; i < dataPie2.length; i++) {
+    legendData.push(dataPie2[i].name);
+    seriesData.push({
+      type: "pie",
+      clockWise: true, //饼图的扇区是否是顺时针排布
+      radius: [radiusValue - 8 * i + "%", radiusValue - 4 - 8 * i + 1 + "%"],
+      center: ["30%", "50%"],
+      label: {
+        normal: {
+          show: false, //隐藏引导线标识
+        },
+      },
+      hoverAnimation: false, //关闭 hover 在扇区上的放大动画效果
+      startAngle: 180 + startAngle[i], //起始角度
+      data: [
+        {
+          //透明伞形
+          z: 1,
+          value: total - dataPie2[i].value,
+          tooltip: {
+            show: false,
           },
-          c: {
-            color: "#4bb9f4",
-            fontSize: 14,
+          itemStyle: {
+            //设置透明伞形
+            color: "rgba(60, 79, 154, 0.2)", //伞形颜色
+            // borderWidth: 10,
+            // borderColor: 'rgba(60, 79, 154, 0.2)',
+            label: {
+              show: false,
+            },
+          },
+        },
+        {
+          z: 2,
+          value: dataPie2[i].value,
+          name: dataPie2[i].name,
+
+          itemStyle: {
+            // borderWidth: 10,
+            borderRadius: "50%",
+            // borderColor: dataColor2[i],
+            color: dataColor2[i],
+          },
+        },
+      ],
+    });
+  }
+  seriesData.push(
+    {
+      type: "pie",
+      name: "内层细圆环",
+      radius: ["26%", "27%"],
+      center: ["30%", "50%"],
+      hoverAnimation: false,
+      clockWise: false,
+      itemStyle: {
+        //   opacity: 0.5,
+        color: "rgba(160,160,160,0.5)",
+      },
+      label: {
+        show: false,
+      },
+      data: [100],
+    },
+    {
+      name: "大环",
+      type: "gauge",
+      splitNumber: 15,
+      radius: "27%",
+      center: ["30%", "50%"],
+      startAngle: 90,
+      endAngle: -269.9999,
+      axisLine: {
+        show: false,
+        lineStyle: {
+          opacity: 0.5,
+          color: [[0, "rgba(160,160,160,0.5)"]],
+        },
+      },
+      axisTick: {
+        show: false,
+      },
+      splitLine: {
+        show: true,
+        length: 12,
+        lineStyle: {
+          color: "auto",
+          width: 3.5,
+        },
+      },
+      axisLabel: {
+        show: false,
+      },
+      detail: {
+        show: false,
+      },
+    }
+    // {
+    //   name: "小环",
+    //   type: "gauge",
+    //   splitNumber: 15,
+    //   radius: "32%",
+    //   center: ["30%", "50%"],
+    //   startAngle: 90,
+    //   endAngle: -269.9999,
+    //   axisLine: {
+    //     show: false,
+    //   },
+    //   axisTick: {
+    //     show: true,
+    //     lineStyle: {
+    //       opacity: 0.5,
+    //       color: "rgba(160,160,160,1)",
+    //       width: 3,
+    //     },
+    //     length: 20,
+    //     splitNumber: 5,
+    //   },
+    //   splitLine: {
+    //     show: false,
+    //   },
+    //   axisLabel: {
+    //     show: false,
+    //   },
+    //   detail: {
+    //     show: false,
+    //   },
+    // }
+  );
+
+  myChart.setOption(
+    {
+      tooltip: {
+        show: false,
+      },
+      legend: {
+        data: legendData,
+        orient: "vertical",
+        top: "center",
+        right: 30,
+        itemWidth: 8,
+        itemHeight: 6,
+        formatter: function (name) {
+          let target, percent;
+          for (let i = 0; i < dataPie2.length; i++) {
+            if (dataPie2[i].name === name) {
+              target = dataPie2[i].value;
+              percent = ((target / total) * 100).toFixed(2);
+            }
+          }
+          let arr = ["{blue|" + name + "}" + " " + " {white|" + percent + "%}"];
+          return arr;
+        },
+        textStyle: {
+          color: "#a5dbff",
+          align: "right",
+          rich: {
+            white: {
+              color: "#4bb9f4",
+              align: "right",
+              fontWeight: "bold",
+              fontSize: 14,
+            },
+            blue: {
+              color: "#fff",
+              align: "left",
+              fontSize: 12,
+              width: 50,
+            },
           },
         },
       },
-
-      // formatter: "{b|{b}：}{c|{d}%}",
-    },
-    grid: {
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 10,
-    },
-    series: [
-      {
-        startAngle: 90,
-        name: "房屋取得情况",
-        type: "pie",
-        radius: ["50%", "60%"],
-        center: ["35%", "50%"],
-        data: results,
-
-        itemStyle: {
-          normal: {
-            borderRadius: 80,
-            borderCap: "round",
-          },
-        },
-        label: {
-          show: false,
-        },
-      },
-    ],
-  });
+      series: seriesData,
+    }
+  );
 }
 
 async function fetchVisualPaperFun() {
@@ -153,15 +343,6 @@ onBeforeUnmount(() => {
     .chart6 {
       width: 100%;
       height: 100%;
-    }
-
-    .box {
-      position: absolute;
-      left: 29%;
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(23, 154, 255, 0.1);
-      border-radius: 50%;
     }
   }
 }
