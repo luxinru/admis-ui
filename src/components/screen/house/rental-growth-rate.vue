@@ -256,7 +256,7 @@ export default {
           let xIndex = pointInGrid[0];
 
           localStorage.setItem("租金增长率", xAreaData[xIndex]);
-          onItemClick("租金增长率", false);
+          this.onItemClick("租金增长率", false);
         }
       });
     },
@@ -281,7 +281,8 @@ export default {
   overflow: hidden;
 
   .select {
-    width: 100%;
+    width: max-content;
+    height: max-content;
     display: flex;
     align-items: center;
     justify-content: flex-end;

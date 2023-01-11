@@ -7,21 +7,6 @@
     <ProportionRentalIncome />
 
     <HousingAcquisition />
-
-    <img
-      v-if="!isClose"
-      class="closeImg"
-      src="@/assets/images/screen/left1.png"
-      alt=""
-      @click="onCloseClick(true)"
-    />
-    <img
-      v-else
-      class="closeImg"
-      src="@/assets/images/screen/right1.png"
-      alt=""
-      @click="onCloseClick(false)"
-    />
   </div>
 </template>
 
@@ -33,29 +18,21 @@ import ProportionRentalIncome from "./proportion-rental-income.vue";
 import HousingAcquisition from "./housing-acquisition.vue";
 
 export default {
-  name: 'AdvancedInfo',
+  name: "AdvancedInfo",
 
   components: {
     ProportionTotalHousing,
     RentalGrowthRate,
     ProportionRentalIncome,
-    HousingAcquisition
+    HousingAcquisition,
   },
 
-  data () {
-    return {
-      isClose: false
-    }
+  data() {
+    return {};
   },
 
-  methods: {
-    onCloseClick (value) {
-      this.isClose = value
-      bus.emit('onRightCloseClick', value)
-    }
-  }
-}
-
+  methods: {},
+};
 </script>
 
 <style scoped lang="scss">

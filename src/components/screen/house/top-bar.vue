@@ -264,7 +264,7 @@ export default {
     background: url("@/assets/images/screen/window-1.png") no-repeat;
     background-size: 100% 100%;
     z-index: 9;
-    padding-top: 22px;
+    // padding-top: 22px;
 
     .title {
       width: 100%;

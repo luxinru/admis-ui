@@ -540,7 +540,8 @@ export default {
   overflow: hidden;
 
   .select {
-    width: 100%;
+    width: max-content;
+    height: max-content;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -636,10 +637,12 @@ export default {
       align-items: center;
       flex-direction: column;
       margin-left: 10px;
-      overflow: hidden;
+      overflow-y: auto;
+      margin-right: 10px;
 
       .item {
         width: 100%;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         margin-top: 12px;

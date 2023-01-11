@@ -451,7 +451,8 @@ export default {
   margin-top: 5px;
 
   .select {
-    width: 100%;
+    width: max-content;
+    height: max-content;
     display: flex;
     align-items: center;
     justify-content: flex-end;

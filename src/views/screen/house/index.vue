@@ -13,7 +13,7 @@
     />
     <img
       class="right_left"
-      v-if="isRightClose"
+      v-if="type === 2 || isRightClose"
       src="@/assets/images/screen/图层1000.png"
       alt=""
     />
@@ -37,9 +37,30 @@
       <img src="@/assets/images/screen/top.png" alt="" />
       <span> 西南油气田房屋可视化 </span>
     </div>
-    <img class="bottom_img" src="@/assets/images/screen/bottom.png" alt="" />
-    <img class="left_img" src="@/assets/images/screen/edge-2.png" alt="" />
-    <img class="right_img" src="@/assets/images/screen/edge-2.png" alt="" />
+    <img
+      class="bottom_img"
+      :src="isBottomHover ? bottomImgActive : bottomImg"
+      alt=""
+      @mouseover="isBottomHover = true"
+      @mouseout="isBottomHover = false"
+      @click="onBottomImgClick"
+    />
+    <img
+      class="left_img"
+      :src="isLeftHover ? High3Img : edge2Img"
+      alt=""
+      @mouseover="isLeftHover = true"
+      @mouseout="isLeftHover = false"
+      @click="onLeftImgClick"
+    />
+    <img
+      class="right_img"
+      :src="isRightHover ? High1Img : edge3Img"
+      alt=""
+      @mouseover="isRightHover = true"
+      @mouseout="isRightHover = false"
+      @click="onRightImgClick"
+    />
 
     <img
       class="border_left_top"
@@ -101,20 +122,6 @@
         class="house_table"
         :class="{ house_close: isTableClose, left51: isLeftClose }"
       >
-        <img
-          v-if="!isTableClose"
-          class="closeImg"
-          src="@/assets/images/screen/upper1.png"
-          alt=""
-          @click="onTableCloseClick(true)"
-        />
-        <img
-          v-else
-          class="closeImg"
-          src="@/assets/images/screen/under1.png"
-          alt=""
-          @click="onTableCloseClick(false)"
-        />
         <HouseTable />
       </section>
 
@@ -136,6 +143,14 @@ import HouseImgs from "@/components/screen/house/house-imgs.vue";
 import HouseInfo from "@/components/screen/house/house-info.vue";
 import HouseTable from "@/components/screen/house/house-table.vue";
 import Map from "@/components/screen/house/map.vue";
+
+import bottomImg from "@/assets/images/screen/bottom.png";
+import bottomImgActive from "@/assets/images/screen/High-2.png";
+
+import edge2 from "@/assets/images/screen/edge-2.png";
+import edge3 from "@/assets/images/screen/edge-3.png";
+import High1 from "@/assets/images/screen/High-1.png";
+import High3 from "@/assets/images/screen/High-3.png";
 
 export default {
   name: "ScreenIndex",
@@ -162,6 +177,15 @@ export default {
       isLeftClose: false,
       isRightClose: false,
       isTableClose: false,
+      isBottomHover: false,
+      isLeftHover: false,
+      isRightHover: false,
+      bottomImg: bottomImg,
+      bottomImgActive: bottomImgActive,
+      edge2Img: edge2,
+      edge3Img: edge3,
+      High1Img: High1,
+      High3Img: High3,
     };
   },
 
@@ -190,7 +214,7 @@ export default {
       self.type = value;
 
       if (value === 2) {
-        self.isTableClose = false
+        self.isTableClose = false;
         nextTick(() => {
           const elements = document.getElementsByClassName("rental_info_root");
           if (elements && elements.length) {
@@ -257,8 +281,16 @@ export default {
   },
 
   methods: {
-    onTableCloseClick(value) {
-      this.isTableClose = value;
+    onLeftImgClick() {
+      this.isLeftClose = !this.isLeftClose;
+    },
+
+    onRightImgClick() {
+      this.isRightClose = !this.isRightClose;
+    },
+
+    onBottomImgClick() {
+      this.isTableClose = !this.isTableClose;
     },
   },
 };
@@ -381,21 +413,22 @@ export default {
     width: 1816px;
     height: 63px;
     bottom: 0;
+    cursor: pointer;
   }
 
   .left_img {
     position: absolute;
-    width: 64px;
+    // width: 64px;
     height: 811px;
     left: 0;
+    cursor: pointer;
   }
 
   .right_img {
     position: absolute;
-    width: 64px;
     height: 811px;
     right: 0;
-    transform: rotateY(180deg);
+    cursor: pointer;
   }
 
   .border_left_top {
@@ -492,15 +525,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .closeImg {
-      position: absolute;
-      width: 83px;
-      height: 24px;
-      top: -27px;
-      cursor: pointer;
-      z-index: 1;
-    }
   }
 
   .house_close {

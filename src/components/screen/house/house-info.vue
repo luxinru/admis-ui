@@ -271,7 +271,7 @@ export default {
   flex-direction: column;
   background: url("../../../assets/images/screen/window-1.png") no-repeat;
   background-size: 100% 100%;
-  padding: 24px 10px 16px 25px;
+  padding: 4px 10px 16px 25px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -280,7 +280,7 @@ export default {
   .close {
     position: absolute;
     right: 8px;
-    top: 30px;
+    top: 10px;
     width: 24px;
     cursor: pointer;
   }
