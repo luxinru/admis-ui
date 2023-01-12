@@ -48,12 +48,19 @@ const original = ref(0);
 const now = ref(0);
 const acc = ref(0);
 
+/**
+ * 点击打开表格弹窗
+ * value 表明入口
+ */
 function onItemClick(value) {
   localStorage.setItem('tableType', value)
   bus.emit("onModalShow");
 }
 
 onMounted(() => {
+  /**
+   * 接收接口数据
+   */
   bus.on("fetchBasicStatsFun", (data) => {
     const { originalValue, nowValue, accDepreciation } = data;
 

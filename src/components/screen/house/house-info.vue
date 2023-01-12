@@ -233,6 +233,9 @@
 <script>
 import bus from "vue3-eventbus";
 
+/**
+ * 房屋信息组件
+ */
 export default {
   name: "HouseInfo",
 
@@ -246,6 +249,9 @@ export default {
     const self = this;
     this.house = JSON.parse(localStorage.getItem("currentHouse"));
 
+    /**
+     * 地图点击房屋时候更新数据
+     */
     bus.on("onMapItemClick", async (data) => {
       self.house = JSON.parse(localStorage.getItem("currentHouse"));
     });

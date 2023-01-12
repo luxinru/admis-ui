@@ -48,6 +48,9 @@ import bus from "vue3-eventbus";
 import { fetchListFilesByKeyCode } from "@/api/screen/house";
 import { cloneDeep } from "lodash";
 
+/**
+ * 房屋图片信息组件
+ */
 export default {
   name: "HouseImgs",
 
@@ -60,6 +63,9 @@ export default {
   },
 
   computed: {
+    /**
+     * 计算底部缩略图展示的三张图片
+     */
     showImgs() {
       if (this.currentImgIndex < 3) {
         // 前三张
@@ -81,6 +87,9 @@ export default {
     this.house = JSON.parse(localStorage.getItem("currentHouse"));
     this.fetchListFilesByKeyCodeFun();
 
+    /**
+     * 地图点击房屋时候更新数据
+     */
     bus.on("onMapItemClick", async (data) => {
       self.house = JSON.parse(localStorage.getItem("currentHouse"));
       self.fetchListFilesByKeyCodeFun();
@@ -92,16 +101,25 @@ export default {
       bus.emit('onHouseImgsOperate', false)
     },
 
+    /**
+     * 上一张
+     */
     onPreview() {
       if (this.currentImgIndex === 0) return;
       this.currentImgIndex -= 1;
     },
 
+    /**
+     * 下一张
+     */
     onNext() {
       if (this.currentImgIndex === this.imgList.length - 1) return;
       this.currentImgIndex += 1;
     },
 
+    /**
+     * 获取数据
+     */
     async fetchListFilesByKeyCodeFun() {
       const { rows } = await fetchListFilesByKeyCode({
         keyCode: this.house.keyCode,

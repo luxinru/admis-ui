@@ -55,6 +55,9 @@ export default {
   },
 
   mounted() {
+    /**
+     * 接收接口数据
+     */
     bus.on("fetchBasicStatsFun", (data) => {
       const { totalHouseNum: value1, totalHouseArea: value2 } = data;
 

@@ -455,12 +455,15 @@ import {
   fetchListFilesByKeyCode,
 } from "@/api/screen/house";
 
+/**
+ * 底部表格组件
+ */
 export default {
   name: "HouseTable",
 
   data() {
     return {
-      type: 1,
+      type: 1, // 1基础信息 2资产信息 3房屋档案 4出租信息 5改造信息
       list: [],
       page: {
         pageNum: 1,
@@ -480,14 +483,21 @@ export default {
   },
 
   methods: {
+    /**
+     * 点击顶部tabs
+     */
     async onTypeClick(value) {
       this.type = value;
 
       this.list = [];
       const depart = JSON.parse(localStorage.getItem("currentDepart"));
       const house = JSON.parse(localStorage.getItem("currentHouse"));
+      /**
+       * 根据不同的tab调不同的方法
+       */
       switch (this.type) {
         case 1:
+          // 房屋信息查询接口
           const { rows: rows1, total: total1 } = await fetchVisualList({
             parentHouseCode: house.id,
             pageNum: this.page.pageNum,
@@ -507,6 +517,7 @@ export default {
           // this.total = total4 || 0;
           break;
         case 3:
+          // 获取房屋图片信息
           const { rows: rows5, total: total5 } = await fetchListFilesByKeyCode({
             keyCode: house.keyCode,
           });
@@ -514,6 +525,7 @@ export default {
           this.total = total5 || 0;
           break;
         case 4:
+          // 房屋出租信息查询接口
           const { rows: rows2, total: total2 } = await fetchVisualRentHouse({
             houseCode: house.id,
             pageNum: this.page.pageNum,
@@ -523,6 +535,7 @@ export default {
           this.total = total2 || 0;
           break;
         case 5:
+          // 房屋改造信息接口
           const { rows: rows3, total: total3 } = await fetchVisualReformHouse({
             houseCode: house.id,
             pageNum: this.page.pageNum,
@@ -534,6 +547,9 @@ export default {
       }
     },
 
+    /**
+     * 下载房屋图片
+     */
     onDownload(file) {
       const canvas = document.createElement("canvas");
       const img = document.createElement("img");

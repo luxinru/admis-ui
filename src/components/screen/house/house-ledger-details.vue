@@ -365,6 +365,10 @@ import {
   fetchVisualAmountRentDepart,
 } from "@/api/screen/house";
 
+
+/**
+ * 表格弹窗组件
+ */
 export default {
   name: "HouseLedgerDetails",
 
@@ -377,14 +381,17 @@ export default {
       total: 0,
       list: [],
       type: "原值",
-      currentDepart: {},
-      currentHouse: {},
-      chart1Data: [],
-      chart2Data: [],
+      currentDepart: {}, // 当前单位
+      currentHouse: {}, // 当前房屋
+      chart1Data: [], // 左侧上边图表
+      chart2Data: [], // 左侧下边图表
     };
   },
 
   computed: {
+    /**
+     * 根据不同入口展示不同标题
+     */
     chart1Title() {
       switch (this.type) {
         case "原值":
@@ -404,6 +411,9 @@ export default {
       }
     },
 
+    /**
+     * 根据不同入口展示不同标题
+     */
     chart2Title() {
       switch (this.type) {
         case "原值":
@@ -428,12 +438,15 @@ export default {
   },
 
   async mounted() {
-    this.type = localStorage.getItem("tableType");
-    this.currentDepart = JSON.parse(localStorage.getItem("currentDepart"));
-    this.currentHouse = localStorage.getItem("currentHouse")
+    this.type = localStorage.getItem("tableType"); // 入口
+    this.currentDepart = JSON.parse(localStorage.getItem("currentDepart")); // 当前单位
+    this.currentHouse = localStorage.getItem("currentHouse") // 当前房屋（可能没有）
       ? JSON.parse(localStorage.getItem("currentHouse"))
       : undefined;
 
+    /**
+     * 根据不同入口请求不同的接口
+     */
     if (
       [
         "原值",
@@ -458,13 +471,16 @@ export default {
       this.initChart();
     }
   },
-
+  
   beforeUnmount() {
     echarts.dispose(document.getElementById("chart4"));
     echarts.dispose(document.getElementById("chart5"));
   },
 
   methods: {
+    /**
+     * 表格页码改变
+     */
     onCurrentChange(value) {
       this.page.pageNum = value;
       if (
@@ -484,6 +500,9 @@ export default {
       }
     },
 
+    /**
+     * 房屋使用性质数量占比查询
+     */
     async fetchVisualAmountNatureFun() {
       const options = {
         departCode: this.currentDepart.departCode,
@@ -498,6 +517,9 @@ export default {
       this.chart1Data = data || [];
     },
 
+    /**
+     * 房屋使用性质价值量占比查询
+     */
     async fetchVisualValueNatureFun() {
       const options = {
         departCode: this.currentDepart.departCode,
@@ -512,6 +534,9 @@ export default {
       this.chart2Data = data || [];
     },
 
+    /**
+     * 房屋出租承租单位性质数量占比查询
+     */
     async fetchVisualValueRentDepartFun() {
       const options = {
         departCode: this.currentDepart.departCode,
@@ -533,6 +558,9 @@ export default {
       this.chart2Data = data || [];
     },
 
+    /**
+     * 房屋出租承租单位性质价值量占比查询
+     */
     async fetchVisualAmountRentDepartFun() {
       const options = {
         departCode: this.currentDepart.departCode,
@@ -777,6 +805,9 @@ export default {
       bus.emit("onModalClose");
     },
 
+    /**
+     * 房屋信息台账明细查询
+     */
     async fetchVisualHouseAccountFun() {
       const { rows, total } = await fetchVisualList({
         houseName: "",
@@ -791,6 +822,9 @@ export default {
       this.total = total;
     },
 
+    /**
+     * 房屋出租信息查询
+     */
     async fetchVisualRentHouseFun() {
       const { rows, total } = await fetchVisualRentHouse({
         houseName: "",

@@ -109,7 +109,7 @@ function initChart(data) {
   ];
   let legendData = [],
     seriesData = [],
-    radiusValue = 75,
+    radiusValue = 75, // 图形大小
     total = 0;
   let startAngle = [];
 

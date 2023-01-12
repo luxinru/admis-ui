@@ -100,7 +100,6 @@ export default {
   },
 
   created() {
-    console.log("this.$route :>> ", this.$route);
     this.type = this.$route.path.indexOf("assets") > -1 ? 1 : 2;
   },
 
@@ -110,6 +109,9 @@ export default {
   },
 
   methods: {
+    /**
+     * 点击头部右侧房屋可视化按钮、资产可是换按钮
+     */
     onItemClick(value) {
       const { proxy } = this.getCurrentInstance;
       if (value === 3) return proxy.$modal.msg("暂未开放！");
@@ -141,6 +143,11 @@ export default {
       this.isDepartListShow = true;
     },
 
+    /**
+     * 单位切换
+     * 返回首页
+     * 传播单位切换事件
+     */
     onDepartClick(depart) {
       this.currentDepart = depart;
       this.isDepartListShow = false;

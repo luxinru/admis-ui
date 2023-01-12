@@ -12,6 +12,7 @@ import createVitePlugins from './vite/plugins'
 import {hash} from './src/utils/functions'
 import pxtovw from 'postcss-px-to-viewport'
 
+// 大屏自适应代码
 const loder_pxtovw = pxtovw({
   //这里是设计稿宽度 自己修改
     viewportWidth: 1920,

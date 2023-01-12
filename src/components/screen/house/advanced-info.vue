@@ -17,6 +17,9 @@ import RentalGrowthRate from "./rental-growth-rate.vue";
 import ProportionRentalIncome from "./proportion-rental-income.vue";
 import HousingAcquisition from "./housing-acquisition.vue";
 
+/**
+ * 右侧信息栏容器
+ */
 export default {
   name: "AdvancedInfo",
 

@@ -152,6 +152,10 @@ import edge3 from "@/assets/images/screen/edge-3.png";
 import High1 from "@/assets/images/screen/High-1.png";
 import High3 from "@/assets/images/screen/High-3.png";
 
+/**
+ * 房屋可视化入口页面
+ */
+
 export default {
   name: "ScreenIndex",
 
@@ -169,14 +173,14 @@ export default {
 
   data() {
     return {
-      isShowModal: false,
-      type: 1,
-      isShowHouseInfo: false,
-      isShowHouseImgs: false,
-      isLoading: false,
-      isLeftClose: false,
-      isRightClose: false,
-      isTableClose: false,
+      isShowModal: false, // 是否显示弹窗表格
+      type: 1, // 1房屋可视化首页 2房屋可视化副业
+      isShowHouseInfo: false, // 是否显示单位详情
+      isShowHouseImgs: false, // 是否显示单位图片轮播
+      isLoading: false, // 单位数据是否加载完成
+      isLeftClose: false, // 左侧展开
+      isRightClose: false, // 右侧展开
+      isTableClose: false, // 表格展开
       isBottomHover: false,
       isLeftHover: false,
       isRightHover: false,
@@ -190,6 +194,9 @@ export default {
   },
 
   watch: {
+    /**
+     * 返回房屋可视化首页时候清楚已经点击的房屋信息
+     */
     type: {
       handler(newVal) {
         if (newVal === 1) {
@@ -216,6 +223,9 @@ export default {
       if (value === 2) {
         self.isTableClose = false;
         nextTick(() => {
+          /**
+           * 点击打开房屋可视化副业时 根据底部表格计算房屋信息、房屋图片高度
+           */
           const elements = document.getElementsByClassName("rental_info_root");
           if (elements && elements.length) {
             const element = elements[0];

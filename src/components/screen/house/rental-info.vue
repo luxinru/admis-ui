@@ -48,6 +48,9 @@ export default {
   },
 
   mounted() {
+    /**
+     * 切换单位时更新数据
+     */
     bus.on("fetchBasicStatsFun", (data) => {
       const { rentalIncome: value } = data;
       this.rentalIncome = Number(value) || 0;
@@ -63,6 +66,10 @@ export default {
   methods: {
     Moment,
 
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
     onItemClick(value, isAll = true) {
       if (isAll) {
         localStorage.removeItem("出租总收入");
@@ -154,6 +161,9 @@ export default {
           axisLabel: {
             color: "rgba(255, 255, 255, 0.6)",
           },
+          /**
+           * 坐标轴最大值为数据最大值的1.5倍 为了美观
+           */
           max: (value) => {
             return value.max + value.max * 0.5;
           },
@@ -206,6 +216,10 @@ export default {
         ],
       });
 
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
       myChart.getZr().on("click", (params) => {
         let pointInPixel = [params.offsetX, params.offsetY];
         if (myChart.containPixel("grid", pointInPixel)) {

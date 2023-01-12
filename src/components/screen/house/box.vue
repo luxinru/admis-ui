@@ -21,6 +21,10 @@
 </template>
 
 <script setup name="Box">
+/**
+ * 盒子组件
+ */
+
 import bus from "vue3-eventbus";
 
 const props = defineProps({

@@ -60,13 +60,18 @@ export default {
   },
 
   methods: {
+    /**
+     * 点击搜索框数据
+     * 进入主页
+     * 并传播点击搜索框数据事件
+     */
     onSearchItemClick(item) {
       this.value = item.assetsName;
       localStorage.setItem("currentHouse", JSON.stringify(item));
-      // bus.emit("onTopbarClick", 1);
-      bus.emit("onTopbarClick", 2); //todo
-      bus.emit("onHouseInfoOperate", true); //todo
-      bus.emit("onHouseImgsOperate", true); //todo
+      bus.emit("onTopbarClick", 1);
+      // bus.emit("onTopbarClick", 2); //todo
+      // bus.emit("onHouseInfoOperate", true); //todo
+      // bus.emit("onHouseImgsOperate", true); //todo
       bus.emit("onSearchInputClick", item);
       this.isShow = false;
     },

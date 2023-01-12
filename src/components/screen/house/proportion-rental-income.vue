@@ -113,6 +113,9 @@ export default {
 
   mounted() {
     const self = this;
+    /**
+     * 切换单位时更新数据
+     */
     bus.on("onDepartChange", (depart) => {
       self.currentDepart = depart;
       self.fetchVisualRentalIncomeFun();
@@ -137,12 +140,19 @@ export default {
       this.isShow = false;
     },
 
+    /**
+     * 切换行政区域、所属单位
+     */
     onOptionsClick(data) {
       this.currentType = data.value;
       this.isShow = false;
       this.fetchVisualRentalIncomeFun();
     },
 
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
     onItemClick(value, isAll = true) {
       if (isAll) {
         localStorage.removeItem("租金增长率");
@@ -158,10 +168,15 @@ export default {
 
       const { areaName, areaNum, areaValue } = data;
       this.all = Number(areaNum) || 0;
+
+      /**
+       * 计算总数 用于计算百分比
+       */
       let max = 0;
       areaValue.forEach((item) => {
         max += Number(item);
       });
+      
 
       const colorList1 = [
         "#00A3F0",
@@ -258,6 +273,10 @@ export default {
         "rgba(130, 0, 240, 0)",
         "rgba(234, 124, 204, 0)",
       ];
+
+      /**
+       * 格式化数据
+       */
       const results = areaName
         ? areaName.map((item, index) => {
             return {
@@ -352,6 +371,9 @@ export default {
             color: "rgba(255, 255, 255, 0.6)",
             formatter: "{value}%",
           },
+          /**
+           * 坐标轴最大值为数据最大值的1.3倍 为了美观
+           */
           max: (value) => {
             return Number((value.max + value.max * 0.3).toFixed(0));
           },
@@ -412,6 +434,10 @@ export default {
         ],
       });
 
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
       myChart.getZr().on("click", (params) => {
         let pointInPixel = [params.offsetX, params.offsetY];
         if (myChart.containPixel("grid", pointInPixel)) {

@@ -7,6 +7,9 @@ import bus from "vue3-eventbus";
 import { fetchVisualList } from "@/api/screen/house";
 import useScreenStore from "@/store/modules/screen";
 
+/**
+ * 地图组件
+ */
 export default {
   name: "Map",
 
@@ -19,6 +22,9 @@ export default {
   },
 
   async mounted() {
+    /**
+     * 先渲染地图 等待接口返回单位列表再渲染打点数据
+     */
     await this.initMap();
     const depart = localStorage.getItem("currentDepart")
       ? JSON.parse(localStorage.getItem("currentDepart"))
@@ -40,12 +46,15 @@ export default {
 
       this.map.addEventListener("click", (e) => {
         if (e.overlay) return; // 存在覆盖物退出
+        /**
+         * 更改打点颜色 以替换图片的方式实现
+         */
         if (this.marker) {
           this.marker.setIcon(
             new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         }
-        bus.emit("onTopbarClick", 1);
+        bus.emit("onTopbarClick", 1); // 放回首页
         localStorage.removeItem("currentHouse");
       });
 
@@ -55,12 +64,18 @@ export default {
       // });
 
       bus.on("onSearchInputClick", (data) => {
+        /**
+         * 更改打点颜色 以替换图片的方式实现
+         */
         if (this.marker) {
           this.marker.setIcon(
             new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         }
 
+        /**
+         * 将原来已经点亮的打点恢复
+         */
         const marker = this.markerList.find((item) => item.houseId === data.id);
         if (marker) {
           marker.setIcon(
@@ -68,6 +83,9 @@ export default {
           );
         }
 
+        /**
+         * 地图中心设置为检索点击的单位
+         */
         self.map.centerAndZoom(
           new BMapGL.Point(data.longitude, data.latitude),
           15
@@ -75,11 +93,18 @@ export default {
       });
 
       bus.on("onDepartChange", (depart) => {
+        /**
+         * 更改单位时触发
+         * 将所有的点亮点位恢复
+         */
         this.markerList.forEach((item) => {
           item.setIcon(
             new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
           );
         });
+        /**
+         * 根据单位code获取地图点位信息
+         */
         self.fetchVisualListFun(depart);
       });
     },
@@ -93,7 +118,7 @@ export default {
         assetsCode: "",
       });
 
-      const list = rows.filter((item) => item.longitude && item.latitude);
+      const list = rows.filter((item) => item.longitude && item.latitude); // 筛选不含有经纬度的数据
       useScreenStore().setHouseList(list);
 
       // 函数 创建多个标注
@@ -110,6 +135,9 @@ export default {
         });
 
         markers.addEventListener("click", (e) => {
+          /**
+           * 地图点位信息添加点击事件
+           */
           if (this.marker) {
             this.marker.setIcon(
               new BMapGL.Icon(
@@ -124,10 +152,10 @@ export default {
           );
           this.marker = markers;
 
-          bus.emit("onMapItemClick", list[i]);
-          bus.emit("onTopbarClick", 2);
-          bus.emit("onHouseInfoOperate", true);
-          bus.emit("onHouseImgsOperate", true);
+          bus.emit("onMapItemClick", list[i]); // 像各个子组件传达点击点位信息事件
+          bus.emit("onTopbarClick", 2); // 页面更换为副业
+          bus.emit("onHouseInfoOperate", true); // 打开房屋信息弹窗
+          bus.emit("onHouseImgsOperate", true); // 打开房屋图片信息弹窗
           // bus.emit("onSearchInputClick", list[i]);
 
           this.map.centerAndZoom(

@@ -15,6 +15,9 @@ import HousingInfo from "./housing-info.vue";
 import RentalInfo from "./rental-info.vue";
 import { fetchBasicStats } from "@/api/screen/house";
 
+/**
+ * 左侧信息栏容器
+ */
 export default {
   name: "BasicInfo",
 

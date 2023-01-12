@@ -59,6 +59,9 @@ import "echarts-gl";
 import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchVisualAmount } from "@/api/screen/house";
 
+/**
+ * 房屋总量占比
+ */
 export default {
   name: "ProportionTotalHousing",
 
@@ -125,6 +128,9 @@ export default {
 
   mounted() {
     const self = this;
+    /**
+     * 切换单位时更新数据
+     */
     bus.on("onDepartChange", (depart) => {
       self.currentDepart = depart;
       self.fetchVisualAmountFun();
@@ -155,6 +161,10 @@ export default {
       this.fetchVisualAmountFun();
     },
 
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
     onItemClick(value) {
       localStorage.setItem("tableType", value);
       bus.emit("onModalShow");
