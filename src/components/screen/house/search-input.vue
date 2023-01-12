@@ -59,6 +59,12 @@ export default {
     },
   },
 
+  watch: {
+    value() {
+      bus.emit("onSearchInput", this.value);
+    },
+  },
+
   methods: {
     /**
      * 点击搜索框数据

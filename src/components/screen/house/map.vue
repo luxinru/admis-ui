@@ -22,6 +22,22 @@ export default {
   },
 
   async mounted() {
+    bus.on("onSearchInput", (value) => {
+      /**
+       * 更改打点颜色 以替换图片的方式实现
+       */
+      if (value === '' && this.marker) {
+        this.marker.setIcon(
+          new BMapGL.Icon(
+            "/images/position-2.png",
+            new BMapGL.Size(67 - 67 / 3, 72)
+          )
+        );
+        bus.emit("onTopbarClick", 1); // 放回首页
+        localStorage.removeItem("currentHouse");
+      }
+    });
+
     /**
      * 先渲染地图 等待接口返回单位列表再渲染打点数据
      */
@@ -51,7 +67,10 @@ export default {
          */
         if (this.marker) {
           this.marker.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
+            new BMapGL.Icon(
+              "/images/position-2.png",
+              new BMapGL.Size(67 - 67 / 3, 72)
+            )
           );
         }
         bus.emit("onTopbarClick", 1); // 放回首页
@@ -69,7 +88,10 @@ export default {
          */
         if (this.marker) {
           this.marker.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
+            new BMapGL.Icon(
+              "/images/position-2.png",
+              new BMapGL.Size(67 - 67 / 3, 72)
+            )
           );
         }
 
@@ -79,7 +101,10 @@ export default {
         const marker = this.markerList.find((item) => item.houseId === data.id);
         if (marker) {
           marker.setIcon(
-            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(67 - 67 / 3, 72))
+            new BMapGL.Icon(
+              "/images/position-1.png",
+              new BMapGL.Size(67 - 67 / 3, 72)
+            )
           );
         }
 
@@ -99,7 +124,10 @@ export default {
          */
         this.markerList.forEach((item) => {
           item.setIcon(
-            new BMapGL.Icon("/images/position-2.png", new BMapGL.Size(67 - 67 / 3, 72))
+            new BMapGL.Icon(
+              "/images/position-2.png",
+              new BMapGL.Size(67 - 67 / 3, 72)
+            )
           );
         });
         /**
@@ -148,7 +176,10 @@ export default {
           }
           localStorage.setItem("currentHouse", JSON.stringify(list[i]));
           markers.setIcon(
-            new BMapGL.Icon("/images/position-1.png", new BMapGL.Size(67 - 67 / 3, 72))
+            new BMapGL.Icon(
+              "/images/position-1.png",
+              new BMapGL.Size(67 - 67 / 3, 72)
+            )
           );
           this.marker = markers;
 
