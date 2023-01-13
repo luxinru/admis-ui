@@ -57,9 +57,10 @@ export default {
         departCode: depart.departCode,
         dimension: 0,
         normType: 0,
+        groupType: 1,
       });
 
-      console.log('data :>> ', data);
+      console.log('data1111111111 :>> ', data);
 
       if (this.chart) {
         echarts.dispose(document.getElementById("physical_asset_statistics"));

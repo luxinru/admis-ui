@@ -115,8 +115,9 @@ export default {
         normType: 0,
       });
 
-      console.log("data :>> ", data);
       const {
+        groupName,
+        groupValue,
         businessCount,
         businessValue,
         depreciationCount,
@@ -134,36 +135,8 @@ export default {
       this.chart = echarts.init(
         document.getElementById("business_data_statistics")
       );
-      const xData = [
-        "00:00",
-        "01:00",
-        "02:00",
-        "03:00",
-        "04:00",
-        "05:00",
-        "06:00",
-        "07:00",
-        "08:00",
-        "09:00",
-        "10:00",
-        "11:00",
-        "12:00",
-        "13:00",
-        "14:00",
-        "15:00",
-        "16:00",
-        "17:00",
-        "18:00",
-        "19:00",
-        "20:00",
-        "21:00",
-        "22:00",
-        "23:00",
-      ];
-      const tq2 = [
-        10, 50, 50, 27, 49, 58, 80, 80, 19, 60, 30, 30, 49, 18, 90, 20, 19, 60,
-        30, 30, 49, 18, 90, 20,
-      ]; // 已出核酸检测结果
+      const xData = groupName;
+      const tq2 = groupValue;
 
       const option = {
         title: {
