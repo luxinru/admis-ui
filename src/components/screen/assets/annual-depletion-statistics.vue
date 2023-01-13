@@ -37,18 +37,18 @@
           v-click-out-side="onClickOutside2"
           @click="isShow2 = !isShow2"
         >
-          <span> {{ "全部分类" }} </span>
+          <span :title="currentType2.label"> {{ currentType2.label }} </span>
           <img src="@/assets/images/screen/more-1.png" alt="" />
 
           <div class="content" v-if="isShow2">
             <span
               class="content_item"
               :class="{
-                content_item_active: currentType2 === item.value,
+                content_item_active: currentType2.value === item.value,
               }"
               v-for="(item, index) in options2"
               :key="index"
-              @click="onOptionsClick1(item)"
+              @click="onOptionsClick2(item)"
             >
               {{ item.label }}
             </span>
@@ -59,7 +59,7 @@
         <div class="label">
           <span>
             全年折耗：
-            <p>1143.99</p>
+            <p>{{ all }}</p>
             万元
           </span>
         </div>
@@ -75,6 +75,7 @@ import Box from "../house/box.vue";
 import * as echarts from "echarts";
 import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchDepletionCount } from "@/api/screen/assets/index";
+import useScreenStore from "@/store/modules/screen";
 
 export default {
   name: "AnnualDepletionStatistics",
@@ -92,6 +93,7 @@ export default {
       chart: null,
       isShow1: false,
       currentType1: 0,
+      all: 0,
       options1: [
         {
           label: "资产类型",
@@ -107,14 +109,37 @@ export default {
         },
       ],
       isShow2: false,
-      currentType2: "all",
-      options2: [
+      currentType2: {
+        label: "全部分类",
+        value: "all",
+      },
+    };
+  },
+
+  computed: {
+    classList() {
+      return useScreenStore().classList || [];
+    },
+
+    options2() {
+      let result = [
         {
           label: "全部分类",
           value: "all",
         },
-      ],
-    };
+      ];
+
+      result = result.concat(
+        this.classList.map((item) => {
+          return {
+            label: item.dictName,
+            value: item.dictCode,
+          };
+        })
+      );
+
+      return result;
+    },
   },
 
   mounted() {
@@ -141,7 +166,7 @@ export default {
     },
 
     onOptionsClick2(data) {
-      this.currentType1 = data.value;
+      this.currentType2 = data;
       this.isShow2 = false;
       this.init();
     },
@@ -151,10 +176,14 @@ export default {
       const { data } = await fetchDepletionCount({
         departCode: depart.departCode,
         dimension: this.currentType1, // 0资产类型 1资产类别 2资金渠道
-        dictCode: "",
+        dictCode:
+          this.currentType2.value === "all" ? "" : this.currentType2.value,
         normType: 0, // 0财务准则 1会计准则
       });
       console.log("data :>> ", data);
+      data.forEach((item) => {
+        this.all += Number(item.cumulativeValue);
+      });
 
       if (this.chart) {
         echarts.dispose(document.getElementById("annual_depletion_statistics"));
@@ -479,20 +508,25 @@ export default {
 
     img {
       height: 24px;
-      margin: 2px 0 0 3px;
+      margin: 2px 0 0 0;
     }
 
     span {
+      width: 70px;
       font-size: 16px;
       font-family: Microsoft YaHei;
       font-weight: 400;
       color: #bdd7e7;
       margin-left: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .content {
       position: absolute;
       height: max-content;
+      max-height: 165px;
       top: 40px;
       left: 0;
       display: flex;
@@ -505,14 +539,21 @@ export default {
 
       .content_item {
         width: 163px;
+        height: 32px;
         font-size: 15px;
         font-family: Microsoft YaHei;
         font-weight: 400;
         color: #ffffff;
         border-bottom: 1px solid rgba(55, 130, 255, 0.2);
-        padding: 10px 10px;
+        padding: 0 10px;
         box-sizing: border-box;
         margin-left: 0;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 
         &:last-child {
           border-bottom: none;

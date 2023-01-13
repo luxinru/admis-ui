@@ -39,9 +39,10 @@ export default {
     async init() {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchDepartList({
-        departCode: depart.departCode,
+        // departCode: depart.departCode,
+        // levelSearch: 0
       })
-      console.log('data :>> ', data);
+      console.log('data11111111111 :>> ', data);
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));

@@ -92,6 +92,9 @@ import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 import AssetsContainer from "@/components/screen/assets/assets-container.vue";
 import AssetsMap from "@/components/screen/assets/assets-map.vue";
 
+import { fetchDictList } from "@/api/screen/assets";
+import useScreenStore from "@/store/modules/screen";
+
 export default {
   name: "AssetsIndex",
 
@@ -127,6 +130,10 @@ export default {
   created() {
     const self = this;
 
+    this.fetchDictList0();
+    this.fetchDictList1();
+    this.fetchDictList2();
+
     bus.on("onDepartChange", () => {
       self.isLoading = true;
     });
@@ -148,6 +155,27 @@ export default {
   },
 
   methods: {
+    async fetchDictList0() {
+      const { rows } = await fetchDictList({
+        dictType: 0,
+      });
+      console.log("rows0 :>> ", rows);
+    },
+
+    async fetchDictList1() {
+      const { rows } = await fetchDictList({
+        dictType: 1,
+      });
+      useScreenStore().setClassList(rows);
+    },
+
+    async fetchDictList2() {
+      const { rows } = await fetchDictList({
+        dictType: 2,
+      });
+      console.log("rows2 :>> ", rows);
+    },
+
     onAssetsInfoCloseClick(value) {
       this.isAssetsInfoClose = value;
     },
@@ -185,6 +213,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
   .map {
     position: absolute;

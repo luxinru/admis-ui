@@ -109,7 +109,7 @@ function initChart(data) {
   ];
   let legendData = [],
     seriesData = [],
-    radiusValue = 75, // 图形大小
+    radiusValue = 70, // 图形大小
     total = 0;
   let startAngle = [];
 
@@ -124,7 +124,7 @@ function initChart(data) {
     seriesData.push({
       type: "pie",
       clockWise: true, //饼图的扇区是否是顺时针排布
-      radius: [radiusValue - 8 * i + "%", radiusValue - 4 - 8 * i + 1 + "%"],
+      radius: [radiusValue - 8 * i + "%", radiusValue - 4 - 8 * i + 15 + "%"],
       center: ["25%", "50%"],
       label: {
         normal: {
@@ -249,51 +249,50 @@ function initChart(data) {
     // }
   );
 
-  myChart.setOption(
-    {
-      tooltip: {
-        show: false,
-      },
-      legend: {
-        data: legendData,
-        orient: "vertical",
-        top: "center",
-        right: 30,
-        itemWidth: 8,
-        itemHeight: 6,
-        formatter: function (name) {
-          let target, percent;
-          for (let i = 0; i < dataPie2.length; i++) {
-            if (dataPie2[i].name === name) {
-              target = dataPie2[i].value;
-              percent = ((target / total) * 100).toFixed(2);
-            }
+  myChart.setOption({
+    tooltip: {
+      show: false,
+    },
+    legend: {
+      data: legendData,
+      orient: "vertical",
+      top: "center",
+      right: 30,
+      itemWidth: 8,
+      itemHeight: 6,
+      selectedMode: false,
+      formatter: function (name) {
+        let target, percent;
+        for (let i = 0; i < dataPie2.length; i++) {
+          if (dataPie2[i].name === name) {
+            target = dataPie2[i].value;
+            percent = ((target / total) * 100).toFixed(2);
           }
-          let arr = ["{blue|" + name + "}" + " " + " {white|" + percent + "%}"];
-          return arr;
-        },
-        textStyle: {
-          color: "#a5dbff",
-          align: "right",
-          rich: {
-            white: {
-              color: "#4bb9f4",
-              align: "right",
-              fontWeight: "bold",
-              fontSize: 14,
-            },
-            blue: {
-              color: "#fff",
-              align: "left",
-              fontSize: 12,
-              width: 50,
-            },
+        }
+        let arr = ["{blue|" + name + "}" + " " + " {white|" + percent + "%}"];
+        return arr;
+      },
+      textStyle: {
+        color: "#a5dbff",
+        align: "right",
+        rich: {
+          white: {
+            color: "#4bb9f4",
+            align: "right",
+            fontWeight: "bold",
+            fontSize: 14,
+          },
+          blue: {
+            color: "#fff",
+            align: "left",
+            fontSize: 12,
+            width: 50,
           },
         },
       },
-      series: seriesData,
-    }
-  );
+    },
+    series: seriesData,
+  });
 }
 
 async function fetchVisualPaperFun() {

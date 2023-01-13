@@ -10,6 +10,15 @@ export function fetchDepartList(params) {
 }
 
 // 1.3.	资产总量统计
+export function fetchDictList(params) {
+  return request({
+    url: `data-visualization/assets/visual/dict/list`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.3.	资产总量统计
 export function fetchAssetsCount(params) {
   return request({
     url: `data-visualization/assets/visual/assets/count`,

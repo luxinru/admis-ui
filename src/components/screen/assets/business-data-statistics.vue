@@ -18,49 +18,45 @@
         </div>
         <div class="chart" id="business_data_statistics"></div>
         <div class="labels">
-          <div class="part">
-            <div class="item">
-              <img src="@/assets/images/screen/icon-11.png" alt="" />
-              <span>
-                当日业务笔数
-                <p>
-                  {{ businessCount }}
-                </p>
-                笔
-              </span>
-            </div>
-            <div class="item">
-              <img src="@/assets/images/screen/icon-12.png" alt="" />
-              <span>
-                当日变动金额
-                <p>
-                  {{ businessValue }}
-                </p>
-                万元
-              </span>
-            </div>
+          <div class="item">
+            <img src="@/assets/images/screen/icon-11.png" alt="" />
+            <span>
+              当日业务笔数
+              <p>
+                {{ businessCount }}
+              </p>
+              笔
+            </span>
           </div>
-          <div class="part">
-            <div class="item">
-              <img src="@/assets/images/screen/icon-13.png" alt="" />
-              <span>
-                当日折旧笔数
-                <p>
-                  {{ depreciationCount }}
-                </p>
-                笔
-              </span>
-            </div>
-            <div class="item">
-              <img src="@/assets/images/screen/icon-14.png" alt="" />
-              <span>
-                当日变动金额
-                <p>
-                  {{ depreciationValue }}
-                </p>
-                万元
-              </span>
-            </div>
+          <div class="item">
+            <img src="@/assets/images/screen/icon-12.png" alt="" />
+            <span>
+              当日变动金额
+              <p>
+                {{ businessValue }}
+              </p>
+              万元
+            </span>
+          </div>
+          <div class="item">
+            <img src="@/assets/images/screen/icon-13.png" alt="" />
+            <span>
+              当日折旧笔数
+              <p>
+                {{ depreciationCount }}
+              </p>
+              笔
+            </span>
+          </div>
+          <div class="item">
+            <img src="@/assets/images/screen/icon-14.png" alt="" />
+            <span>
+              当日变动金额
+              <p>
+                {{ depreciationValue }}
+              </p>
+              万元
+            </span>
           </div>
         </div>
       </div>
@@ -316,10 +312,13 @@ export default {
 
     .labels {
       width: 100%;
+      height: 78px;
       display: flex;
       flex-direction: column;
+      overflow-y: scroll;
+      padding-bottom: 10px;
 
-      .part {
+      .item {
         width: calc(100% - 12px * 2);
         height: 34px;
         background: rgba(59, 132, 255, 0.2);
@@ -329,39 +328,31 @@ export default {
         margin: 3px 12px 0;
         padding: 0 16px;
         box-sizing: border-box;
+        margin-top: 10px;
+        flex-shrink: 0;
 
-        &:last-child {
-          margin-bottom: 10px;
+        &:first-child {
+          margin-top: 0;
         }
 
-        .item {
-          flex: 1 0;
+        img {
+          width: 17px;
+          margin-right: 8px;
+        }
+
+        span {
+          font-size: 12px;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #ffffff;
           display: flex;
           align-items: center;
 
-          &:last-child {
-            margin-left: 16px;
-          }
-
-          img {
-            width: 17px;
-            margin-right: 8px;
-          }
-
-          span {
-            font-size: 12px;
-            font-family: Microsoft YaHei;
-            font-weight: 400;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-
-            p {
-              font-size: 16px;
-              font-weight: bold;
-              color: rgba(35, 120, 218, 1);
-              margin: 0 5px;
-            }
+          p {
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(35, 120, 218, 1);
+            margin: 0 5px;
           }
         }
       }

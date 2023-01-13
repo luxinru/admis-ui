@@ -2,11 +2,15 @@ const useScreenStore = defineStore(
   'screen',
   {
     state: () => ({
-      houseList: []
+      houseList: [],
+      classList: []
     }),
     actions: {
       setHouseList(list) {
         this.houseList = list || []
+      },
+      setClassList(list) {
+        this.classList = list || []
       },
     }
   })

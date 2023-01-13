@@ -60,7 +60,7 @@ export default {
         groupType: 1,
       });
 
-      console.log('data1111111111 :>> ', data);
+      console.log('data1111111111111 :>> ', data);
 
       if (this.chart) {
         echarts.dispose(document.getElementById("physical_asset_statistics"));

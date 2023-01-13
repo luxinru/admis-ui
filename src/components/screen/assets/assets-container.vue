@@ -200,6 +200,7 @@ export default {
     .bottom_info {
       width: 100%;
       height: 100%;
+      overflow: hidden;
     }
   }
 }

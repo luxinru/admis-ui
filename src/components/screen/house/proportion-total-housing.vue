@@ -655,7 +655,7 @@ export default {
         flex-shrink: 0;
         display: flex;
         align-items: center;
-        margin-top: 12px;
+        margin-top: 5px;
         cursor: pointer;
         overflow: hidden;
 

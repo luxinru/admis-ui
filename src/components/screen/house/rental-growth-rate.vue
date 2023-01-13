@@ -146,6 +146,7 @@ export default {
         tooltip: {
           show: true,
           trigger: "axis",
+          confine: true,
           valueFormatter: (value) => Number(value).toFixed(2) + "%",
         },
         grid: {
