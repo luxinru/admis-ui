@@ -37,19 +37,19 @@ export default {
 
   methods: {
     async init() {
-      const depart = JSON.parse(localStorage.getItem('currentDepart') || {})
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchAssetsCount({
         departCode: depart.departCode,
-        normType: 0
-      })
+        normType: 0,
+      });
 
       this.chart = echarts.init(
         document.getElementById("total_assets_statistics")
       );
 
-      var xData = data.map(item => item.assetsType);
-      var lastYearData = data.map(item => item.assetsCount);
-      var thisYearData = data.map(item => item.assetsValue);
+      var xData = data.map((item) => item.assetsType);
+      var lastYearData = data.map((item) => item.assetsCount);
+      var thisYearData = data.map((item) => item.assetsValue);
       var timeLineData = [1];
       let legend = ["进库数", "出库数"];
       var background = "#0e2147"; //背景
@@ -173,7 +173,7 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  const finded = data.find(item => item.assetsType === value)
+                  const finded = data.find((item) => item.assetsType === value);
                   return finded.assetsCount;
                 },
               },
@@ -232,7 +232,7 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  const finded = data.find(item => item.assetsType === value)
+                  const finded = data.find((item) => item.assetsType === value);
                   return finded.assetsValue.toFixed(2);
                 },
               },

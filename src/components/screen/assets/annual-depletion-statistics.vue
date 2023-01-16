@@ -181,6 +181,7 @@ export default {
         normType: 0, // 0财务准则 1会计准则
       });
       console.log("data :>> ", data);
+
       data.forEach((item) => {
         this.all += Number(item.cumulativeValue);
       });
@@ -193,291 +194,191 @@ export default {
         document.getElementById("annual_depletion_statistics")
       );
 
-      let arr = [];
-      let list = [];
-      let series = [];
-      let legend = [];
-      let fontSize = 12;
-      let barWidth = 4;
-      let barGap = 0;
-      let maxList = [];
-      let max = 460; //背景最大值取y轴刻度线（最后注释部分）
-      let colorStartList = [
-        "transparent",
-        "transparent",
-        "transparent",
-        "transparent",
-      ];
-      let colorLeftList = ["#000", "#000", "#000", "#000"];
-      let colorTopList = ["#1E7EFF", "#FFA75A", "#6ACC29", "#9833FF"];
-      let colorEndList = ["#4084EE", "#FF8D28", "#6ACC29", "#9833FF"];
-      const chartObj = {
-        series: [
-          {
-            name: "月计提",
-            data: data.map((item) => item.accrualValue),
-          },
-          {
-            name: "月补提",
-            data: data.map((item) => item.recoilValue),
-          },
-          {
-            name: "累计折旧",
-            data: data.map((item) => item.cumulativeValue),
-          },
-        ],
-        chartList: data.map((item) => item.month.replace("月", "")),
+      // mock数据
+      const dataArr = {
+        xdata: data.map((item) => item.month.replace("月", "")),
+        vaccination: data.map((item) => item.accrualValue),
+        unvaccinated: data.map((item) => item.recoilValue),
+        unvaccinatedTwo: data.map((item) => item.cumulativeValue),
       };
-      function colorRgba(str, alpha) {
-        let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
-        var sColor = str.toLowerCase();
-        if (sColor == "transparent") {
-          return "transparent";
-        }
-        if (sColor && reg.test(sColor)) {
-          if (sColor.length === 4) {
-            var sColorNew = "#";
-            for (let i = 1; i < 4; i += 1) {
-              sColorNew += sColor
-                .slice(i, i + 1)
-                .concat(sColor.slice(i, i + 1));
-            }
-            sColor = sColorNew;
-          }
-          //处理六位的颜色值
-          var sColorChange = [];
-          for (let i = 1; i < 7; i += 2) {
-            sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
-          }
-          return "rgba(" + sColorChange.join(",") + "," + alpha + ")";
-        } else {
-          return sColor;
-        }
-      }
-      if (chartObj.series && chartObj.series.length) {
-        chartObj.series.forEach((ele, i) => {
-          arr = arr.concat(ele.data);
-        });
-        maxList = chartObj.series[0].data.map(() => {
-          return max;
-        });
-        list = chartObj.series[0].data.map((item, index) => {
-          return 1;
-        });
-        chartObj.series.forEach((item, index) => {
-          legend.push({
-            name: item.name,
-            itemStyle: {
-              color: colorEndList[index % colorEndList.length],
-            },
-          });
 
-          //实际数据顶部切片
-          series.push({
-            data: item.data,
-            type: "pictorialBar",
-            tooltip: {
-              show: false,
-            },
-            barMaxWidth: fontSize * 3,
-            color: colorTopList[index],
-            symbolPosition: "end",
-            symbol: "diamond",
-            symbolOffset: [
-              (-0.5 * (chartObj.series.length - 1) +
-                index +
-                -0.5 * barGap * 0.01 * (chartObj.series.length - 1) +
-                barGap * 0.01 * index) *
-                barWidth,
-              "-50%",
-            ],
-            symbolSize: [barWidth, barWidth * 0.4],
-            zlevel: 2,
-          });
-          //实际数据侧边切片
-          series.push({
-            data: item.data,
-            type: "pictorialBar",
-            tooltip: {
-              show: false,
-            },
-            barMaxWidth: fontSize * 3,
-            color: {
-              x: 0,
-              y: 1,
-              x2: 0,
-              y2: 0,
-              type: "linear",
-              global: false,
-              colorStops: [
-                {
-                  offset: 0,
-                  color: "transparent",
-                },
-                {
-                  offset: 0.2,
-                  color: colorRgba(
-                    colorLeftList[index % colorLeftList.length],
-                    0.2
-                  ),
-                },
-                {
-                  offset: 1,
-                  color: colorRgba(
-                    colorLeftList[index % colorLeftList.length],
-                    0.3
-                  ),
-                },
-              ],
-            },
-            symbolPosition: "end",
-            symbol: "rect",
-            symbolSize: [barWidth / 2, "100%"],
-            symbolOffset: [
-              (-0.5 * (chartObj.series.length - 1) +
-                index +
-                -0.5 * barGap * 0.01 * (chartObj.series.length - 1) +
-                barGap * 0.01 * index -
-                0.25) *
-                barWidth,
-              0,
-            ],
-            zlevel: 1,
-          });
-          //柱子
-          series.push({
-            data: item.data,
-            type: "bar",
-            name: item.name,
-            barGap: barGap + "%",
-            barWidth: barWidth,
-            barMaxWidth: fontSize * 3,
-            label: {
-              show: false,
-              position: "top",
-              distance: fontSize * 0.3,
-              textStyle: {
-                color: colorEndList[index % colorEndList.length],
-                fontSize: fontSize,
-              },
-              // formatter: function (a, b) {
-              //     return a.value==0?'':a.value;
-              // },
-            },
-            itemStyle: {
-              color: {
-                x: 0,
-                y: 1,
-                x2: 0,
-                y2: 0,
-                type: "linear",
-                global: false,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: colorStartList[index % colorStartList.length],
-                  },
-                  {
-                    offset: 0.2,
-                    color: colorRgba(
-                      colorEndList[index % colorEndList.length],
-                      0.2
-                    ),
-                  },
-                  {
-                    offset: 1,
-                    color: colorRgba(
-                      colorEndList[index % colorEndList.length],
-                      1
-                    ),
-                  },
-                ],
-              },
-            },
-          });
-        });
-      }
-      const option = {
-        tooltip: {
-          show: true,
-          trigger: "item",
+      // tooltip
+      const tooltip = {
+        trigger: "item",
+      };
+      const legend = {
+        data: ["月计提", "月补提", "累计折旧"],
+        textStyle: { fontSize: 14, color: "#fff" },
+        itemWidth: 8,
+        itemHeight: 4,
+        top: "0%",
+        right: "2%",
+        selectedMode: false,
+      };
+      const grid = { top: "20%", left: "10%", right: "6%", bottom: "15%" };
+      // xAxis
+      const xAxis = {
+        name: "(月)",
+        nameGap: 0,
+        nameTextStyle: {
+          fontSize: 12,
+          color: "rgba(196, 225, 255, 1)",
         },
-        grid: {
-          top: "18%",
-          left: "2%",
-          right: "4%",
-          bottom: fontSize,
-          containLabel: true, //包括文本，居中
-        },
-        legend: {
-          show: true,
-          data: legend,
-          selectedMode: false, //图例是否可以点击
-          icon: "rect",
-          itemWidth: 8,
-          itemHeight: 4,
-          textStyle: {
-            color: "#C3E3F9",
-            fontSize: fontSize,
-          },
-          right: "0%",
-        },
-        xAxis: {
-          data: chartObj.chartList,
-          type: "category",
-          boundaryGap: true,
-          axisLine: {
-            //坐标轴轴线相关设置。数学上的x轴
-            show: true,
-            lineStyle: {
-              color: "rgba(87, 107, 139, 0.66)",
-            },
-          },
-          axisLabel: {
-            //坐标轴刻度标签的相关设置
-            interval: 0,
-            textStyle: {
-              color: "rgba(196, 225, 255, 1)",
-              fontSize: 14,
-            },
-          },
-          splitLine: {
-            show: false,
-          },
-          axisTick: {
-            show: false,
-          },
+        axisTick: { show: false },
+        axisLine: { lineStyle: { color: "rgba(87, 107, 139, 0.66)" } },
+        axisLabel: {
+          textStyle: { fontSize: 12, color: "rgba(196, 225, 255, 1)" },
           interval: 0,
         },
-        yAxis: [
-          {
-            type: "value",
-            axisLine: {
-              show: true,
-              lineStyle: {
-                width: 1,
-                color: "rgba(87, 107, 139, 0.66)",
-                type: "dashed",
-              },
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                width: 1,
-                color: "rgba(87, 107, 139, 0.66)",
-                type: "dashed",
-              },
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLabel: {
-              fontSize: 12,
-              color: "rgba(196, 225, 255, 1)",
+        data: dataArr.xdata,
+      };
+
+      // yAxis
+      const yAxis = [
+        {
+          axisTick: { show: false },
+          axisLine: { show: true, lineStyle: { type: "dashed" } },
+          splitLine: {
+            lineStyle: { color: "rgba(255,255,255, .05)", type: "dashed" },
+          },
+          axisLabel: {
+            textStyle: { fontSize: 12, color: "rgba(196, 225, 255, 1)" },
+          },
+        },
+        {
+          show: true,
+          max: 100,
+          splitLine: { show: false },
+          axisLine: { show: false },
+          axisTick: { show: false },
+          axisLabel: {
+            textStyle: { fontSize: 16, color: "#fff" },
+            formatter: (params) => {
+              return `${params}%`;
             },
           },
-        ],
-        series: series,
+        },
+      ];
+
+      // series
+      const series = [
+        {
+          z: 1,
+          name: "月计提",
+          type: "pictorialBar",
+          symbolPosition: "end",
+          data: dataArr.vaccination,
+          symbol: "diamond",
+          symbolOffset: ["-50%", "-50%"],
+          symbolSize: [12, 6],
+          itemStyle: {
+            borderColor: "#2fffa4",
+            color: "#2fffa4",
+          },
+        },
+        {
+          z: 1,
+          type: "bar",
+          name: "月计提",
+          barWidth: 12,
+          barGap: "-50%",
+          data: dataArr.vaccination,
+          itemStyle: {
+            color: {
+              type: "linear",
+              x: 0,
+              x2: 1,
+              y: 0,
+              y2: 0,
+              colorStops: [
+                { offset: 0, color: "rgba(29, 245, 160, .7)" },
+                { offset: 0.5, color: "rgba(29, 245, 160, .7)" },
+                { offset: 0.5, color: "rgba(29, 245, 160, .3)" },
+                { offset: 1, color: "rgba(29, 245, 160, .3)" },
+              ],
+            },
+          },
+        },
+        {
+          z: 2,
+          name: "月补提",
+          type: "pictorialBar",
+          symbolPosition: "end",
+          data: dataArr.unvaccinated,
+          symbol: "diamond",
+          symbolOffset: [0, "-50%"],
+          symbolSize: [12, 6],
+          itemStyle: {
+            borderColor: "#32ffee",
+            color: "#32ffee",
+          },
+        },
+        {
+          z: 2,
+          type: "bar",
+          name: "月补提",
+          barWidth: 12,
+          data: dataArr.unvaccinated,
+          itemStyle: {
+            color: {
+              type: "linear",
+              x: 0,
+              x2: 1,
+              y: 0,
+              y2: 0,
+              colorStops: [
+                { offset: 0, color: "rgba(50, 255, 238, .7)" },
+                { offset: 0.5, color: "rgba(50, 255, 238, .7)" },
+                { offset: 0.5, color: "rgba(50, 255, 238, .3)" },
+                { offset: 1, color: "rgba(50, 255, 238, .3)" },
+              ],
+            },
+          },
+        },
+        {
+          z: 3,
+          name: "累计折旧",
+          type: "pictorialBar",
+          symbolPosition: "end",
+          data: dataArr.unvaccinatedTwo,
+          symbol: "diamond",
+          symbolOffset: ["50%", "-50%"],
+          symbolSize: [12, 6],
+          itemStyle: {
+            borderColor: "#ffd11a",
+            color: "#ffd11a",
+          },
+        },
+        {
+          z: 3,
+          type: "bar",
+          name: "累计折旧",
+          barWidth: 12,
+          data: dataArr.unvaccinatedTwo,
+          itemStyle: {
+            color: {
+              type: "linear",
+              x: 0,
+              x2: 1,
+              y: 0,
+              y2: 0,
+              colorStops: [
+                { offset: 0, color: "rgba(255, 209, 26, .7)" },
+                { offset: 0.5, color: "rgba(255, 209, 26, .7)" },
+                { offset: 0.5, color: "rgba(255, 209, 26, .3)" },
+                { offset: 1, color: "rgba(255, 209, 26, .3)" },
+              ],
+            },
+          },
+        },
+      ];
+      const option = {
+        tooltip,
+        xAxis,
+        yAxis,
+        series,
+        grid,
+        legend,
       };
 
       this.chart.setOption(option);

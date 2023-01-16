@@ -175,6 +175,14 @@ export default {
             alpha: 65,
           },
         },
+        colors: [
+          "#4b90fe",
+          "#3ad0ff",
+          "#8dfabc",
+          "#ffc178",
+          "#2ba5ea",
+          "#0074ff",
+        ],
         title: {
           text: null,
         },
@@ -182,6 +190,7 @@ export default {
           itemStyle: {
             color: "#fff",
           },
+          itemMarginBottom: 10,
           labelFormatter: function () {
             /*
              *  格式化函数可用的变量：this， 可以用 console.log(this) 来查看包含的详细信息
@@ -193,7 +202,7 @@ export default {
         },
         plotOptions: {
           pie: {
-            size: "140%",
+            size: "130%",
             innerSize: "40%",
             depth: 45,
             allowPointSelect: true,
@@ -297,6 +306,7 @@ export default {
     .img {
       position: absolute;
       height: 341px;
+      margin-top: 16px;
     }
 
     .chart {

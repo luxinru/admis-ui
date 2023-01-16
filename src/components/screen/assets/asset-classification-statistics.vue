@@ -59,6 +59,11 @@
         </div>
       </template>
       <div class="container">
+        <div class="imgs">
+          <img src="@/assets/images/screen/icon-101.png" alt="" />
+          <img src="@/assets/images/screen/icon-111.png" alt="" />
+          <img src="@/assets/images/screen/icon-121.png" alt="" />
+        </div>
         <div class="chart" id="asset_classification_statistics1"></div>
         <div class="labels">
           <div class="item" v-for="(item, index) in labels" :key="index">
@@ -175,7 +180,6 @@ export default {
         document.getElementById("asset_classification_statistics1")
       );
 
-      this.angle = 0; //角度，用来做简单的动画效果的
       let color = [
         "#fdd56a",
         "#fdb36a",
@@ -294,240 +298,51 @@ export default {
           value: 0,
         },
       ];
+
+      let seriesArr = [];
+      for (let index = 0; index < 19; index++) {
+        seriesArr = seriesArr.concat([
+          {
+            value: 20,
+            name: "yellow",
+            itemStyle: {
+              color: color[index],
+            },
+          },
+          {
+            value: 2,
+            name: "",
+            itemStyle: {
+              color: "transparent",
+            },
+          },
+        ]);
+      }
+
       this.option = {
+        tooltip: {
+          trigger: "item",
+        },
         legend: {
           show: false,
         },
         series: [
           {
-            name: "ring5",
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              return {
-                type: "arc",
-                shape: {
-                  cx: api.getWidth() / 2,
-                  cy: api.getHeight() / 2,
-                  r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.6,
-                  startAngle: ((0 + self.angle) * Math.PI) / 180,
-                  endAngle: ((90 + self.angle) * Math.PI) / 180,
-                },
-                style: {
-                  stroke: "#fdcb9b",
-                  fill: "transparent",
-                  lineWidth: 1.5,
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "ring5",
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              return {
-                type: "arc",
-                shape: {
-                  cx: api.getWidth() / 2,
-                  cy: api.getHeight() / 2,
-                  r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.6,
-                  startAngle: ((180 + self.angle) * Math.PI) / 180,
-                  endAngle: ((270 + self.angle) * Math.PI) / 180,
-                },
-                style: {
-                  stroke: "#fdcb9b",
-                  fill: "transparent",
-                  lineWidth: 1.5,
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "ring5",
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              return {
-                type: "arc",
-                shape: {
-                  cx: api.getWidth() / 2,
-                  cy: api.getHeight() / 2,
-                  r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65,
-                  startAngle: ((270 + -self.angle) * Math.PI) / 180,
-                  endAngle: ((40 + -self.angle) * Math.PI) / 180,
-                },
-                style: {
-                  stroke: "#fdcb9b",
-                  fill: "transparent",
-                  lineWidth: 1.5,
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "ring5",
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              return {
-                type: "arc",
-                shape: {
-                  cx: api.getWidth() / 2,
-                  cy: api.getHeight() / 2,
-                  r: (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65,
-                  startAngle: ((90 + -self.angle) * Math.PI) / 180,
-                  endAngle: ((220 + -self.angle) * Math.PI) / 180,
-                },
-                style: {
-                  stroke: "#fdcb9b",
-                  fill: "transparent",
-                  lineWidth: 1.5,
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "ring5",
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              let x0 = api.getWidth() / 2;
-              let y0 = api.getHeight() / 2;
-              let r = (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65;
-              let point = self.getCirlPoint(x0, y0, r, 90 + -self.angle);
-              return {
-                type: "circle",
-                shape: {
-                  cx: point.x,
-                  cy: point.y,
-                  r: 4,
-                },
-                style: {
-                  stroke: "#fdcb9b", //粉
-                  fill: "#fdcb9b",
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "ring5", //绿点
-            type: "custom",
-            coordinateSystem: "none",
-            renderItem: function (params, api) {
-              let x0 = api.getWidth() / 2;
-              let y0 = api.getHeight() / 2;
-              let r = (Math.min(api.getWidth(), api.getHeight()) / 2) * 0.65;
-              let point = self.getCirlPoint(x0, y0, r, 270 + -self.angle);
-              return {
-                type: "circle",
-                shape: {
-                  cx: point.x,
-                  cy: point.y,
-                  r: 4,
-                },
-                style: {
-                  stroke: "#fdcb9b", //绿
-                  fill: "#fdcb9b",
-                },
-              };
-            },
-            data: [0],
-          },
-          {
-            name: "吃猪肉频率",
+            name: "占用率",
             type: "pie",
-            radius: ["50%", "40%"],
+            center: ["50%", "50%"],
+            radius: ["45%", "64%"],
+            avoidLabelOverlap: false,
             silent: true,
-            clockwise: true,
-            startAngle: 180,
-            z: 0,
-            zlevel: 0,
-            color: color,
-            itemStyle: {
-              borderColor: "rgba(255, 255, 255, 0.01)",
-              borderWidth: 15,
-            },
             label: {
               show: false,
             },
-            data: this.labels,
-          },
-          {
-            type: "pie",
-            zlevel: 3,
-            silent: true,
-            radius: ["30%", "31%"],
-            //  center: [index * 34 + 15.5 + '%', '45%'],
-            label: {
-              show: false,
-            },
-            labelLine: {
-              normal: {
-                show: false,
-              },
-            },
-            data: this.dotArr(),
+            data: seriesArr,
           },
         ],
       };
 
       this.chart.setOption(this.option);
-      setInterval(() => {
-        this.draw();
-      }, 50);
-    },
-
-    dotArr() {
-      let dataArr = [];
-      for (var i = 0; i < 80; i++) {
-        if (i % 2 === 0) {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 1,
-            itemStyle: {
-              normal: {
-                color: "#0CD3DB",
-                borderWidth: 1,
-                borderColor: "#0CD3DB",
-              },
-            },
-          });
-        } else {
-          dataArr.push({
-            name: (i + 1).toString(),
-            value: 2,
-            itemStyle: {
-              normal: {
-                color: "rgba(0,0,0,0)",
-                borderWidth: 0,
-                borderColor: "rgba(0,0,0,0)",
-              },
-            },
-          });
-        }
-      }
-      return dataArr;
-    },
-
-    getCirlPoint(x0, y0, r, angle) {
-      let x1 = x0 + r * Math.cos((angle * Math.PI) / 180);
-      let y1 = y0 + r * Math.sin((angle * Math.PI) / 180);
-      return {
-        x: x1,
-        y: y1,
-      };
-    },
-
-    draw() {
-      this.angle = this.angle + 3;
-      this.chart.setOption(this.option, true);
-      //window.requestAnimationFrame(draw);
     },
   },
 };
@@ -632,14 +447,58 @@ export default {
     height: 100%;
     overflow: hidden;
     display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .imgs {
+      position: absolute;
+      left: 7.1%;
+      width: 173px;
+      height: 174px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        position: absolute;
+
+        &:nth-child(1) {
+          animation: mymove1 10s infinite linear;
+        }
+
+        &:nth-child(2) {
+          animation: mymove2 10s infinite linear;
+        }
+      }
+
+      @keyframes mymove1 {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes mymove2 {
+        from {
+          transform: rotate(360deg);
+        }
+        to {
+          transform: rotate(0deg);
+        }
+      }
+    }
 
     .chart {
+      position: relative;
       flex: 1 0;
       height: 100%;
       overflow: hidden;
     }
 
     .labels {
+      position: relative;
       flex: 2 0;
       height: 100%;
       overflow: hidden;

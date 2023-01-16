@@ -19,6 +19,16 @@
       <span> 西南油气田资产可视化 </span>
     </div>
     <img class="bottom_img" src="@/assets/images/screen/bottom.png" alt="" />
+
+    <img
+      class="bottom_img"
+      :src="isBottomHover ? bottomImgActive : bottomImg"
+      alt=""
+      @mouseover="isBottomHover = true"
+      @mouseout="isBottomHover = false"
+      @click="onBottomImgClick"
+    />
+
     <img class="left_img" src="@/assets/images/screen/edge-2.png" alt="" />
     <img class="right_img" src="@/assets/images/screen/edge-2.png" alt="" />
 
@@ -63,21 +73,6 @@
         :class="{ assets_info_close: isAssetsInfoClose }"
       >
         <AssetsInfo />
-
-        <img
-          v-if="!isAssetsInfoClose"
-          class="closeImg"
-          src="@/assets/images/screen/upper1.png"
-          alt=""
-          @click="onAssetsInfoCloseClick(true)"
-        />
-        <img
-          v-else
-          class="closeImg"
-          src="@/assets/images/screen/under1.png"
-          alt=""
-          @click="onAssetsInfoCloseClick(false)"
-        />
       </section>
     </template>
   </div>
@@ -91,6 +86,9 @@ import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 import AssetsContainer from "@/components/screen/assets/assets-container.vue";
 import AssetsMap from "@/components/screen/assets/assets-map.vue";
+
+import bottomImg from "@/assets/images/screen/bottom.png";
+import bottomImgActive from "@/assets/images/screen/High-2.png";
 
 import { fetchDictList } from "@/api/screen/assets";
 import useScreenStore from "@/store/modules/screen";
@@ -113,6 +111,9 @@ export default {
       isLoading: false,
       isAssetsInfoClose: false,
       assetsType: 1,
+      isBottomHover: false,
+      bottomImg: bottomImg,
+      bottomImgActive: bottomImgActive,
     };
   },
 
@@ -155,6 +156,10 @@ export default {
   },
 
   methods: {
+    onBottomImgClick() {
+      this.isAssetsInfoClose = !this.isAssetsInfoClose;
+    },
+
     async fetchDictList0() {
       const { rows } = await fetchDictList({
         dictType: 0,
@@ -174,10 +179,6 @@ export default {
         dictType: 2,
       });
       console.log("rows2 :>> ", rows);
-    },
-
-    onAssetsInfoCloseClick(value) {
-      this.isAssetsInfoClose = value;
     },
   },
 };
@@ -287,6 +288,7 @@ export default {
     width: 1816px;
     height: 63px;
     bottom: 0;
+    cursor: pointer;
   }
 
   .left_img {
@@ -371,14 +373,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .closeImg {
-      position: absolute;
-      width: 83px;
-      height: 24px;
-      top: -27px;
-      cursor: pointer;
-    }
   }
 
   .assets_info_close {

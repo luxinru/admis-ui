@@ -1,6 +1,30 @@
 <template>
   <div class="business_statistics_root">
     <Box title="本年业务统计">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside2"
+          @click="isShow2 = !isShow2"
+        >
+          <span :title="currentType2.label"> {{ currentType2.label }} </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow2">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType2.value === item.value,
+              }"
+              v-for="(item, index) in options2"
+              :key="index"
+              @click="onOptionsClick2(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
       <div class="container">
         <div class="imgs">
           <img src="@/assets/images/screen/container.png" alt="" />
@@ -66,6 +90,7 @@
 <script>
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchBusinessCount } from "@/api/screen/assets/index";
 
 export default {
@@ -75,9 +100,28 @@ export default {
     Box,
   },
 
+  directives: {
+    clickOutSide,
+  },
+
   data() {
     return {
       list: [],
+      isShow2: false,
+      currentType2: {
+        label: "热点业务榜",
+        value: 0,
+      },
+      options2: [
+        {
+          label: "热点业务榜",
+          value: 0,
+        },
+        {
+          label: "热点单位",
+          value: 1,
+        },
+      ],
     };
   },
 
@@ -86,6 +130,16 @@ export default {
   },
 
   methods: {
+    onOptionsClick2(data) {
+      this.currentType2 = data;
+      this.isShow2 = false;
+      this.init();
+    },
+
+    onClickOutside2() {
+      this.isShow2 = false;
+    },
+    
     async init() {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchBusinessCount({
@@ -104,6 +158,81 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  .select {
+    position: relative;
+    flex: 1 0;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 0;
+    }
+
+    span {
+      width: 100px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .content {
+      position: absolute;
+      height: max-content;
+      max-height: 165px;
+      top: 40px;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 163px;
+        height: 32px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 0 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
 
   .container {
     width: 100%;
@@ -161,7 +290,7 @@ export default {
         display: flex;
         align-items: center;
         flex-shrink: 0;
-        background: url('@/assets/images/screen/Table-bj.png') no-repeat;
+        background: url("@/assets/images/screen/Table-bj.png") no-repeat;
         background-size: 100% 100%;
 
         span {
