@@ -131,6 +131,10 @@ export default {
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
 
   beforeUnmount() {
@@ -331,7 +335,7 @@ export default {
             name: "占用率",
             type: "pie",
             center: ["50%", "50%"],
-            radius: ["45%", "64%"],
+            radius: ["45%", "70%"],
             avoidLabelOverlap: false,
             silent: true,
             label: {

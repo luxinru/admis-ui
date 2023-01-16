@@ -3,15 +3,33 @@
     <Box title="实物资产统计">
       <div class="container">
         <div class="legend">
-          <span :class="{ active: type === 1 }" @click="type = 1">
+          <span
+            :class="{ active: type === 1 }"
+            @click="
+              type = 1;
+              init();
+            "
+          >
             <p></p>
             总数量
           </span>
-          <span :class="{ active: type === 2 }" @click="type = 2">
+          <span
+            :class="{ active: type === 2 }"
+            @click="
+              type = 2;
+              init();
+            "
+          >
             <p></p>
             总金额
           </span>
-          <span :class="{ active: type === 3 }" @click="type = 3">
+          <span
+            :class="{ active: type === 3 }"
+            @click="
+              type = 3;
+              init();
+            "
+          >
             <p></p>
             总业务量
           </span>
@@ -44,6 +62,10 @@ export default {
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
 
   beforeUnmount() {
@@ -59,9 +81,6 @@ export default {
         normType: 0,
         groupType: 1,
       });
-
-      console.log('data1111111111111 :>> ', data);
-
       if (this.chart) {
         echarts.dispose(document.getElementById("physical_asset_statistics"));
       }
@@ -70,221 +89,122 @@ export default {
         document.getElementById("physical_asset_statistics")
       );
 
-      let xaxisData = [
-        "川中油气矿",
-        "重庆气矿",
-        "蜀南气矿",
-        "川西北气矿",
-        "蜀南气矿",
-      ];
-      let yaxisData = [90, 80, 100, 70, 65];
-
-      const offsetX = 6;
-      const offsetY = 5;
-      // 绘制左侧面
-      const CubeLeft = echarts.graphic.extendShape({
-        shape: {
+      let dataArr = data.map((item) => item.groupValue);
+      let xData = data.map((item) => item.groupName);
+      let singleBarWidth = 6;
+      function getColor(color) {
+        return {
+          type: "linear",
           x: 0,
-          y: 0,
-        },
-        buildPath: function (ctx, shape) {
-          // 会canvas的应该都能看得懂，shape是从custom传入的
-          const xAxisPoint = shape.xAxisPoint;
-          const c0 = [shape.x, shape.y];
-          const c1 = [shape.x - offsetX, shape.y - offsetY];
-          const c2 = [xAxisPoint[0] - offsetX, xAxisPoint[1] - offsetY];
-          const c3 = [xAxisPoint[0], xAxisPoint[1]];
-          ctx
-            .moveTo(c0[0], c0[1])
-            .lineTo(c1[0], c1[1])
-            .lineTo(c2[0], c2[1])
-            .lineTo(c3[0], c3[1])
-            .closePath();
-        },
-      });
-
-      // 绘制右侧面
-      const CubeRight = echarts.graphic.extendShape({
-        shape: {
-          x: 0,
-          y: 0,
-        },
-        buildPath: function (ctx, shape) {
-          const xAxisPoint = shape.xAxisPoint;
-          const c1 = [shape.x, shape.y];
-          const c2 = [xAxisPoint[0], xAxisPoint[1]];
-          const c3 = [xAxisPoint[0] + offsetX, xAxisPoint[1] - offsetY];
-          const c4 = [shape.x + offsetX, shape.y - offsetY];
-          ctx
-            .moveTo(c1[0], c1[1])
-            .lineTo(c2[0], c2[1])
-            .lineTo(c3[0], c3[1])
-            .lineTo(c4[0], c4[1])
-            .closePath();
-        },
-      });
-
-      // 绘制顶面
-      const CubeTop = echarts.graphic.extendShape({
-        shape: {
-          x: 0,
-          y: 0,
-        },
-        buildPath: function (ctx, shape) {
-          const c1 = [shape.x, shape.y];
-          const c2 = [shape.x + offsetX, shape.y - offsetY]; //右点
-          const c3 = [shape.x, shape.y - offsetX];
-          const c4 = [shape.x - offsetX, shape.y - offsetY];
-          ctx
-            .moveTo(c1[0], c1[1])
-            .lineTo(c2[0], c2[1])
-            .lineTo(c3[0], c3[1])
-            .lineTo(c4[0], c4[1])
-            .closePath();
-        },
-      });
-
-      // 注册三个面图形
-      echarts.graphic.registerShape("CubeLeft", CubeLeft);
-      echarts.graphic.registerShape("CubeRight", CubeRight);
-      echarts.graphic.registerShape("CubeTop", CubeTop);
-
-      const option = {
+          y: 1,
+          x2: 0,
+          y2: 0,
+          colorStops: [
+            {
+              offset: 0,
+              color: color[0], // 0% 处的颜色
+            },
+            {
+              offset: 1,
+              color: color[1], // 100% 处的颜色
+            },
+          ],
+        };
+      }
+      let option = {
         tooltip: {
-          trigger: "item",
+          trigger: "axis",
+          formatter: "{b}: {c}",
         },
         grid: {
-          left: "2%",
-          right: "2%",
-          top: "10%",
-          bottom: "5%",
-          containLabel: true,
+          left: "13%",
+          right: "5%",
+          top: "8%",
+          bottom: "14%",
         },
         xAxis: {
-          type: "category",
-          data: xaxisData,
-          minInterval: 1,
+          nameTextStyle: {
+            fontSize: 12,
+          },
           axisLine: {
-            show: true,
             lineStyle: {
-              width: 1,
-              color: "rgba(87, 107, 139, 0.66)",
+              color: "rgba(255, 255, 255, 0.2)",
             },
           },
-          axisTick: {
-            show: false,
-          },
+          splitLine: { show: false },
+          axisTick: { show: false },
+          //轴线上的字
           axisLabel: {
-            interval: 0,
+            show: true,
+            color: "#fff",
             fontSize: 12,
-            color: "rgba(196, 225, 255, 1)",
           },
+          data: xData,
         },
         yAxis: {
           type: "value",
-          axisLine: {
-            show: true,
-            lineStyle: {
-              width: 1,
-              color: "rgba(87, 107, 139, 0.66)",
-              type: "dashed",
-            },
+          // min: 0,
+          // max: 100,
+          // interval: 20,
+          name: "",
+          axisTick: { show: false },
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 12,
           },
+          //轴线上的字
+          axisLabel: {
+            color: "#fff",
+            fontSize: 12,
+          },
+          axisLine: { show: false },
+          //网格线
           splitLine: {
             show: true,
             lineStyle: {
-              width: 1,
-              color: "rgba(87, 107, 139, 0.66)",
+              color: "rgba(183, 200, 235, 0.3)",
               type: "dashed",
+              opacity: 0.3,
             },
-          },
-          axisTick: {
-            show: false,
-          },
-          axisLabel: {
-            fontSize: 12,
-            color: "rgba(196, 225, 255, 1)",
           },
         },
         series: [
           {
-            type: "custom",
-            renderItem: (params, api) => {
-              const location = api.coord([api.value(0), api.value(1)]);
-              return {
-                type: "group",
-                children: [
-                  {
-                    type: "CubeLeft",
-                    shape: {
-                      api,
-                      xValue: api.value(0),
-                      yValue: api.value(1),
-                      x: location[0],
-                      y: location[1],
-                      xAxisPoint: api.coord([api.value(0), 0]),
-                    },
-                    style: {
-                      fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        {
-                          offset: 0,
-                          color: "rgba(57, 206, 255, 1)",
-                        },
-                        {
-                          offset: 0.9,
-                          color: "rgba(57, 206, 255, 0)",
-                        },
-                      ]),
-                    },
-                  },
-                  {
-                    type: "CubeRight",
-                    shape: {
-                      api,
-                      xValue: api.value(0),
-                      yValue: api.value(1),
-                      x: location[0],
-                      y: location[1],
-                      xAxisPoint: api.coord([api.value(0), 0]),
-                    },
-                    style: {
-                      fill: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        {
-                          offset: 0,
-                          color: "rgba(57, 206, 255, 1)",
-                        },
-                        {
-                          offset: 0.9,
-                          color: "rgba(57, 206, 255, 0)",
-                        },
-                      ]),
-                    },
-                  },
-                  {
-                    type: "CubeTop",
-                    shape: {
-                      api,
-                      xValue: api.value(0),
-                      yValue: api.value(1),
-                      x: location[0],
-                      y: location[1],
-                      xAxisPoint: api.coord([api.value(0), 0]),
-                    },
-                    style: {
-                      fill: "rgba(57, 206, 255, 1)",
-                    },
-                  },
-                ],
-              };
+            type: "bar",
+            name: "产量",
+            data: dataArr,
+            barWidth: singleBarWidth, //统计条宽度
+            itemStyle: {
+              color: getColor([
+                "rgba(45, 72, 173, 0.1)",
+                "rgba(57, 206, 255, 1)",
+              ]),
             },
-            data: yaxisData,
           },
           {
             type: "bar",
+            data: dataArr,
+            barWidth: singleBarWidth, //统计条宽度
+            barGap: "-2%",
             itemStyle: {
-              color: "transparent",
+              color: getColor([
+                "rgba(20, 43, 128, 0.2)",
+                "rgba(36, 201, 255, 1)",
+              ]),
             },
-            data: yaxisData,
+          },
+          {
+            z: 3,
+            type: "pictorialBar",
+            symbolPosition: "end",
+            data: dataArr,
+            symbol: "diamond",
+            symbolOffset: [0, "-50%"],
+            symbolSize: [singleBarWidth * 2, singleBarWidth * 2 * 0.5],
+            itemStyle: {
+              borderWidth: 0,
+              color: "#6FF7FF",
+            },
           },
         ],
       };

@@ -29,6 +29,10 @@ export default {
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
 
   beforeUnmount() {
@@ -38,7 +42,7 @@ export default {
   methods: {
     async init() {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      const { data } = await fetchAssetsCount({
+      let { data } = await fetchAssetsCount({
         departCode: depart.departCode,
         normType: 0,
       });
@@ -47,14 +51,22 @@ export default {
         document.getElementById("total_assets_statistics")
       );
 
-      var xData = data.map((item) => item.assetsType);
-      var lastYearData = data.map((item) => item.assetsCount);
-      var thisYearData = data.map((item) => item.assetsValue);
-      var timeLineData = [1];
-      let legend = ["进库数", "出库数"];
-      var background = "#0e2147"; //背景
-      let textColor = "#fff";
-      let lineColor = "rgba(255,255,255,0.2)";
+      const typeObj = {
+        well: "水井",
+        station: "场站",
+        purification: "净化装置",
+        pipeline: "管线",
+        land: "土地",
+      };
+
+      data.forEach((item) => {
+        item.assetsName = typeObj[item.assetsType] || item.assetsType;
+      });
+
+      const xData = data.map((item) => item.assetsName);
+      const lastYearData = data.map((item) => item.assetsCount);
+      const thisYearData = data.map((item) => item.assetsValue);
+
       let colors = [
         {
           start: "rgba(25, 190, 238, 1)",
@@ -65,11 +77,6 @@ export default {
           end: "rgba(0, 69, 255, 1)",
         },
       ];
-      let borderData = [];
-      let scale = 2;
-      borderData = xData.map((item) => {
-        return scale;
-      });
 
       const option = {
         baseOption: {
@@ -173,7 +180,9 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  const finded = data.find((item) => item.assetsType === value);
+                  const finded = data.find(
+                    (item) => typeObj[item.assetsType] === value
+                  );
                   return finded.assetsCount;
                 },
               },
@@ -232,7 +241,9 @@ export default {
                   fontSize: "12",
                 },
                 formatter: function (value) {
-                  const finded = data.find((item) => item.assetsType === value);
+                  const finded = data.find(
+                    (item) => typeObj[item.assetsType] === value
+                  );
                   return finded.assetsValue.toFixed(2);
                 },
               },
@@ -244,7 +255,6 @@ export default {
         options: [],
       };
 
-      // option.baseOption.timeline.data.push(timeLineData[0])
       option.options.push({
         series: [
           {

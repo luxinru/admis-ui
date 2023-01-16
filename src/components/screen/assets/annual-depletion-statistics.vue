@@ -144,6 +144,10 @@ export default {
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
 
   beforeUnmount() {
@@ -270,7 +274,7 @@ export default {
           data: dataArr.vaccination,
           symbol: "diamond",
           symbolOffset: ["-50%", "-50%"],
-          symbolSize: [12, 6],
+          symbolSize: [8, 4],
           itemStyle: {
             borderColor: "#2fffa4",
             color: "#2fffa4",
@@ -280,7 +284,7 @@ export default {
           z: 1,
           type: "bar",
           name: "月计提",
-          barWidth: 12,
+          barWidth: 8,
           barGap: "-50%",
           data: dataArr.vaccination,
           itemStyle: {
@@ -307,7 +311,7 @@ export default {
           data: dataArr.unvaccinated,
           symbol: "diamond",
           symbolOffset: [0, "-50%"],
-          symbolSize: [12, 6],
+          symbolSize: [8, 4],
           itemStyle: {
             borderColor: "#32ffee",
             color: "#32ffee",
@@ -317,7 +321,7 @@ export default {
           z: 2,
           type: "bar",
           name: "月补提",
-          barWidth: 12,
+          barWidth: 8,
           data: dataArr.unvaccinated,
           itemStyle: {
             color: {
@@ -343,7 +347,7 @@ export default {
           data: dataArr.unvaccinatedTwo,
           symbol: "diamond",
           symbolOffset: ["50%", "-50%"],
-          symbolSize: [12, 6],
+          symbolSize: [8, 4],
           itemStyle: {
             borderColor: "#ffd11a",
             color: "#ffd11a",
@@ -353,7 +357,7 @@ export default {
           z: 3,
           type: "bar",
           name: "累计折旧",
-          barWidth: 12,
+          barWidth: 8,
           data: dataArr.unvaccinatedTwo,
           itemStyle: {
             color: {

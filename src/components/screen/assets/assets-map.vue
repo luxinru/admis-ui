@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       chart: null,
-      options: {}
+      options: {},
     };
   },
 
@@ -41,8 +41,7 @@ export default {
       const { data } = await fetchDepartList({
         // departCode: depart.departCode,
         // levelSearch: 0
-      })
-      console.log('data11111111111 :>> ', data);
+      });
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
@@ -54,84 +53,272 @@ export default {
       this.chart = echarts.init(document.getElementById("mapChart"));
 
       this.options = {
-        grid: {
-          left: "0", // 与容器左侧的距离
-          right: "0", // 与容器右侧的距离
-          top: "0", // 与容器顶部的距离
-          bottom: "0", // 与容器底部的距离
+        backgroundColor: "transparent",
+        tooltip: {
+          // 指示器
+          trigger: "item",
+        },
+        legend: {
+          orient: "vertical",
+          top: "5",
+          right: "20",
+          itemWidth: 20,
+          itemHeight: 20,
+          data: [
+            {
+              name: "标记点1",
+            },
+            {
+              name: "标记点2",
+            },
+            {
+              name: "标记点3",
+            },
+          ],
+          textStyle: {
+            color: "#fff",
+            fontSize: 15,
+          },
         },
         geo: {
-          map: "my",
-          aspectScale: 0.85,
-          layoutCenter: ["50%", "40%"], //地图位置
-          layoutSize: "70%",
-
+          map: 'my',
+          // zoom: 0.4, // 设置地图显示大小比例
+          zoom: 0.7,   // 设置地图显示大小比例
+          label: {
+            normal: {
+              show: true, //显示区域名称
+              fontSize: "14",
+              color: "#fff",
+            },
+            emphasis: {
+              //对应的鼠标悬浮效果
+              show: true,
+              textStyle: {
+                color: "gold",
+              },
+            },
+          },
+          roam: true, //设置为false,不启动roam就无所谓缩放拖曳同步了
+          layoutCenter: ["50%", "40%"],
+          layoutSize: "100%",
           itemStyle: {
             normal: {
-              shadowColor: "#276fce",
-              shadowOffsetX: 0,
-              shadowOffsetY: 15,
-              opacity: 0.3,
+              color: "#0362bd", //地图块颜色
+              borderColor: "#1ad0f9", //鼠标覆盖地图块颜色
+            },
+            emphasis: {
+              color: "#0070ff",
+              areaColor: "rgb(0,112,255)",
             },
           },
         },
+        //配置属性
         series: [
           {
+            name: "地区",
             type: "map",
-            mapType: "my",
-            aspectScale: 0.85,
-            layoutCenter: ["50%", "40%"], //地图位置
-            layoutSize: "70%",
-            zoom: 1, //当前视角的缩放比例
-            // roam: true, //是否开启平游或缩放
-            scaleLimit: {
-              //滚轮缩放的极限控制
-              min: 1,
-              max: 1,
-            },
-            label: {
+            geoIndex: 0,
+            data: [],
+            itemStyle: {
               normal: {
-                show: true,
-                textStyle: {
-                  color: "#fff",
+                // show: true,
+                // color: "#BE14E4", //点颜色
+                label: {
+                  show: true,
+                  textStyle: {
+                    fontWeight: "bold", //字体
+                    fontSize: 18, //字体大小
+                    color: "#fff",
+                  },
                 },
               },
-              emphasis: {
+            },
+          },
+          {
+            name: "标记点1",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            showEffectOn: "render", //涟漪
+            zlevel: 2,
+            rippleEffect: {
+              //period: 2.5, //波纹秒数
+              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+              scale: 3, //波纹范围
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: "{b}",
+                position: "top",
+                show: false, //不显示
                 textStyle: {
-                  color: "#fff",
+                  // 地图上散点的字体样式
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  color: "blue",
                 },
               },
             },
             itemStyle: {
               normal: {
-                areaColor: "#0c274b",
-                borderColor: "RGBA(52, 140, 250, 1)",
-                borderWidth: 2,
-                shadowColor: "#092f8f", //外发光
-                shadowBlur: 20,
-              },
-              emphasis: {
-                areaColor: {
-                  type: "radial",
-                  x: 0.5,
-                  y: 0.5,
-                  r: 0.9,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: "RGBA(40, 99, 113, 1)", // 0% 处的颜色
-                    },
-                    {
-                      offset: 1,
-                      color: "RGBA(28, 79, 105, 0.6)", // 100% 处的颜色
-                    },
-                  ],
-                },
+                show: true,
+                color: "#E4E214", //字体和点颜色
                 label: {
-                  color: "#fff",
+                  textStyle: {
+                    fontWeight: "bold", //字体
+                    fontSize: 18, //字体大小
+                    color: "#E4E214",
+                  },
                 },
               },
             },
+            data: [
+              {
+                name: "类型1-标记点1",
+                value: [102.359817, 26.721043, 280],
+                product: "200",
+                scale: "21",
+                symbolSize: 10,
+              },
+              {
+                name: "类型1-标记点2",
+                value: [104.062156, 30.651066, 200],
+                product: "260",
+                scale: "33",
+                symbolSize: 15,
+              },
+              {
+                name: "类型1-标记点3",
+                value: [100.062156, 30.651066, 200],
+                product: "280",
+                scale: "55",
+                symbolSize: 50 / 2,
+              },
+            ],
+          },
+          {
+            name: "标记点2",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            showEffectOn: "render",
+            zlevel: 2,
+            rippleEffect: {
+              //period: 2.5, //波纹秒数
+              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+              scale: 3, //波纹范围
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: "{b}",
+                position: "top",
+                show: false, //不显示
+                textStyle: {
+                  // 地图上散点的字体样式
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  color: "#BE14E4", // 点上字的颜色
+                },
+              },
+            },
+            itemStyle: {
+              normal: {
+                show: true,
+                color: "#ff7e7e", //点颜色
+                label: {
+                  textStyle: {
+                    fontWeight: "bold", //字体
+                    fontSize: 18, //字体大小
+                    color: "#BE14E4",
+                  },
+                },
+              },
+            },
+            data: [
+              {
+                name: "类型2-标记点1",
+                value: [102.062156, 32.651066, 200],
+                product: "200",
+                scale: "21",
+                symbolSize: 10,
+              },
+              {
+                name: "类型2-标记点2",
+                value: [103.062156, 28.651066, 200],
+                product: "260",
+                scale: "32",
+                symbolSize: 15,
+              },
+              {
+                name: "类型2-标记点2",
+                value: [103.062156, 30.651066, 200],
+                product: "280",
+                scale: "51",
+                symbolSize: 25,
+              },
+            ],
+          },
+          {
+            name: "标记点3",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            showEffectOn: "render",
+            zlevel: 2,
+            rippleEffect: {
+              //period: 2.5, //波纹秒数
+              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+              scale: 3, //波纹范围
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: "{b}",
+                position: "top",
+                show: false, //不显示
+                textStyle: {
+                  // 地图上散点的字体样式
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  color: "#BE14E4", // 点上字的颜色
+                },
+              },
+            },
+            itemStyle: {
+              normal: {
+                show: true,
+                color: "#02f2b3", //点颜色
+                label: {
+                  textStyle: {
+                    fontWeight: "bold", //字体
+                    fontSize: 18, //字体大小
+                    color: "#BE14E4",
+                  },
+                },
+              },
+            },
+            data: [
+              {
+                name: "类型3-标记点1",
+                value: [104.062156, 32.651066, 200],
+                product: "200",
+                scale: "21",
+                symbolSize: 10,
+              },
+              {
+                name: "类型3-标记点2",
+                value: [105.062156, 28.651066, 200],
+                product: "260",
+                scale: "32",
+                symbolSize: 15,
+              },
+              {
+                name: "类型3-标记点2",
+                value: [105.062156, 30.651066, 200],
+                product: "280",
+                scale: "51",
+                symbolSize: 25,
+              },
+            ],
           },
         ],
       };
