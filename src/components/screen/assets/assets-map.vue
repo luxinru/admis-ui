@@ -9,7 +9,7 @@
 <script>
 import bus from "vue3-eventbus";
 import * as echarts from "echarts";
-import provinceJson from "@/assets/json/province.json";
+import sichuanJson from "@/assets/json/四川省.json";
 import chengduJson from "@/assets/json/成都市.json";
 import { fetchDepartList } from "@/api/screen/assets/index";
 
@@ -37,17 +37,19 @@ export default {
 
   methods: {
     async init() {
-      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      const { data } = await fetchDepartList({
-        // departCode: depart.departCode,
-        // levelSearch: 0
-      });
+      // const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      // const { data } = await fetchDepartList({
+      //   // departCode: depart.departCode,
+      //   // levelSearch: 0
+      // });
+
+      // console.log('AssetsMap :>> ', data);
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
       }
 
-      echarts.registerMap("my", provinceJson);
+      echarts.registerMap("四川省", sichuanJson);
       echarts.registerMap("成都市", chengduJson);
 
       this.chart = echarts.init(document.getElementById("mapChart"));
@@ -81,9 +83,9 @@ export default {
           },
         },
         geo: {
-          map: 'my',
+          map: "四川省",
           // zoom: 0.4, // 设置地图显示大小比例
-          zoom: 0.7,   // 设置地图显示大小比例
+          zoom: 0.55, // 设置地图显示大小比例
           label: {
             normal: {
               show: true, //显示区域名称
@@ -115,7 +117,7 @@ export default {
         //配置属性
         series: [
           {
-            name: "地区",
+            name: "四川省",
             type: "map",
             geoIndex: 0,
             data: [],

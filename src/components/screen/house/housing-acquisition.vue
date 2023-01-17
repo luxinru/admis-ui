@@ -125,7 +125,7 @@ function initChart(data) {
       type: "pie",
       clockWise: true, //饼图的扇区是否是顺时针排布
       radius: [radiusValue - 8 * i + "%", radiusValue - 4 - 8 * i + 15 + "%"],
-      center: ["25%", "50%"],
+      center: ["30%", "50%"],
       label: {
         normal: {
           show: false, //隐藏引导线标识
@@ -170,8 +170,8 @@ function initChart(data) {
     {
       type: "pie",
       name: "内层细圆环",
-      radius: ["20%", "21%"],
-      center: ["25%", "50%"],
+      radius: ["26%", "27%"],
+      center: ["30%", "50%"],
       hoverAnimation: false,
       clockWise: false,
       itemStyle: {
@@ -188,7 +188,7 @@ function initChart(data) {
       type: "gauge",
       splitNumber: 15,
       radius: "27%",
-      center: ["25%", "50%"],
+      center: ["30%", "50%"],
       startAngle: 90,
       endAngle: -269.9999,
       axisLine: {
