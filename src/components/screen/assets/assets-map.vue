@@ -37,13 +37,13 @@ export default {
 
   methods: {
     async init() {
-      // const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      // const { data } = await fetchDepartList({
-      //   // departCode: depart.departCode,
-      //   // levelSearch: 0
-      // });
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data } = await fetchDepartList({
+        departCode: depart.departCode,
+        // levelSearch: 0
+      });
 
-      // console.log('AssetsMap :>> ', data);
+      console.log('AssetsMap :>> ', data);
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
