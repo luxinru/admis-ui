@@ -203,7 +203,7 @@ function initChart(data) {
       },
       splitLine: {
         show: true,
-        length: 12,
+        length: 22,
         lineStyle: {
           color: "auto",
           width: 3.5,
