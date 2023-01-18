@@ -37,13 +37,14 @@ export default {
 
   methods: {
     async init() {
-      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      const { data } = await fetchDepartList({
-        departCode: depart.departCode,
-        // levelSearch: 0
-      });
+      // const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      // const { data } = await fetchDepartList({
+      //   departCode: depart.departCode,
+      //   departName: '成都市',
+      //   levelSearch: 0
+      // });
 
-      console.log('AssetsMap :>> ', data);
+      // console.log('AssetsMap :>> ', data);
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
@@ -136,192 +137,192 @@ export default {
               },
             },
           },
-          {
-            name: "标记点1",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            showEffectOn: "render", //涟漪
-            zlevel: 2,
-            rippleEffect: {
-              //period: 2.5, //波纹秒数
-              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-              scale: 3, //波纹范围
-            },
-            hoverAnimation: true,
-            label: {
-              normal: {
-                formatter: "{b}",
-                position: "top",
-                show: false, //不显示
-                textStyle: {
-                  // 地图上散点的字体样式
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "blue",
-                },
-              },
-            },
-            itemStyle: {
-              normal: {
-                show: true,
-                color: "#E4E214", //字体和点颜色
-                label: {
-                  textStyle: {
-                    fontWeight: "bold", //字体
-                    fontSize: 18, //字体大小
-                    color: "#E4E214",
-                  },
-                },
-              },
-            },
-            data: [
-              {
-                name: "类型1-标记点1",
-                value: [102.359817, 26.721043, 280],
-                product: "200",
-                scale: "21",
-                symbolSize: 10,
-              },
-              {
-                name: "类型1-标记点2",
-                value: [104.062156, 30.651066, 200],
-                product: "260",
-                scale: "33",
-                symbolSize: 15,
-              },
-              {
-                name: "类型1-标记点3",
-                value: [100.062156, 30.651066, 200],
-                product: "280",
-                scale: "55",
-                symbolSize: 50 / 2,
-              },
-            ],
-          },
-          {
-            name: "标记点2",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            showEffectOn: "render",
-            zlevel: 2,
-            rippleEffect: {
-              //period: 2.5, //波纹秒数
-              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-              scale: 3, //波纹范围
-            },
-            hoverAnimation: true,
-            label: {
-              normal: {
-                formatter: "{b}",
-                position: "top",
-                show: false, //不显示
-                textStyle: {
-                  // 地图上散点的字体样式
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#BE14E4", // 点上字的颜色
-                },
-              },
-            },
-            itemStyle: {
-              normal: {
-                show: true,
-                color: "#ff7e7e", //点颜色
-                label: {
-                  textStyle: {
-                    fontWeight: "bold", //字体
-                    fontSize: 18, //字体大小
-                    color: "#BE14E4",
-                  },
-                },
-              },
-            },
-            data: [
-              {
-                name: "类型2-标记点1",
-                value: [102.062156, 32.651066, 200],
-                product: "200",
-                scale: "21",
-                symbolSize: 10,
-              },
-              {
-                name: "类型2-标记点2",
-                value: [103.062156, 28.651066, 200],
-                product: "260",
-                scale: "32",
-                symbolSize: 15,
-              },
-              {
-                name: "类型2-标记点2",
-                value: [103.062156, 30.651066, 200],
-                product: "280",
-                scale: "51",
-                symbolSize: 25,
-              },
-            ],
-          },
-          {
-            name: "标记点3",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            showEffectOn: "render",
-            zlevel: 2,
-            rippleEffect: {
-              //period: 2.5, //波纹秒数
-              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-              scale: 3, //波纹范围
-            },
-            hoverAnimation: true,
-            label: {
-              normal: {
-                formatter: "{b}",
-                position: "top",
-                show: false, //不显示
-                textStyle: {
-                  // 地图上散点的字体样式
-                  fontSize: 15,
-                  fontWeight: "bold",
-                  color: "#BE14E4", // 点上字的颜色
-                },
-              },
-            },
-            itemStyle: {
-              normal: {
-                show: true,
-                color: "#02f2b3", //点颜色
-                label: {
-                  textStyle: {
-                    fontWeight: "bold", //字体
-                    fontSize: 18, //字体大小
-                    color: "#BE14E4",
-                  },
-                },
-              },
-            },
-            data: [
-              {
-                name: "类型3-标记点1",
-                value: [104.062156, 32.651066, 200],
-                product: "200",
-                scale: "21",
-                symbolSize: 10,
-              },
-              {
-                name: "类型3-标记点2",
-                value: [105.062156, 28.651066, 200],
-                product: "260",
-                scale: "32",
-                symbolSize: 15,
-              },
-              {
-                name: "类型3-标记点2",
-                value: [105.062156, 30.651066, 200],
-                product: "280",
-                scale: "51",
-                symbolSize: 25,
-              },
-            ],
-          },
+          // {
+          //   name: "标记点1",
+          //   type: "effectScatter",
+          //   coordinateSystem: "geo",
+          //   showEffectOn: "render", //涟漪
+          //   zlevel: 2,
+          //   rippleEffect: {
+          //     //period: 2.5, //波纹秒数
+          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+          //     scale: 3, //波纹范围
+          //   },
+          //   hoverAnimation: true,
+          //   label: {
+          //     normal: {
+          //       formatter: "{b}",
+          //       position: "top",
+          //       show: false, //不显示
+          //       textStyle: {
+          //         // 地图上散点的字体样式
+          //         fontSize: 15,
+          //         fontWeight: "bold",
+          //         color: "blue",
+          //       },
+          //     },
+          //   },
+          //   itemStyle: {
+          //     normal: {
+          //       show: true,
+          //       color: "#E4E214", //字体和点颜色
+          //       label: {
+          //         textStyle: {
+          //           fontWeight: "bold", //字体
+          //           fontSize: 18, //字体大小
+          //           color: "#E4E214",
+          //         },
+          //       },
+          //     },
+          //   },
+          //   data: [
+          //     {
+          //       name: "类型1-标记点1",
+          //       value: [102.359817, 26.721043, 280],
+          //       product: "200",
+          //       scale: "21",
+          //       symbolSize: 10,
+          //     },
+          //     {
+          //       name: "类型1-标记点2",
+          //       value: [104.062156, 30.651066, 200],
+          //       product: "260",
+          //       scale: "33",
+          //       symbolSize: 15,
+          //     },
+          //     {
+          //       name: "类型1-标记点3",
+          //       value: [100.062156, 30.651066, 200],
+          //       product: "280",
+          //       scale: "55",
+          //       symbolSize: 50 / 2,
+          //     },
+          //   ],
+          // },
+          // {
+          //   name: "标记点2",
+          //   type: "effectScatter",
+          //   coordinateSystem: "geo",
+          //   showEffectOn: "render",
+          //   zlevel: 2,
+          //   rippleEffect: {
+          //     //period: 2.5, //波纹秒数
+          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+          //     scale: 3, //波纹范围
+          //   },
+          //   hoverAnimation: true,
+          //   label: {
+          //     normal: {
+          //       formatter: "{b}",
+          //       position: "top",
+          //       show: false, //不显示
+          //       textStyle: {
+          //         // 地图上散点的字体样式
+          //         fontSize: 15,
+          //         fontWeight: "bold",
+          //         color: "#BE14E4", // 点上字的颜色
+          //       },
+          //     },
+          //   },
+          //   itemStyle: {
+          //     normal: {
+          //       show: true,
+          //       color: "#ff7e7e", //点颜色
+          //       label: {
+          //         textStyle: {
+          //           fontWeight: "bold", //字体
+          //           fontSize: 18, //字体大小
+          //           color: "#BE14E4",
+          //         },
+          //       },
+          //     },
+          //   },
+          //   data: [
+          //     {
+          //       name: "类型2-标记点1",
+          //       value: [102.062156, 32.651066, 200],
+          //       product: "200",
+          //       scale: "21",
+          //       symbolSize: 10,
+          //     },
+          //     {
+          //       name: "类型2-标记点2",
+          //       value: [103.062156, 28.651066, 200],
+          //       product: "260",
+          //       scale: "32",
+          //       symbolSize: 15,
+          //     },
+          //     {
+          //       name: "类型2-标记点2",
+          //       value: [103.062156, 30.651066, 200],
+          //       product: "280",
+          //       scale: "51",
+          //       symbolSize: 25,
+          //     },
+          //   ],
+          // },
+          // {
+          //   name: "标记点3",
+          //   type: "effectScatter",
+          //   coordinateSystem: "geo",
+          //   showEffectOn: "render",
+          //   zlevel: 2,
+          //   rippleEffect: {
+          //     //period: 2.5, //波纹秒数
+          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+          //     scale: 3, //波纹范围
+          //   },
+          //   hoverAnimation: true,
+          //   label: {
+          //     normal: {
+          //       formatter: "{b}",
+          //       position: "top",
+          //       show: false, //不显示
+          //       textStyle: {
+          //         // 地图上散点的字体样式
+          //         fontSize: 15,
+          //         fontWeight: "bold",
+          //         color: "#BE14E4", // 点上字的颜色
+          //       },
+          //     },
+          //   },
+          //   itemStyle: {
+          //     normal: {
+          //       show: true,
+          //       color: "#02f2b3", //点颜色
+          //       label: {
+          //         textStyle: {
+          //           fontWeight: "bold", //字体
+          //           fontSize: 18, //字体大小
+          //           color: "#BE14E4",
+          //         },
+          //       },
+          //     },
+          //   },
+          //   data: [
+          //     {
+          //       name: "类型3-标记点1",
+          //       value: [104.062156, 32.651066, 200],
+          //       product: "200",
+          //       scale: "21",
+          //       symbolSize: 10,
+          //     },
+          //     {
+          //       name: "类型3-标记点2",
+          //       value: [105.062156, 28.651066, 200],
+          //       product: "260",
+          //       scale: "32",
+          //       symbolSize: 15,
+          //     },
+          //     {
+          //       name: "类型3-标记点2",
+          //       value: [105.062156, 30.651066, 200],
+          //       product: "280",
+          //       scale: "51",
+          //       symbolSize: 25,
+          //     },
+          //   ],
+          // },
         ],
       };
 

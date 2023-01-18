@@ -41,6 +41,7 @@ export default {
 
   methods: {
     async init() {
+      const self = this;
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       let { data } = await fetchAssetsCount({
         departCode: depart.departCode,
@@ -313,6 +314,27 @@ export default {
       });
 
       this.chart.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      this.chart.on("click", (params) => {
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("资产总量统计", false);
+      });
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(value, isAll = true) {
+      if (isAll) {
+        localStorage.removeItem("资产总量统计");
+      }
+      localStorage.setItem("assetsTableType", value);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };

@@ -107,3 +107,39 @@ export function fetchAssetsList(params) {
     params,
   });
 }
+
+// 1.18.	资产分类数量占比查询接口
+export function fetchAssetsAmount(params) {
+  return request({
+    url: `data-visualization/assets/visual/assets/amount`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.19.	资产分类价值量占比查询接口
+export function fetchAssetsValue(params) {
+  return request({
+    url: `data-visualization/assets/visual/assets/value`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.14.	业务明细列表查询
+export function fetchBusinessList(params) {
+  return request({
+    url: `data-visualization/assets/visual/business/list`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.20.	业务数量占比查询接口
+export function fetchBusinessAmount(params) {
+  return request({
+    url: `data-visualization/assets/visual/business/amount`,
+    method: "get",
+    params,
+  });
+}

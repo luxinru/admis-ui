@@ -256,6 +256,24 @@ export default {
       };
 
       this.chart.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this
+      this.chart.on("click", (params) => {
+        self.onItemClick("业务数据统计");
+      });
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(data) {
+      localStorage.setItem("assetsTableType", data);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };

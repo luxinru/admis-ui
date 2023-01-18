@@ -1,8 +1,42 @@
 <template>
   <div class="physical_asset_statistics_root">
     <Box title="实物资产统计">
+      <template v-slot:more>
+        <div
+          class="select"
+          v-click-out-side="onClickOutside2"
+          @click="isShow2 = !isShow2"
+        >
+          <span :title="currentType2.label"> {{ currentType2.label }} </span>
+          <img src="@/assets/images/screen/more-1.png" alt="" />
+
+          <div class="content" v-if="isShow2">
+            <span
+              class="content_item"
+              :class="{
+                content_item_active: currentType2.value === item.value,
+              }"
+              v-for="(item, index) in options2"
+              :key="index"
+              @click="onOptionsClick2(item)"
+            >
+              {{ item.label }}
+            </span>
+          </div>
+        </div>
+      </template>
       <div class="container">
         <div class="legend">
+          <span
+            :class="{ active: type === 0 }"
+            @click="
+              type = 0;
+              init();
+            "
+          >
+            <p></p>
+            总数量
+          </span>
           <span
             :class="{ active: type === 1 }"
             @click="
@@ -11,22 +45,12 @@
             "
           >
             <p></p>
-            总数量
+            总金额
           </span>
           <span
             :class="{ active: type === 2 }"
             @click="
               type = 2;
-              init();
-            "
-          >
-            <p></p>
-            总金额
-          </span>
-          <span
-            :class="{ active: type === 3 }"
-            @click="
-              type = 3;
               init();
             "
           >
@@ -45,6 +69,7 @@ import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
 import { fetchRealAssetsCount } from "@/api/screen/assets/index";
+import clickOutSide from "@mahdikhashan/vue3-click-outside";
 
 export default {
   name: "PhysicalAssetStatistics",
@@ -52,11 +77,29 @@ export default {
   components: {
     Box,
   },
+  directives: {
+    clickOutSide,
+  },
 
   data() {
     return {
-      type: 1,
+      type: 0,
       chart: null,
+      isShow2: false,
+      currentType2: {
+        label: "时间",
+        value: 0,
+      },
+      options2: [
+        {
+          label: "时间",
+          value: 0,
+        },
+        {
+          label: "机构",
+          value: 1,
+        },
+      ],
     };
   },
 
@@ -73,13 +116,24 @@ export default {
   },
 
   methods: {
+    onClickOutside2() {
+      this.isShow2 = false;
+    },
+
+    onOptionsClick2(data) {
+      this.currentType2 = data;
+      this.isShow2 = false;
+      this.init();
+    },
+
     async init() {
+      const self = this
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchRealAssetsCount({
         departCode: depart.departCode,
-        dimension: 0,
+        dimension: this.type,
         normType: 0,
-        groupType: 1,
+        groupType: this.currentType2.value,
       });
       if (this.chart) {
         echarts.dispose(document.getElementById("physical_asset_statistics"));
@@ -210,6 +264,30 @@ export default {
       };
 
       this.chart.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      this.chart.on("click", (params) => {
+        if (self.type === 0) {
+          localStorage.setItem("physicalType", self.currentType2.value);
+          localStorage.setItem("assetsType", params.name);
+          self.onItemClick("实物资产统计", false);
+        }
+      });
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(value, isAll = true) {
+      if (isAll) {
+        localStorage.removeItem("实物资产统计");
+      }
+      localStorage.setItem("assetsTableType", value);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };
@@ -220,6 +298,81 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  .select {
+    position: relative;
+    width: max-content;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px 8px 0 0;
+    cursor: pointer;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    img {
+      height: 24px;
+      margin: 2px 0 0 0;
+    }
+
+    span {
+      width: 70px;
+      font-size: 16px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #bdd7e7;
+      margin-left: 10px;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .content {
+      position: absolute;
+      height: max-content;
+      max-height: 165px;
+      top: 40px;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(7, 37, 84, 0.9);
+      border: 1px solid rgba(10, 71, 167, 0.9);
+      border-radius: 3px;
+      z-index: 1;
+      overflow-y: auto;
+
+      .content_item {
+        width: 100px;
+        height: 32px;
+        font-size: 15px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 0 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .content_item_active {
+        background-color: rgba(55, 130, 255, 1);
+      }
+    }
+  }
 
   .container {
     width: 100%;

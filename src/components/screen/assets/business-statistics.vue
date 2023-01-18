@@ -39,7 +39,12 @@
           </div>
 
           <div class="list">
-            <div class="item" v-for="(item, index) in list" :key="index">
+            <div
+              class="item"
+              v-for="(item, index) in list"
+              :key="index"
+              @click="onItemClick(item)"
+            >
               <span>
                 <img
                   v-if="index + 1 === 1"
@@ -143,15 +148,26 @@ export default {
     onClickOutside2() {
       this.isShow2 = false;
     },
-    
+
     async init() {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchBusinessCount({
         departCode: depart.departCode,
-        dimension: 0,
+        dimension: this.currentType2.value,
         normType: 0,
       });
       this.list = data || [];
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(data) {
+      localStorage.setItem("assetsTableType", '本年业务统计');
+      localStorage.setItem("dimension", this.currentType2.value);
+      localStorage.setItem("assetsType",data.groupName);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };
@@ -324,6 +340,7 @@ export default {
           align-items: center;
           background-color: rgba(4, 43, 109, 0.25);
           flex-shrink: 0;
+          cursor: pointer;
 
           &:nth-child(2n) {
             background-color: rgba(4, 43, 109, 0.55);

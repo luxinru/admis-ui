@@ -75,6 +75,10 @@
         <AssetsInfo />
       </section>
     </template>
+
+    <section class="modal" v-if="isShowModal">
+      <HouseLedgerDetails />
+    </section>
   </div>
 </template>
 
@@ -86,6 +90,7 @@ import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 import AssetsContainer from "@/components/screen/assets/assets-container.vue";
 import AssetsMap from "@/components/screen/assets/assets-map.vue";
+import HouseLedgerDetails from "@/components/screen/assets/house-ledger-details.vue";
 
 import bottomImg from "@/assets/images/screen/bottom.png";
 import bottomImgActive from "@/assets/images/screen/High-2.png";
@@ -103,6 +108,7 @@ export default {
     AssetsInfo,
     AssetsContainer,
     AssetsMap,
+    HouseLedgerDetails,
   },
 
   data() {
@@ -114,6 +120,7 @@ export default {
       isBottomHover: false,
       bottomImg: bottomImg,
       bottomImgActive: bottomImgActive,
+      isShowModal: false
     };
   },
 
@@ -141,6 +148,11 @@ export default {
 
     bus.on("onAssetsTypeChange", (value) => {
       self.assetsType = value;
+    });
+
+    bus.on("onAssetsModalShow", (value) => {
+      console.log('value :>> ', value);
+      self.isShowModal = value;
     });
   },
 
@@ -377,6 +389,17 @@ export default {
 
   .assets_info_close {
     height: 0;
+  }
+
+  .modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 999;
   }
 }
 </style>

@@ -59,26 +59,19 @@
         </div>
       </template>
       <div class="container">
-        <template v-if="!isSingle">
-          <div class="chart" id="asset_classification_statistics1"></div>
-          <div class="chart" id="asset_classification_statistics2"></div>
-        </template>
-
-        <template v-else>
-          <div class="imgs">
-            <img src="@/assets/images/screen/icon-101.png" alt="" />
-            <img src="@/assets/images/screen/icon-111.png" alt="" />
-            <img src="@/assets/images/screen/icon-121.png" alt="" />
+        <div class="imgs">
+          <img src="@/assets/images/screen/icon-101.png" alt="" />
+          <img src="@/assets/images/screen/icon-111.png" alt="" />
+          <img src="@/assets/images/screen/icon-121.png" alt="" />
+        </div>
+        <div class="chart" id="asset_classification_statistics1"></div>
+        <div class="labels">
+          <div class="item" v-for="(item, index) in labels" :key="index">
+            <p :style="{ 'background-color': item.color }"></p>
+            <div>{{ item.name }}</div>
+            <span>{{ item.value }}</span>
           </div>
-          <div class="chart3" id="asset_classification_statistics3"></div>
-          <div class="labels">
-            <div class="item" v-for="(item, index) in labels" :key="index">
-              <p :style="{ 'background-color': item.color }"></p>
-              <div>{{ item.name }}</div>
-              <span>{{ item.value }}</span>
-            </div>
-          </div>
-        </template>
+        </div>
       </div>
     </Box>
   </div>
@@ -90,10 +83,10 @@ import Box from "../house/box.vue";
 import * as echarts from "echarts";
 import clickOutSide from "@mahdikhashan/vue3-click-outside";
 import { fetchTypeCount } from "@/api/screen/assets/index";
-import _ from "lodash";
 
 export default {
   name: "AssetClassificationStatistics",
+
   components: {
     Box,
   },
@@ -105,8 +98,6 @@ export default {
   data() {
     return {
       chart1: null,
-      chart2: null,
-      chart3: null,
       isShow1: false,
       currentType1: 0,
       options1: [
@@ -132,21 +123,25 @@ export default {
         },
       ],
       all: 0,
+      option: {},
       labels: [],
-      isSingle: false,
     };
   },
-  async mounted() {
+
+  mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
+
   beforeUnmount() {
     echarts.dispose(
       document.getElementById("asset_classification_statistics1")
     );
-    echarts.dispose(
-      document.getElementById("asset_classification_statistics2")
-    );
   },
+
   methods: {
     onClickOutside1() {
       this.isShow1 = false;
@@ -169,6 +164,7 @@ export default {
     },
 
     async init() {
+      const self = this;
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchTypeCount({
         departCode: depart.departCode,
@@ -176,236 +172,15 @@ export default {
         normType: this.currentType2, // 0财务准则 1会计准则
       });
 
-      console.log("data :>> ", data);
       this.all = data.allValue;
 
-      const list = data.groupMap || [];
-
-      if (list.length > 10) {
-        this.isSingle = true;
-        this.$nextTick(() => {
-          this.init3(list);
-        });
-      } else {
-        this.isSingle = false;
-        this.$nextTick(() => {
-          this.init1(list);
-          this.init2(list);
-        });
-      }
-    },
-
-    async init1(arr) {
-      this.chart1 = echarts.init(
-        document.getElementById("asset_classification_statistics1")
-      );
-      let data1 = arr.map((item) => item.groupName);
-      let data2 = arr.map((item) => {
-        return {
-          value: item.groupValue,
-          name: item.groupName,
-        };
-      });
-      var colorList = [
-        {
-          c1: " #7DEBFF",
-          c2: "#3BB3FF",
-        },
-        {
-          c1: "#5FE48E",
-          c2: "#37C76A",
-        },
-        {
-          c1: "#9085FF",
-          c2: "#503EFF",
-        },
-        {
-          c1: "#F9D172",
-          c2: "#FFBB18",
-        },
-        {
-          c1: " #85C9FF",
-          c2: "#8AC2F9",
-        },
-        {
-          c1: " #7DEBFF",
-          c2: "#3BB3FF",
-        },
-      ];
-      const option = {
-        tooltip: {
-          trigger: "item",
-        },
-        legend: {
-          orient: "vertical",
-          right: "15%",
-          top: "center",
-          itemWidth: 16,
-          itemHeight: 4,
-          itemGap: 13,
-          data: data1,
-          textStyle: {
-            color: "#fff",
-          },
-          icon: "rect",
-        },
-        series: [
-          {
-            name: "资产",
-            type: "pie",
-            radius: "65%",
-            center: ["40%", "50%"],
-            data: data2,
-            roseType: "radius",
-            startAngle: 90,
-            // roseType:false,
-            label: {
-              show: false,
-            },
-            itemStyle: {
-              normal: {
-                color: function (params) {
-                  return new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                    {
-                      //颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
-                      offset: 0,
-                      color: colorList[params.dataIndex].c1,
-                    },
-                    {
-                      offset: 1,
-                      color: colorList[params.dataIndex].c2,
-                    },
-                  ]);
-                  // return colorList[params.dataIndex % colorList.length];
-                },
-              },
-            },
-          },
-        ],
-      };
-      this.chart1.setOption(option);
-    },
-    async init2(arr) {
-      this.chart2 = echarts.init(
-        document.getElementById("asset_classification_statistics2")
-      );
-
-      const values1 = arr.map((item) => Number(item.groupValue));
-      const values2 = arr.map((item) => Number(item.groupCount));
-
-      let max = 0;
-      let max1 = _.max(values1);
-      let max2 = _.max(values2);
-
-      max = max1 > max2 ? max1 : max2;
-
-      const option = {
-        tooltip: {},
-        legend: {
-          right: "10%",
-          top: "center",
-          itemWidth: 16,
-          itemHeight: 4,
-          textStyle: {
-            color: "#fff",
-          },
-          icon: "rect",
-          orient: "vertical",
-          data: [
-            {
-              name: "资产价值",
-            },
-            {
-              name: "资产数量",
-            },
-          ],
-        },
-        radar: {
-          name: {
-            textStyle: {
-              color: "rgba(255, 255, 255, 1)",
-              fontSize: 13,
-            },
-          },
-          axisLine: {
-            show: true,
-            lineStyle: {
-              width: 1,
-              color: "rgba(159, 165, 173, 0.5)", // 设置网格的颜色
-            },
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              width: 1,
-              color: "rgba(159, 165, 173, 0.5)", // 设置网格的颜色
-            },
-          },
-          splitArea: {
-            show: false,
-          },
-          indicator: arr.map((item) => {
-            return {
-              name: item.groupName,
-              max: max,
-            };
-          }),
-          center: ["30%", "50%"],
-          radius: "60%",
-        },
-        series: [
-          {
-            type: "radar",
-            data: [
-              {
-                value: arr.map((item) => Number(item.groupValue)),
-                name: "资产价值",
-                symbol: "none",
-                areaStyle: {
-                  normal: {
-                    color: "rgba(0, 128, 255, 1)",
-                    opacity: 0.3,
-                  },
-                },
-                lineStyle: {
-                  width: 2,
-                  color: "rgba(0, 128, 255, 1)",
-                },
-              },
-              {
-                value: arr.map((item) => Number(item.groupCount)),
-                name: "资产数量",
-                symbol: "none",
-                areaStyle: {
-                  normal: {
-                    color: "rgba(61, 223, 183, 1)",
-                    opacity: 0.3,
-                  },
-                },
-                lineStyle: {
-                  width: 2,
-                  color: "rgba(61, 223, 183, 1)",
-                },
-              },
-            ],
-          },
-        ],
-      };
-      this.chart2.setOption(option);
-    },
-
-    async init3(list) {
-      console.log("this.chart3 :>> ", this.chart3);
-      console.log("object :>> ", [
-        document.getElementById("asset_classification_statistics3"),
-      ]);
-      if (this.chart3) {
+      if (this.chart) {
         echarts.dispose(
-          document.getElementById("asset_classification_statistics3")
+          document.getElementById("asset_classification_statistics1")
         );
       }
-      this.chart3 = echarts.init(
-        document.getElementById("asset_classification_statistics3")
+      this.chart = echarts.init(
+        document.getElementById("asset_classification_statistics1")
       );
 
       let color = [
@@ -429,20 +204,110 @@ export default {
         "#ea735a",
         "#1882e4",
       ];
-      this.labels = list.map((item, index) => {
-        return {
-          name: item.groupName,
-          color: color[index],
-          value: Number(item.groupValue),
-        };
-      });
+      this.labels = [
+        {
+          name: "油气水井设施",
+          color: "#0084ff",
+          value: 0,
+        },
+        {
+          name: "油气水集输处理设施",
+          color: "#37ffc9",
+          value: 0,
+        },
+        {
+          name: "输油气水管道",
+          color: "#ffe777",
+          value: 0,
+        },
+        {
+          name: "炼油化工生产装置",
+          color: "#19d6ff",
+          value: 0,
+        },
+        {
+          name: "储油气水及化学化工容器设施",
+          color: "#8676fa",
+          value: 0,
+        },
+        {
+          name: "油气开采及炼油化工专用设备",
+          color: "#5f94ff",
+          value: 0,
+        },
+        {
+          name: "工程机械",
+          color: "#ffb66a",
+          value: 0,
+        },
+        {
+          name: "运输设备",
+          color: "#ff4b7d",
+          value: 0,
+        },
+        {
+          name: "工程机械",
+          color: "#60daaa",
+          value: 0,
+        },
+        {
+          name: "动力设备及设施",
+          color: "#359eff",
+          value: 0,
+        },
+        {
+          name: "传导设备及设施",
+          color: "#ff9eb8",
+          value: 0,
+        },
+        {
+          name: "通信设备",
+          color: "#d784e6",
+          value: 0,
+        },
+        {
+          name: "供排水设施",
+          color: "#ffd177",
+          value: 0,
+        },
+        {
+          name: "制造和机修加工设备",
+          color: "#48ecac",
+          value: 0,
+        },
+        {
+          name: "工具及仪器",
+          color: "#3b75eb",
+          value: 0,
+        },
+        {
+          name: "生产、生活辅助配套设备",
+          color: "#6bf3ff",
+          value: 0,
+        },
+        {
+          name: "房屋",
+          color: "#b872cf",
+          value: 0,
+        },
+        {
+          name: "构筑物",
+          color: "#ea735a",
+          value: 0,
+        },
+        {
+          name: "加油气站及加工处理设施",
+          color: "#1882e4",
+          value: 0,
+        },
+      ];
 
       let seriesArr = [];
-      for (let index = 0; index < list.length; index++) {
+      for (let index = 0; index < 19; index++) {
         seriesArr = seriesArr.concat([
           {
-            value: Number(list[index].groupValue),
-            name: list[index].groupName,
+            value: 20,
+            name: "yellow",
             itemStyle: {
               color: color[index],
             },
@@ -457,7 +322,7 @@ export default {
         ]);
       }
 
-      const option = {
+      this.option = {
         tooltip: {
           trigger: "item",
         },
@@ -466,7 +331,7 @@ export default {
         },
         series: [
           {
-            name: "资产价值",
+            name: "占用率",
             type: "pie",
             center: ["50%", "50%"],
             radius: ["45%", "70%"],
@@ -480,7 +345,7 @@ export default {
         ],
       };
 
-      this.chart3.setOption(option);
+      this.chart.setOption(this.option);
     },
   },
 };
@@ -492,6 +357,7 @@ export default {
   height: 100%;
   overflow: hidden;
   pointer-events: auto;
+  overflow: hidden;
 
   .all {
     width: max-content;
@@ -586,11 +452,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    .chart {
-      flex: 1 0;
-      height: 100%;
-      overflow: hidden;
-    }
 
     .imgs {
       position: absolute;
@@ -632,7 +493,7 @@ export default {
       }
     }
 
-    .chart3 {
+    .chart {
       position: relative;
       flex: 1 0;
       height: 100%;
