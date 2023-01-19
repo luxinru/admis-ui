@@ -59,7 +59,7 @@ export default {
         backgroundColor: "transparent",
         tooltip: {
           // 指示器
-          trigger: "item",
+          show: false
         },
         legend: {
           orient: "vertical",
@@ -114,6 +114,12 @@ export default {
               areaColor: "rgb(0,112,255)",
             },
           },
+          select: {
+            itemStyle: {
+              areaColor: "#0362bd",
+              color: "#fff",
+            },
+          },
         },
         //配置属性
         series: [
@@ -134,6 +140,12 @@ export default {
                     color: "#fff",
                   },
                 },
+              },
+            },
+            select: {
+              itemStyle: {
+                areaColor: "#0362bd",
+                color: "#fff",
               },
             },
           },
@@ -326,12 +338,12 @@ export default {
         ],
       };
 
-      this.chart.on("click", (params) => {
-        console.log("params :>> ", params);
-        if (params.componentSubType == "map") {
-          this.goDown(params.name);
-        }
-      });
+      // this.chart.on("click", (params) => {
+      //   console.log("params :>> ", params);
+      //   if (params.componentSubType == "map") {
+      //     this.goDown(params.name);
+      //   }
+      // });
       this.chart.setOption(this.options);
     },
 

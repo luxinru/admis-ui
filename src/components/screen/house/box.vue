@@ -95,8 +95,8 @@ function onMoreClick() {
     height: 100%;
     background: linear-gradient(
       0deg,
-      rgba(5, 45, 110, 0.77),
-      rgba(1, 18, 40, 0.77)
+      rgba(5, 45, 110, 0.88),
+      rgba(1, 18, 40, 0.88)
     );
     border: 1px solid;
     border-image: linear-gradient(

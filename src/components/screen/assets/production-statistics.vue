@@ -46,6 +46,8 @@ export default {
         departCode: depart.departCode,
       });
 
+      console.log('data :>> ', data);
+
       const names = data.map((item) => item.groupName);
       const labels = data[0].groupValue.map((item) => item.month);
       // const labels = data.forEchar
@@ -64,8 +66,7 @@ export default {
 
       const option = {
         tooltip: {
-          show: true,
-          trigger: "axis",
+          trigger: "item",
         },
         legend: {
           top: "0%",
@@ -76,14 +77,7 @@ export default {
           icon: "rect",
           itemWidth: 8,
           itemHeight: 4,
-          data: [
-            {
-              name: names[0],
-            },
-            {
-              name: names[1],
-            },
-          ],
+          selectedMode: false
         },
         grid: {
           top: "15%",
@@ -147,11 +141,9 @@ export default {
         },
         series: [
           {
-            name: names[0],
+            name: "气产量",
             type: "line",
             smooth: true,
-            showAllSymbol: true,
-            symbolSize: 0,
             lineStyle: {
               normal: {
                 width: 2,
@@ -184,10 +176,8 @@ export default {
             data: goToSchool,
           },
           {
-            name: names[1],
+            name: "油产量",
             type: "line",
-            showAllSymbol: true,
-            symbolSize: 0,
             smooth: true,
             lineStyle: {
               normal: {
@@ -223,6 +213,25 @@ export default {
         ],
       };
       this.chart.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this;
+      this.chart.on("click", (params) => {
+        console.log("params :>> ", params);
+        self.onItemClick("业务数据统计");
+      });
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(data) {
+      localStorage.setItem("assetsTableType", data);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };
@@ -236,10 +245,14 @@ export default {
   pointer-events: auto;
 
   .container {
+    position: relative;
     width: 100%;
     height: 100%;
 
     .chart {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
     }

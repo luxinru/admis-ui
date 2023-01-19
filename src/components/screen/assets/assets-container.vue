@@ -21,7 +21,7 @@
             @click="onItemClick(1)"
           >
             <img src="@/assets/images/screen/icon-6.png" alt="" />
-            <span>中国准则</span>
+            <span>财务准则</span>
           </div>
           <div
             class="item"
@@ -29,7 +29,7 @@
             @click="onItemClick(2)"
           >
             <img src="@/assets/images/screen/icon-7.png" alt="" />
-            <span>税务准则</span>
+            <span>会计准则</span>
           </div>
         </div>
 
@@ -91,7 +91,8 @@ export default {
   methods: {
     onItemClick(value) {
       this.type = value;
-      bus.emit('onAssetsTypeChange', value)
+      // bus.emit('onAssetsTypeChange', value)
+      bus.emit('onDepartChange', {})
     },
   },
 };

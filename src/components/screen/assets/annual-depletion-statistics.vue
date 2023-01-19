@@ -219,7 +219,7 @@ export default {
         right: "2%",
         selectedMode: false,
       };
-      const grid = { top: "20%", left: "10%", right: "6%", bottom: "15%" };
+      const grid = { top: "20%", left: "15%", right: "6%", bottom: "15%" };
       // xAxis
       const xAxis = {
         name: "(月)",
@@ -386,6 +386,24 @@ export default {
       };
 
       this.chart.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this;
+      this.chart.on("click", (params) => {
+        self.onItemClick("业务数据统计");
+      });
+    },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(data) {
+      localStorage.setItem("assetsTableType", data);
+      bus.emit("onAssetsModalShow", true);
     },
   },
 };

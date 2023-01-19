@@ -33,7 +33,7 @@
             </span>
           </div>
         </div>
-        <div
+        <!-- <div
           class="select"
           v-click-out-side="onClickOutside2"
           @click="isShow2 = !isShow2"
@@ -56,7 +56,7 @@
               {{ item.label }}
             </span>
           </div>
-        </div>
+        </div> -->
       </template>
       <div class="container">
         <template v-if="!isSingle">
@@ -138,6 +138,10 @@ export default {
   },
   async mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
   beforeUnmount() {
     echarts.dispose(
@@ -284,7 +288,26 @@ export default {
         ],
       };
       this.chart1.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this;
+      this.chart1.on("click", (params) => {
+        self.onItemClick("业务数据统计");
+      });
     },
+
+    /**
+     * 点击打开表格弹窗
+     * value 表明入口
+     */
+    onItemClick(data) {
+      localStorage.setItem("assetsTableType", data);
+      bus.emit("onAssetsModalShow", true);
+    },
+
     async init2(arr) {
       this.chart2 = echarts.init(
         document.getElementById("asset_classification_statistics2")
@@ -392,6 +415,15 @@ export default {
         ],
       };
       this.chart2.setOption(option);
+
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this;
+      this.chart2.on("click", (params) => {
+        self.onItemClick("业务数据统计");
+      });
     },
 
     async init3(list) {
