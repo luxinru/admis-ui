@@ -1,5 +1,5 @@
 <template>
-  <div class="search_input_root" v-click-out-side="onClickOutside">
+  <div class="search_input_root">
     <span class="label"> 单位查询 </span>
     <img src="@/assets/images/screen/search.png" alt="" />
 
@@ -8,71 +8,53 @@
         v-model="value"
         type="text"
         placeholder="可输入单位名称、编号"
-        @focus="isShow = true"
+        @blur="onBlur"
       />
-    </div>
-
-    <div v-if="isShow" class="select_container">
-      <div
-        class="item"
-        v-for="(item, index) in showHouseList"
-        :key="index"
-        @click="onSearchItemClick(item)"
-      >
-        {{ item.assetsName }}
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import bus from "vue3-eventbus";
-import clickOutSide from "@mahdikhashan/vue3-click-outside";
-import useScreenStore from "@/store/modules/screen";
 
 export default {
   name: "SearchInput",
 
-  directives: {
-    clickOutSide,
-  },
-
   data() {
     return {
-      isShow: false,
       value: "",
     };
   },
 
   computed: {
     houseList() {
-      return useScreenStore().houseList;
-    },
-
-    showHouseList() {
-      return this.houseList.filter(
-        (item) =>
-          item.assetsName.indexOf(this.value) > -1 ||
-          item.assetsCode.indexOf(this.value) > -1 ||
-          item.departCode.indexOf(this.value) > -1
-      );
+      return [
+        {
+          departLevel: "2",
+          departCode: "11700",
+          departName: "中国石油西南油气田分公司",
+        },
+        {
+          latitude: 30.6629614,
+          departLevel: "3",
+          departCode: "117000002",
+          departName: "西南油气田/重庆气矿",
+          longitude: 104.0987796,
+        },
+        {
+          latitude: 30.502384,
+          departLevel: "4",
+          departCode: "1170000020001",
+          departName: "西南油气田/重庆气矿/机关",
+          longitude: 104.0638337,
+        },
+      ];
     },
   },
 
   methods: {
-    onSearchItemClick(item) {
-      this.value = item.assetsName;
-      localStorage.setItem("currentHouse", JSON.stringify(item));
-      bus.emit("onTopbarClick", 1);
-      // bus.emit("onTopbarClick", 2); //todo
-      // bus.emit("onHouseInfoOperate", true); //todo
-      // bus.emit("onHouseImgsOperate", true); //todo
-      bus.emit("onSearchInputClick", item);
-      this.isShow = false;
-    },
-
-    onClickOutside() {
-      this.isShow = false;
+    onBlur() {
+      bus.emit("onSearchInputBlur", this.value);
     },
   },
 };
@@ -137,33 +119,6 @@ export default {
         font-weight: 400;
         color: rgba(189, 215, 231, 0.8);
       }
-    }
-  }
-
-  .select_container {
-    position: absolute;
-    width: 100%;
-    top: 41px;
-    left: 0;
-    height: 230px;
-    display: flex;
-    flex-direction: column;
-    background: rgba(7, 37, 84, 0.9);
-    border: 1px solid rgba(10, 71, 167, 0.9);
-    border-radius: 3px;
-    overflow-y: auto;
-
-    .item {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding: 10px 10px;
-      box-sizing: border-box;
-      font-size: 15px;
-      font-family: Microsoft YaHei;
-      font-weight: 400;
-      color: #ffffff;
-      cursor: pointer;
     }
   }
 }

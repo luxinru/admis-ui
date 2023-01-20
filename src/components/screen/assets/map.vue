@@ -4,7 +4,7 @@
 
 <script>
 import bus from "vue3-eventbus";
-import { fetchVisualList } from "@/api/screen/house";
+import { fetchAssetsList } from "@/api/screen/assets";
 import useScreenStore from "@/store/modules/screen";
 
 export default {
@@ -25,7 +25,7 @@ export default {
       : "";
 
     if (depart) {
-      this.fetchVisualListFun(depart);
+      this.fetchAssetsListFun(depart);
     }
   },
 
@@ -89,21 +89,19 @@ export default {
             )
           );
         });
-        self.fetchVisualListFun(depart);
+        self.fetchAssetsListFun(depart);
       });
     },
 
-    async fetchVisualListFun(depart) {
-      const { rows } = await fetchVisualList({
-        houseName: "",
-        houseCode: "",
+    async fetchAssetsListFun(depart) {
+      const { rows } = await fetchAssetsList({
         departCode: depart.departCode,
         // departCode: "226010006", // todo
-        assetsCode: "",
+        assetsType: localStorage.getItem('assetsType'),
       });
 
       const list = rows.filter((item) => item.longitude && item.latitude);
-      useScreenStore().setHouseList(list);
+      // useScreenStore().setHouseList(list);
 
       // 函数 创建多个标注
       this.map.clearOverlays();

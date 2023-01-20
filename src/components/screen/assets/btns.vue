@@ -1,6 +1,6 @@
 <template>
   <div class="btns_root">
-    <div class="item" :class="{ active: type === 1 }" @click="onItemClick(1)">
+    <div class="item" @click="onItemClick(1)">
       <img src="@/assets/images/screen/icon-8.png" alt="" />
       <span>返回首页</span>
     </div>
@@ -29,11 +29,18 @@ export default {
     };
   },
 
+  mounted() {
+    this.type = localStorage.getItem("normType") === "0" ? 2 : 3;
+  },
+
   methods: {
     onItemClick(value) {
       this.type = value;
       if (value === 1) {
-        bus.emit('onAssetsTypeChange', value)
+        bus.emit("onAssetsTypeChange", value);
+      } else {
+        localStorage.setItem("normType", value === 2 ? 0 : 1);
+        bus.emit("onDepartChange");
       }
     },
   },

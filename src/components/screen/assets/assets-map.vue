@@ -10,7 +10,33 @@
 import bus from "vue3-eventbus";
 import * as echarts from "echarts";
 import sichuanJson from "@/assets/json/四川省.json";
+import chongqingJson from "@/assets/json/重庆市.json";
+
+/**
+ * 四川省
+ */
 import chengduJson from "@/assets/json/成都市.json";
+import abazangzuqiangzuJson from "@/assets/json/阿坝藏族羌族自治州.json";
+import bazhongJson from "@/assets/json/巴中市.json";
+import dazhouJson from "@/assets/json/达州市.json";
+import deyangJson from "@/assets/json/德阳市.json";
+import ganzizangzuJson from "@/assets/json/甘孜藏族自治州.json";
+import guanganJson from "@/assets/json/广安市.json";
+import guangyuanJson from "@/assets/json/广元市.json";
+import leshanJson from "@/assets/json/乐山市.json";
+import lianshanyizuJson from "@/assets/json/凉山彝族自治州.json";
+import luzhouJson from "@/assets/json/泸州市.json";
+import meishanJson from "@/assets/json/眉山市.json";
+import mianyangJson from "@/assets/json/绵阳市.json";
+import nanchongJson from "@/assets/json/南充市.json";
+import neijiangJson from "@/assets/json/内江市.json";
+import panzhihuaJson from "@/assets/json/攀枝花市.json";
+import suiningJson from "@/assets/json/遂宁市.json";
+import yaanJson from "@/assets/json/雅安市.json";
+import yibinJson from "@/assets/json/宜宾市.json";
+import ziyangJson from "@/assets/json/资阳市.json";
+import zigongJson from "@/assets/json/自贡市.json";
+
 import { fetchDepartList } from "@/api/screen/assets/index";
 
 export default {
@@ -22,11 +48,25 @@ export default {
     return {
       chart: null,
       options: {},
+      map: "四川省",
     };
   },
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
+
+    bus.on("onMapChange", (map) => {
+      this.map = map;
+      this.init();
+    });
+
+    bus.on("onSearchInputBlur", (str) => {
+      this.init(str);
+    });
   },
 
   beforeUnmount() {
@@ -36,22 +76,55 @@ export default {
   },
 
   methods: {
-    async init() {
+    async init(str = '') {
       // const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       // const { data } = await fetchDepartList({
       //   departCode: depart.departCode,
-      //   departName: '成都市',
-      //   levelSearch: 0
+      //   // departName: "成都市",
+      //   levelSearch: 0,
       // });
 
-      // console.log('AssetsMap :>> ', data);
+      // console.log("AssetsMap :>> ", data);
+      let data = [
+        {
+          departLevel: "2",
+          departCode: "11700",
+          departName: "中国石油西南油气田分公司",
+        },
+        {
+          latitude: 30.6629614,
+          departLevel: "3",
+          departCode: "117000002",
+          departName: "西南油气田/重庆气矿",
+          longitude: 104.0987796,
+        },
+        {
+          latitude: 30.502384,
+          departLevel: "4",
+          departCode: "1170000020001",
+          departName: "西南油气田/重庆气矿/机关",
+          longitude: 104.0638337,
+        },
+      ];
+
+      data = data.filter(item => item.departName.indexOf(str) > -1)
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
       }
 
-      echarts.registerMap("四川省", sichuanJson);
-      echarts.registerMap("成都市", chengduJson);
+      if (!echarts.getMap(this.map)) {
+        switch (this.map) {
+          case "四川省":
+            echarts.registerMap(this.map, sichuanJson);
+            break;
+          case "重庆市":
+            echarts.registerMap(this.map, chongqingJson);
+            break;
+          default:
+            break;
+        }
+      }
 
       this.chart = echarts.init(document.getElementById("mapChart"));
 
@@ -59,32 +132,13 @@ export default {
         backgroundColor: "transparent",
         tooltip: {
           // 指示器
-          show: false
+          show: true,
         },
         legend: {
-          orient: "vertical",
-          top: "5",
-          right: "20",
-          itemWidth: 20,
-          itemHeight: 20,
-          data: [
-            {
-              name: "标记点1",
-            },
-            {
-              name: "标记点2",
-            },
-            {
-              name: "标记点3",
-            },
-          ],
-          textStyle: {
-            color: "#fff",
-            fontSize: 15,
-          },
+          shwo: false,
         },
         geo: {
-          map: "四川省",
+          map: this.map,
           // zoom: 0.4, // 设置地图显示大小比例
           zoom: 0.55, // 设置地图显示大小比例
           label: {
@@ -114,6 +168,7 @@ export default {
               areaColor: "rgb(0,112,255)",
             },
           },
+          selectedMode: "single",
           select: {
             itemStyle: {
               areaColor: "#0362bd",
@@ -124,7 +179,7 @@ export default {
         //配置属性
         series: [
           {
-            name: "四川省",
+            name: this.map,
             type: "map",
             geoIndex: 0,
             data: [],
@@ -142,6 +197,7 @@ export default {
                 },
               },
             },
+            selectedMode: "single",
             select: {
               itemStyle: {
                 areaColor: "#0362bd",
@@ -149,213 +205,211 @@ export default {
               },
             },
           },
-          // {
-          //   name: "标记点1",
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   showEffectOn: "render", //涟漪
-          //   zlevel: 2,
-          //   rippleEffect: {
-          //     //period: 2.5, //波纹秒数
-          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-          //     scale: 3, //波纹范围
-          //   },
-          //   hoverAnimation: true,
-          //   label: {
-          //     normal: {
-          //       formatter: "{b}",
-          //       position: "top",
-          //       show: false, //不显示
-          //       textStyle: {
-          //         // 地图上散点的字体样式
-          //         fontSize: 15,
-          //         fontWeight: "bold",
-          //         color: "blue",
-          //       },
-          //     },
-          //   },
-          //   itemStyle: {
-          //     normal: {
-          //       show: true,
-          //       color: "#E4E214", //字体和点颜色
-          //       label: {
-          //         textStyle: {
-          //           fontWeight: "bold", //字体
-          //           fontSize: 18, //字体大小
-          //           color: "#E4E214",
-          //         },
-          //       },
-          //     },
-          //   },
-          //   data: [
-          //     {
-          //       name: "类型1-标记点1",
-          //       value: [102.359817, 26.721043, 280],
-          //       product: "200",
-          //       scale: "21",
-          //       symbolSize: 10,
-          //     },
-          //     {
-          //       name: "类型1-标记点2",
-          //       value: [104.062156, 30.651066, 200],
-          //       product: "260",
-          //       scale: "33",
-          //       symbolSize: 15,
-          //     },
-          //     {
-          //       name: "类型1-标记点3",
-          //       value: [100.062156, 30.651066, 200],
-          //       product: "280",
-          //       scale: "55",
-          //       symbolSize: 50 / 2,
-          //     },
-          //   ],
-          // },
-          // {
-          //   name: "标记点2",
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   showEffectOn: "render",
-          //   zlevel: 2,
-          //   rippleEffect: {
-          //     //period: 2.5, //波纹秒数
-          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-          //     scale: 3, //波纹范围
-          //   },
-          //   hoverAnimation: true,
-          //   label: {
-          //     normal: {
-          //       formatter: "{b}",
-          //       position: "top",
-          //       show: false, //不显示
-          //       textStyle: {
-          //         // 地图上散点的字体样式
-          //         fontSize: 15,
-          //         fontWeight: "bold",
-          //         color: "#BE14E4", // 点上字的颜色
-          //       },
-          //     },
-          //   },
-          //   itemStyle: {
-          //     normal: {
-          //       show: true,
-          //       color: "#ff7e7e", //点颜色
-          //       label: {
-          //         textStyle: {
-          //           fontWeight: "bold", //字体
-          //           fontSize: 18, //字体大小
-          //           color: "#BE14E4",
-          //         },
-          //       },
-          //     },
-          //   },
-          //   data: [
-          //     {
-          //       name: "类型2-标记点1",
-          //       value: [102.062156, 32.651066, 200],
-          //       product: "200",
-          //       scale: "21",
-          //       symbolSize: 10,
-          //     },
-          //     {
-          //       name: "类型2-标记点2",
-          //       value: [103.062156, 28.651066, 200],
-          //       product: "260",
-          //       scale: "32",
-          //       symbolSize: 15,
-          //     },
-          //     {
-          //       name: "类型2-标记点2",
-          //       value: [103.062156, 30.651066, 200],
-          //       product: "280",
-          //       scale: "51",
-          //       symbolSize: 25,
-          //     },
-          //   ],
-          // },
-          // {
-          //   name: "标记点3",
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   showEffectOn: "render",
-          //   zlevel: 2,
-          //   rippleEffect: {
-          //     //period: 2.5, //波纹秒数
-          //     brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
-          //     scale: 3, //波纹范围
-          //   },
-          //   hoverAnimation: true,
-          //   label: {
-          //     normal: {
-          //       formatter: "{b}",
-          //       position: "top",
-          //       show: false, //不显示
-          //       textStyle: {
-          //         // 地图上散点的字体样式
-          //         fontSize: 15,
-          //         fontWeight: "bold",
-          //         color: "#BE14E4", // 点上字的颜色
-          //       },
-          //     },
-          //   },
-          //   itemStyle: {
-          //     normal: {
-          //       show: true,
-          //       color: "#02f2b3", //点颜色
-          //       label: {
-          //         textStyle: {
-          //           fontWeight: "bold", //字体
-          //           fontSize: 18, //字体大小
-          //           color: "#BE14E4",
-          //         },
-          //       },
-          //     },
-          //   },
-          //   data: [
-          //     {
-          //       name: "类型3-标记点1",
-          //       value: [104.062156, 32.651066, 200],
-          //       product: "200",
-          //       scale: "21",
-          //       symbolSize: 10,
-          //     },
-          //     {
-          //       name: "类型3-标记点2",
-          //       value: [105.062156, 28.651066, 200],
-          //       product: "260",
-          //       scale: "32",
-          //       symbolSize: 15,
-          //     },
-          //     {
-          //       name: "类型3-标记点2",
-          //       value: [105.062156, 30.651066, 200],
-          //       product: "280",
-          //       scale: "51",
-          //       symbolSize: 25,
-          //     },
-          //   ],
-          // },
+          {
+            name: "",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            showEffectOn: "render", //涟漪
+            zlevel: 2,
+            rippleEffect: {
+              //period: 2.5, //波纹秒数
+              brushType: "stroke", //stroke(涟漪)和fill(扩散)，两种效果
+              scale: 3, //波纹范围
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: "{b}",
+                position: "top",
+                show: false, //不显示
+                textStyle: {
+                  // 地图上散点的字体样式
+                  fontSize: 15,
+                  fontWeight: "bold",
+                  color: "blue",
+                },
+              },
+            },
+            itemStyle: {
+              show: true,
+              color: "#02f2b3", //字体和点颜色
+              label: {
+                show: true,
+                textStyle: {
+                  fontWeight: "bold", //字体
+                  fontSize: 18, //字体大小
+                  color: "#fff",
+                },
+              },
+            },
+            selectedMode: "single",
+            select: {
+              itemStyle: {
+                color: "#E4E214",
+              },
+            },
+            data: data.map((item) => {
+              return {
+                name: item.departName,
+                departCode: item.departCode,
+                departLevel: item.departLevel,
+                value: [Number(item.longitude), Number(item.latitude)],
+                symbolSize: 50 / Number(item.departLevel),
+                select: {
+                  disabled: item.departLevel === "4",
+                },
+                tooltip: {
+                  formatter: '{b}'
+                }
+              };
+            }),
+          },
         ],
       };
 
-      // this.chart.on("click", (params) => {
-      //   console.log("params :>> ", params);
-      //   if (params.componentSubType == "map") {
-      //     this.goDown(params.name);
-      //   }
-      // });
       this.chart.setOption(this.options);
+
+      this.chart.on("click", (params) => {
+        if (params.componentSubType == "map") {
+          this.goDown(params.name);
+        }
+
+        if (params.componentSubType === "effectScatter") {
+          if (params.data.departLevel === "4") return;
+          this.$modal
+            .confirm("是否更改统计单位？")
+            .then(() => {
+              bus.emit('updateDepart', params.data.departCode)
+            })
+            .catch(() => {
+              this.init();
+            });
+        }
+      });
     },
 
     async goDown(name) {
-      //获取地图数据之后，修改地图options
-      // if (!echarts.getMap(name)) {
-      //   const newMapJson = await getMapJson(name);
-      //   echarts.registerMap(mapname, newMapJson);
-      // }
-      this.options.geo.map = name;
-      this.options.series[0].map = name;
-      this.chart.setOption(this.options);
+      // 获取地图数据之后，修改地图options
+      let isChange = false;
+      if (!echarts.getMap(name)) {
+        switch (name) {
+          case "阿坝藏族羌族自治州":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, abazangzuqiangzuJson);
+            break;
+          case "巴中市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, bazhongJson);
+            break;
+          case "成都市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, chengduJson);
+            break;
+          case "达州市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, dazhouJson);
+            break;
+          case "德阳市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, deyangJson);
+            break;
+          case "甘孜藏族自治州":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, ganzizangzuJson);
+            break;
+          case "广安市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, guanganJson);
+            break;
+          case "广元市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, guangyuanJson);
+            break;
+          case "乐山市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, leshanJson);
+            break;
+          case "凉山彝族自治州":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, lianshanyizuJson);
+            break;
+          case "泸州市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, luzhouJson);
+            break;
+          case "眉山市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, meishanJson);
+            break;
+          case "绵阳市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, mianyangJson);
+            break;
+          case "南充市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, nanchongJson);
+            break;
+          case "内江市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, neijiangJson);
+            break;
+          case "攀枝花市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, panzhihuaJson);
+            break;
+          case "遂宁市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, suiningJson);
+            break;
+          case "雅安市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, yaanJson);
+            break;
+          case "宜宾市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, yibinJson);
+            break;
+          case "资阳市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, ziyangJson);
+            break;
+          case "自贡市":
+            this.map = name;
+            isChange = true;
+            echarts.registerMap(this.map, zigongJson);
+            break;
+          default:
+            break;
+        }
+      } else {
+        isChange = true;
+      }
+
+      if (echarts.getMap(name) && isChange) {
+        this.options.geo.map = name;
+        this.options.series[0].map = name;
+        this.chart.setOption(this.options);
+      }
     },
   },
 };

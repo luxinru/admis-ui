@@ -13,6 +13,7 @@ import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import * as echarts from "echarts";
 import { fetchAssetsCount } from "@/api/screen/assets/index";
+import { forIn } from "lodash-es";
 
 export default {
   name: "TotalAssetsStatistics",
@@ -320,8 +321,18 @@ export default {
        * 声明入口
        */
       this.chart.on("click", (params) => {
-        localStorage.setItem("assetsType", params.name);
-        self.onItemClick("资产总量统计", false);
+        let assetsType = "";
+        for (const key in typeObj) {
+          const element = typeObj[key];
+
+          if (element === params.name) {
+            assetsType = key;
+          }
+        }
+
+        localStorage.setItem("assetsType", assetsType);
+        // self.onItemClick("资产总量统计", false);
+        bus.emit('onAssetsTypeChange', 2)
       });
     },
 

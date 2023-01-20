@@ -31,6 +31,11 @@
             <img src="@/assets/images/screen/icon-7.png" alt="" />
             <span>会计准则</span>
           </div>
+
+          <div class="item" @click="onMapChange()">
+            <img src="@/assets/images/screen/icon-7.png" alt="" />
+            <span>{{ this.map }}</span>
+          </div>
         </div>
 
         <div class="input">
@@ -85,14 +90,30 @@ export default {
   data() {
     return {
       type: 1,
+      map: "重庆市", // 四川省 重庆市
     };
+  },
+
+  mounted() {
+    this.type = localStorage.getItem("normType")
+      ? Number(localStorage.getItem("normType")) === 0
+        ? 1
+        : 2
+      : 1;
+    localStorage.setItem("normType", this.type === 1 ? 0 : 1);
   },
 
   methods: {
     onItemClick(value) {
       this.type = value;
       // bus.emit('onAssetsTypeChange', value)
-      bus.emit('onDepartChange', {})
+      localStorage.setItem("normType", value === 1 ? 0 : 1); // 0=财务准则 1=会计准则
+      bus.emit("onDepartChange", {});
+    },
+
+    onMapChange() {
+      bus.emit("onMapChange", this.map);
+      this.map = this.map === "四川省" ? "重庆市" : "四川省";
     },
   },
 };

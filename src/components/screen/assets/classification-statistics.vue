@@ -26,7 +26,7 @@
             </span>
           </div>
         </div>
-        <div
+        <!-- <div
           class="select"
           v-click-out-side="onClickOutside2"
           @click="isShow2 = !isShow2"
@@ -49,7 +49,7 @@
               {{ item.label }}
             </span>
           </div>
-        </div>
+        </div> -->
       </template>
       <div class="container">
         <section class="item">
@@ -167,6 +167,10 @@ export default {
 
   mounted() {
     this.init();
+
+    bus.on("onDepartChange", (depart) => {
+      this.init();
+    });
   },
 
   methods: {

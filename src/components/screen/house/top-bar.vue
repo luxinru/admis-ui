@@ -105,6 +105,11 @@ export default {
 
   mounted() {
     this.fetchMyrelationListFun();
+
+    bus.on('updateDepart', (departCode) => {
+      sessionStorage.setItem('departCode', departCode)
+      this.fetchMyrelationListFun();
+    })
     // bus.emit("onDepartChange", this.currentDepart); // todo
   },
 
@@ -153,6 +158,7 @@ export default {
       this.isDepartListShow = false;
       bus.emit("onTopbarClick", 1);
       localStorage.removeItem("currentHouse");
+      localStorage.setItem('currentDepart', JSON.stringify(depart))
       bus.emit("onDepartChange", depart);
     },
 
