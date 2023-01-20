@@ -221,7 +221,8 @@ export default {
       const self = this;
       this.chart.on("click", (params) => {
         console.log("params :>> ", params);
-        self.onItemClick("业务数据统计");
+        localStorage.setItem("assetsType", params.name)
+        self.onItemClick("油气产量统计");
       });
     },
 

@@ -143,3 +143,67 @@ export function fetchBusinessAmount(params) {
     params,
   });
 }
+
+// 1.15.	油气产量明细列表查询
+export function fetchProductionList(params) {
+  return request({
+    url: `data-visualization/assets/visual/production/list`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.21.	油气产量分类占比查询接口
+export function fetchProductionValue(params) {
+  return request({
+    url: `data-visualization/assets/visual/production/value`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.16.	折耗明细列表查询
+export function fetchDepletionList(params) {
+  return request({
+    url: `data-visualization/assets/visual/depletion/list`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.22.	折耗量分类占比查询接口
+export function fetchDepletionValue(params) {
+  return request({
+    url: `data-visualization/assets/visual/depletion/value`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.17.	出租明细列表查询
+export function fetchRentList(params) {
+  return request({
+    url: `data-visualization/assets/visual/rent/list`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.23.	出租承租单位性质数量占比查询接口
+export function fetchRentAmount(params) {
+  return request({
+    url: `data-visualization/assets/visual/rent/amount`,
+    method: "get",
+    params,
+  });
+}
+
+// 1.24.	房屋出租承租单位性质价值量占比查询接口
+export function fetchRentValue(params) {
+  return request({
+    url: `data-visualization/assets/visual/rent/value`,
+    method: "get",
+    params,
+  });
+}
+

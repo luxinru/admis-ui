@@ -127,7 +127,7 @@ export default {
     },
 
     async init() {
-      const self = this
+      const self = this;
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchRealAssetsCount({
         departCode: depart.departCode,
@@ -270,11 +270,10 @@ export default {
        * 声明入口
        */
       this.chart.on("click", (params) => {
-        if (self.type === 0) {
-          localStorage.setItem("physicalType", self.currentType2.value);
-          localStorage.setItem("assetsType", params.name);
-          self.onItemClick("实物资产统计", false);
-        }
+        localStorage.setItem("physicalOption", self.currentType2.value);
+        localStorage.setItem("physicalType", self.type);
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("实物资产统计", false);
       });
     },
 

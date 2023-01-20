@@ -77,14 +77,14 @@ export default {
 
   methods: {
     async init(str = '') {
-      // const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      // const { data } = await fetchDepartList({
-      //   departCode: depart.departCode,
-      //   // departName: "成都市",
-      //   levelSearch: 0,
-      // });
+      const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
+      const { data: data1 } = await fetchDepartList({
+        departCode: depart.departCode,
+        // departName: "成都市",
+        levelSearch: 0,
+      });
 
-      // console.log("AssetsMap :>> ", data);
+      console.log("AssetsMap :>> ", data1);
       let data = [
         {
           departLevel: "2",

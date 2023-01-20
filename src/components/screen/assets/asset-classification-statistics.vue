@@ -180,7 +180,6 @@ export default {
         normType: this.currentType2, // 0财务准则 1会计准则
       });
 
-      console.log("data :>> ", data);
       this.all = data.allValue;
 
       const list = data.groupMap || [];
@@ -295,7 +294,8 @@ export default {
        */
       const self = this;
       this.chart1.on("click", (params) => {
-        self.onItemClick("业务数据统计");
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("资产总量统计");
       });
     },
 
@@ -422,15 +422,12 @@ export default {
        */
       const self = this;
       this.chart2.on("click", (params) => {
-        self.onItemClick("业务数据统计");
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("资产总量统计");
       });
     },
 
     async init3(list) {
-      console.log("this.chart3 :>> ", this.chart3);
-      console.log("object :>> ", [
-        document.getElementById("asset_classification_statistics3"),
-      ]);
       if (this.chart3) {
         echarts.dispose(
           document.getElementById("asset_classification_statistics3")
@@ -513,6 +510,15 @@ export default {
       };
 
       this.chart3.setOption(option);
+      /**
+       * echarts点击事件
+       * 声明入口
+       */
+      const self = this;
+      this.chart3.on("click", (params) => {
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("资产总量统计");
+      });
     },
   },
 };

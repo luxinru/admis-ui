@@ -105,7 +105,7 @@ export default {
         },
         {
           label: "资金渠道",
-          value: 1,
+          value: 2,
         },
       ],
       isShow2: false,
@@ -393,7 +393,13 @@ export default {
        */
       const self = this;
       this.chart.on("click", (params) => {
-        self.onItemClick("业务数据统计");
+        localStorage.setItem("dimension", self.currentType1);
+        localStorage.setItem(
+          "dictCode",
+          self.currentType2.value === "all" ? "" : self.currentType2.value
+        );
+        localStorage.setItem("assetsType", params.name);
+        self.onItemClick("年折耗统计");
       });
     },
 

@@ -8,18 +8,7 @@
 
     <div class="container">
       <span class="title">
-        {{
-          [
-            "原值",
-            "净值",
-            "折旧",
-            "房屋总量",
-            "房屋分类占比",
-            "房屋取得情况",
-          ].indexOf(type) > -1
-            ? "房屋台账明细信息查询"
-            : "房屋出租明细查询"
-        }}
+        {{ type }}
         <img
           class="close"
           src="@/assets/images/screen/close.png"
@@ -55,6 +44,8 @@
                       '实物资产统计',
                       '本年业务统计',
                       '业务数据统计',
+                      '油气产量统计',
+                      '年折耗统计',
                     ].indexOf(type) > -1
                       ? item.groupName
                       : item.usedNatureName
@@ -66,6 +57,8 @@
                       "实物资产统计",
                       "本年业务统计",
                       "业务数据统计",
+                      "油气产量统计",
+                      "年折耗统计",
                     ].indexOf(type) > -1
                       ? item.groupName
                       : item.usedNatureName
@@ -78,24 +71,24 @@
                       '实物资产统计',
                       '本年业务统计',
                       '业务数据统计',
+                      '油气产量统计',
+                      '年折耗统计',
                     ].indexOf(type) > -1
                   "
                   :title="item.groupCount"
                 >
                   {{ item.groupCount }}
                 </p>
-                <p
-                  v-if="['房屋面积'].indexOf(type) > -1"
-                  :title="item.landArea"
-                >
-                  {{ item.landArea }}
-                </p>
               </div>
             </div>
           </div>
           <div
             class="item"
-            v-if="['本年业务统计', '业务数据统计'].indexOf(type) === -1"
+            v-if="
+              (['实物资产统计'].indexOf(type) > -1 &&
+                (physicalType === '0' || physicalType === '1')) ||
+              ['资产总量统计'].indexOf(type) > -1
+            "
           >
             <div class="item_title">
               <img src="@/assets/images/screen/more-1.png" alt="" />
@@ -133,24 +126,6 @@
                 >
                   {{ item.groupValue }}
                 </p>
-                <p v-if="['净值'].indexOf(type) > -1" :title="item.nowValue">
-                  {{ item.nowValue }}
-                </p>
-                <p
-                  v-if="['折旧'].indexOf(type) > -1"
-                  :title="item.addDepreciate"
-                >
-                  {{ item.addDepreciate }}
-                </p>
-                <p
-                  v-if="
-                    ['出租总收入', '租金增长率', '租金收入占比'].indexOf(type) >
-                    -1
-                  "
-                  :title="item.rentMoney"
-                >
-                  {{ item.rentMoney }}
-                </p>
               </div>
             </div>
           </div>
@@ -158,7 +133,7 @@
 
         <div class="list">
           <section class="table_container">
-            <table v-if="['资产总量统计', '实物资产统计'].indexOf(type) > -1">
+            <table v-if="['资产总量统计'].indexOf(type) > -1">
               <thead>
                 <tr>
                   <th>资产编码</th>
@@ -204,6 +179,186 @@
                   </td>
                 </tr>
               </tbody>
+            </table>
+
+            <table v-if="['实物资产统计'].indexOf(type) > -1">
+              <template v-if="physicalType === '0'">
+                <thead>
+                  <tr>
+                    <th>资产编码</th>
+                    <th>资产类别编码</th>
+                    <th>资产名称</th>
+                    <th>资产类型</th>
+                    <th>增加日期</th>
+                    <th>原值</th>
+                    <th>净值</th>
+                    <th>累计折旧</th>
+                    <th>减值准备</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(item, index) in list" :key="index">
+                    <td :title="item.assetsCode || '-'">
+                      {{ item.assetsCode || "-" }}
+                    </td>
+                    <td :title="item.contentAssetsCode || '-'">
+                      {{ item.contentAssetsCode || "-" }}
+                    </td>
+                    <td :title="item.assetsName || '-'">
+                      {{ item.assetsName || "-" }}
+                    </td>
+                    <td :title="item.assetsTypeName || '-'">
+                      {{ item.assetsTypeName || "-" }}
+                    </td>
+                    <td :title="item.addVoucherDate || '-'">
+                      {{ item.addVoucherDate || "-" }}
+                    </td>
+                    <td :title="item.originalValue || '-'">
+                      {{ item.originalValue || "-" }}
+                    </td>
+                    <td :title="item.nowValue || '-'">
+                      {{ item.nowValue || "-" }}
+                    </td>
+                    <td :title="item.addDepreciate || '-'">
+                      {{ item.addDepreciate || "-" }}
+                    </td>
+                    <td :title="item.devalueValue || '-'">
+                      {{ item.devalueValue || "-" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+              <template v-if="physicalType === '1'">
+                <thead>
+                  <tr>
+                    <th>业务类型</th>
+                    <th>资产编码</th>
+                    <th>资产类别编码</th>
+                    <th>资产名称</th>
+                    <th>资产类型</th>
+                    <th>租赁类型</th>
+                    <th>租赁期实际开始日期</th>
+                    <th>预计租赁终止日</th>
+                    <th>租赁期(年)</th>
+                    <th>租赁金额类别</th>
+                    <th>承租方单位类型</th>
+                    <th>承租方单位编码</th>
+                    <th>承租方单位名称</th>
+                    <th>租赁金额(不含税)</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(item, index) in list" :key="index">
+                    <td :title="item.businessType || '-'">
+                      {{ item.businessType || "-" }}
+                    </td>
+                    <td :title="item.assetsCode || '-'">
+                      {{ item.assetsCode || "-" }}
+                    </td>
+                    <td :title="item.contentAssetsCode || '-'">
+                      {{ item.contentAssetsCode || "-" }}
+                    </td>
+                    <td :title="item.assetsName || '-'">
+                      {{ item.assetsName || "-" }}
+                    </td>
+                    <td :title="item.assetsTypeName || '-'">
+                      {{ item.assetsTypeName || "-" }}
+                    </td>
+                    <td :title="item.rentTypeName || '-'">
+                      {{ item.rentTypeName || "-" }}
+                    </td>
+                    <td :title="item.rentStartDate || '-'">
+                      {{ item.rentStartDate || "-" }}
+                    </td>
+                    <td :title="item.rentEndDate || '-'">
+                      {{ item.rentEndDate || "-" }}
+                    </td>
+                    <td :title="item.rentPeriod || '-'">
+                      {{ item.rentPeriod || "-" }}
+                    </td>
+                    <td :title="item.rentMoneyCategoryName || '-'">
+                      {{ item.rentMoneyCategoryName || "-" }}
+                    </td>
+                    <td :title="item.rentDepartTypeName || '-'">
+                      {{ item.rentDepartTypeName || "-" }}
+                    </td>
+                    <td :title="item.rentDepartCode || '-'">
+                      {{ item.rentDepartCode || "-" }}
+                    </td>
+                    <td :title="item.rentDepartName || '-'">
+                      {{ item.rentDepartName || "-" }}
+                    </td>
+                    <td :title="item.rentMoney || '-'">
+                      {{ item.rentMoney || "-" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+              <template v-if="physicalType === '2'">
+                <thead>
+                  <tr>
+                    <th>业务类型</th>
+                    <th>所属单位</th>
+                    <th>单据编号</th>
+                    <th>资产编码</th>
+                    <th>资产类别编码</th>
+                    <th>资产名称</th>
+                    <th>资产类型</th>
+                    <th>业务状态</th>
+                    <th>变动日期</th>
+                    <th>原值</th>
+                    <th>净值</th>
+                    <th>累计折旧</th>
+                    <th>减值准备</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(item, index) in list" :key="index">
+                    <td :title="item.businessType || '-'">
+                      {{ item.businessType || "-" }}
+                    </td>
+                    <td :title="item.departCode || '-'">
+                      {{ item.departCode || "-" }}
+                    </td>
+                    <td :title="item.invoiceNumber || '-'">
+                      {{ item.invoiceNumber || "-" }}
+                    </td>
+                    <td :title="item.assetsCode || '-'">
+                      {{ item.assetsCode || "-" }}
+                    </td>
+                    <td :title="item.contentAssetsCode || '-'">
+                      {{ item.contentAssetsCode || "-" }}
+                    </td>
+                    <td :title="item.assetsName || '-'">
+                      {{ item.assetsName || "-" }}
+                    </td>
+                    <td :title="item.assetsTypeName || '-'">
+                      {{ item.assetsTypeName || "-" }}
+                    </td>
+                    <td :title="item.markStatus || '-'">
+                      {{ item.markStatus || "-" }}
+                    </td>
+                    <td :title="item.varDate || '-'">
+                      {{ item.varDate || "-" }}
+                    </td>
+                    <td :title="item.originalValue || '-'">
+                      {{ item.originalValue || "-" }}
+                    </td>
+                    <td :title="item.nowValue || '-'">
+                      {{ item.nowValue || "-" }}
+                    </td>
+                    <td :title="item.addDepreciate || '-'">
+                      {{ item.addDepreciate || "-" }}
+                    </td>
+                    <td :title="item.devalueValue || '-'">
+                      {{ item.devalueValue || "-" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
             </table>
 
             <table v-else-if="['本年业务统计'].indexOf(type) > -1">
@@ -270,99 +425,61 @@
               </tbody>
             </table>
 
-            <table v-else>
+            <table v-else-if="['年折耗统计'].indexOf(type) > -1">
               <thead>
                 <tr>
+                  <th>业务类型</th>
                   <th>资产编码</th>
+                  <th>资产类别编码</th>
+                  <th>资产名称</th>
                   <th>资产类型</th>
-                  <th>
-                    资产名称
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    资产类别编码
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    规格型号
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    所属单位
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>宗地编码</th>
-                  <th>权属情况</th>
-                  <th>
-                    使用权类型
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th v-if="type === '原值'">原值</th>
-                  <th v-if="type === '净值'">净值</th>
-                  <th v-if="type === '折旧'">折旧</th>
-                  <th v-if="type === '房屋面积'">土地面积</th>
+                  <th>增加日期</th>
+                  <th>折旧方法</th>
+                  <th>折旧年限</th>
+                  <th>尚可使用月份</th>
+                  <th>折旧日期</th>
+                  <th>月折旧额</th>
+                  <th>月补提额</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr v-for="(item, index) in list" :key="index">
-                  <td :title="item.assetsCode || '-'">
-                    {{ item.assetsCode || "-" }}
+                  <td :title="item.businessType || '-'">
+                    {{ item.businessType || "-" }}
                   </td>
-                  <td :title="item.assetsType || '-'">
-                    {{ item.assetsType || "-" }}
-                  </td>
-                  <td :title="item.assetsName || '-'">
-                    {{ item.assetsName || "-" }}
+                  <td :title="item.businessType || '-'">
+                    {{ item.businessType || "-" }}
                   </td>
                   <td :title="item.contentAssetsCode || '-'">
                     {{ item.contentAssetsCode || "-" }}
                   </td>
-                  <td :title="item.assetsStandard || '-'">
-                    {{ item.assetsStandard || "-" }}
+                  <td :title="item.assetsName || '-'">
+                    {{ item.assetsName || "-" }}
                   </td>
-                  <td :title="item.departName || '-'">
-                    {{ item.departName || "-" }}
+                  <td :title="item.assetsTypeName || '-'">
+                    {{ item.assetsTypeName || "-" }}
                   </td>
-                  <td :title="item.parcelCode || '-'">
-                    {{ item.parcelCode || "-" }}
+                  <td :title="item.addVoucherDate || '-'">
+                    {{ item.addVoucherDate || "-" }}
                   </td>
-                  <td :title="item.ownershipConditionName || '-'">
-                    {{ item.ownershipConditionName || "-" }}
+                  <td :title="item.depreciateCode || '-'">
+                    {{ item.depreciateCode || "-" }}
                   </td>
-                  <td :title="item.usedrightTypeName || '-'">
-                    {{ item.usedrightTypeName || "-" }}
+                  <td :title="item.depreciateYear || '-'">
+                    {{ item.depreciateYear || "-" }}
                   </td>
-                  <td v-if="type === '原值'" :title="item.originalValue || '-'">
-                    {{ item.originalValue || "-" }}
+                  <td :title="item.usableYear || '-'">
+                    {{ item.usableYear || "-" }}
                   </td>
-                  <td v-if="type === '净值'" :title="item.nowValue || '-'">
-                    {{ item.nowValue || "-" }}
+                  <td :title="item.depreciateDate || '-'">
+                    {{ item.depreciateDate || "-" }}
                   </td>
-                  <td v-if="type === '折旧'" :title="item.addDepreciate || '-'">
-                    {{ item.addDepreciate || "-" }}
+                  <td :title="item.monthDepreciate || '-'">
+                    {{ item.monthDepreciate || "-" }}
                   </td>
-                  <td v-if="type === '房屋面积'" :title="item.landArea || '-'">
-                    {{ item.landArea || "-" }}
+                  <td :title="item.patchDepreciate || '-'">
+                    {{ item.patchDepreciate || "-" }}
                   </td>
                 </tr>
               </tbody>
@@ -386,6 +503,7 @@
 
 <script>
 import * as echarts from "echarts";
+import Moment from "moment";
 import bus from "vue3-eventbus";
 
 import {
@@ -403,6 +521,13 @@ import {
   fetchAssetsValue,
   fetchBusinessList,
   fetchBusinessAmount,
+  fetchProductionList,
+  fetchProductionValue,
+  fetchDepletionList,
+  fetchDepletionValue,
+  fetchRentList,
+  fetchRentAmount,
+  fetchRentValue,
 } from "@/api/screen/assets";
 
 /**
@@ -419,7 +544,6 @@ export default {
       },
       total: 0,
       list: [],
-      type: "原值",
       currentDepart: {}, // 当前单位
       currentHouse: {}, // 当前房屋
       chart1Data: [], // 左侧上边图表
@@ -434,11 +558,22 @@ export default {
     chart1Title() {
       switch (this.type) {
         case "资产总量统计":
+          return "资产分类价值量占比";
         case "实物资产统计":
-          return "资产分类数量占比";
+          if (this.physicalType === "0") {
+            return "资产分类价值量占比";
+          } else if (this.physicalType === "1") {
+            return "出租承租单位性质数量占比";
+          } else {
+            return "业务数量占比";
+          }
         case "本年业务统计":
         case "业务数据统计":
           return "业务数量占比";
+        case "油气产量统计":
+          return "油气产量分类占比";
+        case "年折耗统计":
+          return "折耗量分类占比";
         default:
           break;
       }
@@ -450,31 +585,43 @@ export default {
     chart2Title() {
       switch (this.type) {
         case "资产总量统计":
-        case "实物资产统计":
           return "资产分类价值量占比";
+        case "实物资产统计":
+          return "房屋出租承租单位性质价值量占比";
         case "净值":
           return "使用性质分类净值占比";
         case "折旧":
           return "使用性质分类折旧占比";
-        case "出租总收入":
-        case "租金增长率":
-        case "租金收入占比":
-          return "承租单位性质分类租金额占比";
 
         default:
           break;
       }
     },
+
+    normType() {
+      return localStorage.getItem("normType") || 0;
+    },
+
+    type() {
+      return localStorage.getItem("assetsTableType");
+    },
+
+    physicalType() {
+      return localStorage.getItem("physicalType");
+    },
+
+    physicalOption() {
+      return localStorage.getItem("physicalOption");
+    },
   },
 
   async mounted() {
-    this.type = localStorage.getItem("assetsTableType"); // 入口
     this.currentDepart = JSON.parse(localStorage.getItem("currentDepart")); // 当前单位
 
     /**
      * 根据不同入口请求不同的接口
      */
-    if (["资产总量统计", "实物资产统计"].indexOf(this.type) > -1) {
+    if (["资产总量统计"].indexOf(this.type) > -1) {
       this.fetchAssetsList();
       await this.fetchVisualAmountNatureFun();
       await this.fetchVisualValueNatureFun();
@@ -485,27 +632,170 @@ export default {
       await this.fetchBusinessAmount();
       // await this.fetchVisualAmountRentDepartFun();
       this.initChart();
+    } else if (["实物资产统计"].indexOf(this.type) > -1) {
+      if (this.physicalType === "0") {
+        this.fetchAssetsList();
+        await this.fetchVisualAmountNatureFun();
+        await this.fetchVisualValueNatureFun();
+
+        this.initChart();
+      } else if (this.physicalType === "1") {
+        this.fetchRentList();
+        await this.fetchRentAmount();
+        await this.fetchRentValue();
+
+        this.initChart();
+      } else {
+        this.fetchBusinessList();
+        await this.fetchBusinessAmount();
+        // await this.fetchVisualAmountRentDepartFun();
+        this.initChart();
+      }
+    } else if (["油气产量统计"].indexOf(this.type) > -1) {
+      this.fetchProductionList();
+      await this.fetchProductionValue();
+
+      this.initChart();
+    } else if (["年折耗统计"].indexOf(this.type) > -1) {
+      this.fetchDepletionList();
+      await this.fetchDepletionValue();
+
+      this.initChart();
     }
   },
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("chart4"));
-    if (["本年业务统计", "业务数据统计"].indexOf(this.type) === -1) {
+    if (["实物资产统计"].indexOf(this.type) > -1 && this.physicalType === "0") {
       echarts.dispose(document.getElementById("chart5"));
     }
   },
 
   methods: {
+    async fetchRentValue() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        normType: this.normType,
+      };
+
+      if (this.physicalOption === "0") {
+        options.statisticalDate = localStorage.getItem("assetsType");
+      } else {
+        options.statisticalDate = localStorage.getItem("departName");
+      }
+
+      const { data } = await fetchRentValue(options);
+
+      this.chart2Data = data || [];
+    },
+
+    async fetchRentAmount() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        normType: this.normType,
+      };
+
+      if (this.physicalOption === "0") {
+        options.statisticalDate = localStorage.getItem("assetsType");
+      } else {
+        options.statisticalDate = localStorage.getItem("departName");
+      }
+
+      const { data } = await fetchRentAmount(options);
+
+      this.chart1Data = data || [];
+    },
+
+    async fetchRentList() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        pageNum: this.page.pageNum,
+        pageSize: this.page.pageSize,
+        normType: this.normType,
+        searchYear: localStorage.getItem("assetsType"),
+      };
+
+      const { rows, total } = await fetchRentList(options);
+
+      this.list = rows || [];
+      this.total = total;
+    },
+
+    async fetchDepletionValue() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        normType: this.normType,
+        dimension: localStorage.getItem("dimension"),
+        dictCode: localStorage.getItem("dictCode") || "",
+        searchMonth: localStorage.getItem("assetsType"),
+        groupType: 0,
+      };
+
+      const { data } = await fetchDepletionValue(options);
+
+      this.chart1Data = data || [];
+    },
+
+    async fetchDepletionList() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        pageNum: this.page.pageNum,
+        pageSize: this.page.pageSize,
+        normType: this.normType,
+        dimension: localStorage.getItem("dimension"),
+        dictCode: localStorage.getItem("dictCode") || "",
+        searchMonth: localStorage.getItem("assetsType"),
+      };
+
+      const { rows, total } = await fetchDepletionList(options);
+
+      this.list = rows || [];
+      this.total = total;
+    },
+
+    async fetchProductionList() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        pageNum: this.page.pageNum,
+        pageSize: this.page.pageSize,
+        normType: this.normType,
+        searchMonth: localStorage.getItem("assetsType"),
+      };
+
+      const { rows, total } = await fetchProductionList(options);
+
+      this.list = rows || [];
+      this.total = total;
+    },
+
+    async fetchProductionValue() {
+      const options = {
+        departCode: this.currentDepart.departCode,
+        normType: this.normType,
+        groupType: 0,
+        searchDate: localStorage.getItem("assetsType"),
+      };
+
+      const { data } = await fetchProductionValue(options);
+
+      this.chart1Data = data || [];
+    },
+
     async fetchBusinessAmount() {
       const options = {
         departCode: this.currentDepart.departCode,
-        dimension: 1,
+        normType: this.normType,
       };
 
       if (this.type === "本年业务统计") {
+        options.dimension = localStorage.getItem("dimension");
         if (options.dimension === "0") {
           options.businessType = localStorage.getItem("assetsType");
+        } else if (options.dimension === "1") {
+          options.departName = localStorage.getItem("assetsType");
         }
+      } else if (this.type === "业务数据统计") {
+        options.searchDate = Moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
       }
 
       const { data } = await fetchBusinessAmount(options);
@@ -517,21 +807,23 @@ export default {
      * 资产明细信息列表查询
      */
     async fetchAssetsList() {
-      const option = {
+      const options = {
         departCode: this.currentDepart.departCode,
         pageNum: this.page.pageNum,
         pageSize: this.page.pageSize,
-        normType: 0,
+        normType: this.normType,
       };
 
       if (this.type === "资产总量统计") {
-        option.assetsType = localStorage.getItem("assetsType");
+        options.assetsType = localStorage.getItem("assetsType");
       } else if (this.type === "实物资产统计") {
-        option.realAssets = 1;
-        option.searchYear = localStorage.getItem("assetsType");
+        if (this.physicalType === "0") {
+          options.realAssets = 1;
+          options.searchYear = localStorage.getItem("assetsType");
+        }
       }
 
-      const { rows, total } = await fetchAssetsList(option);
+      const { rows, total } = await fetchAssetsList(options);
 
       this.list = rows || [];
       this.total = total;
@@ -541,23 +833,29 @@ export default {
      * 业务明细列表查询
      */
     async fetchBusinessList() {
-      const option = {
+      const options = {
         departCode: this.currentDepart.departCode,
         pageNum: this.page.pageNum,
         pageSize: this.page.pageSize,
-        normType: 0,
+        normType: this.normType,
       };
 
       if (this.type === "本年业务统计") {
-        option.dimension = localStorage.getItem("dimension");
-        if (option.dimension === "0") {
-          option.businessType = localStorage.getItem("assetsType");
-        } else if (this.type === "业务数据统计") {
-          option.searchDate = new Date();
+        options.dimension = localStorage.getItem("dimension");
+        if (options.dimension === "0") {
+          options.businessType = localStorage.getItem("assetsType");
+        } else if (options.dimension === "1") {
+          options.departName = localStorage.getItem("assetsType");
+        }
+      } else if (this.type === "业务数据统计") {
+        options.searchDate = Moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+      } else if (this.type === "实物资产统计") {
+        if (this.physicalOption === "0") {
+          options.searchYear = localStorage.getItem("assetsType");
         }
       }
 
-      const { rows, total } = await fetchBusinessList(option);
+      const { rows, total } = await fetchBusinessList(options);
 
       this.list = rows || [];
       this.total = total;
@@ -581,14 +879,23 @@ export default {
     async fetchVisualAmountNatureFun() {
       const options = {
         departCode: this.currentDepart.departCode,
-        normType: 0,
+        normType: this.normType,
       };
 
       if (this.type === "资产总量统计") {
         options.assetsType = localStorage.getItem("assetsType");
       } else if (this.type === "实物资产统计") {
-        options.realAssets = 1;
-        options.searchDate = localStorage.getItem("assetsType");
+        if (this.physicalType === "0") {
+          options.realAssets = 1;
+          if (this.physicalOption === "0") {
+            options.searchDate = localStorage.getItem("assetsType");
+          } else {
+            options.departName = localStorage.getItem("assetsType");
+          }
+        } else if (this.physicalType === "2") {
+          options.realAssets = 1;
+          options.searchYear = localStorage.getItem("assetsType");
+        }
       }
 
       const { data } = await fetchAssetsAmount(options);
@@ -604,14 +911,23 @@ export default {
       const options = {
         departCode: this.currentDepart.departCode,
         assetsType: localStorage.getItem("assetsType"),
-        normType: 0,
+        normType: this.normType,
       };
 
       if (this.type === "资产总量统计") {
         options.assetsType = localStorage.getItem("assetsType");
       } else if (this.type === "实物资产统计") {
-        options.realAssets = 1;
-        options.searchDate = localStorage.getItem("assetsType");
+        if (this.physicalType === "0") {
+          options.realAssets = 1;
+          if (this.physicalOption === "0") {
+            options.searchDate = localStorage.getItem("assetsType");
+          } else {
+            options.departName = localStorage.getItem("assetsType");
+          }
+        } else if (this.physicalType === "2") {
+          options.realAssets = 1;
+          options.searchYear = localStorage.getItem("assetsType");
+        }
       }
 
       const { data } = await fetchAssetsValue(options);
@@ -757,6 +1073,7 @@ export default {
         case "实物资产统计":
         case "本年业务统计":
         case "业务数据统计":
+        case "油气产量统计":
           data1 = this.chart1Data.map((item) => {
             return {
               name: item.groupName,
@@ -764,21 +1081,11 @@ export default {
             };
           });
           break;
-        case "房屋面积":
+        case "年折耗统计":
           data1 = this.chart1Data.map((item) => {
             return {
-              name: item.usedNatureName,
-              value: Number(item.landArea),
-            };
-          });
-          break;
-        case "出租总收入":
-        case "租金增长率":
-        case "租金收入占比":
-          data1 = this.chart1Data.map((item) => {
-            return {
-              name: item.rentDepartName,
-              value: Number(item.countValue),
+              name: item.groupName,
+              value: Number(item.groupValue),
             };
           });
           break;
@@ -812,7 +1119,12 @@ export default {
 
       myChart1.setOption(options1);
 
-      if (["本年业务统计"].indexOf(this.type) === -1) {
+      if (
+        ["本年业务统计"].indexOf(this.type) === -1 ||
+        (["实物资产统计"].indexOf(this.type) === -1 &&
+          this.physicalType === "1") ||
+        ["资产总量统计"].indexOf(this.type) === -1
+      ) {
         echarts.dispose(document.getElementById("chart5"));
         const myChart2 = echarts.init(document.getElementById("chart5"));
         let data2 = [];
@@ -824,32 +1136,6 @@ export default {
               return {
                 name: item.groupName,
                 value: Number(item.groupValue),
-              };
-            });
-            break;
-          case "净值":
-            data2 = this.chart2Data.map((item) => {
-              return {
-                name: item.usedNatureName,
-                value: Number(item.nowValue),
-              };
-            });
-            break;
-          case "折旧":
-            data2 = this.chart2Data.map((item) => {
-              return {
-                name: item.usedNatureName,
-                value: Number(item.addDepreciate),
-              };
-            });
-            break;
-          case "出租总收入":
-          case "租金增长率":
-          case "租金收入占比":
-            data2 = this.chart2Data.map((item) => {
-              return {
-                name: item.rentDepartName,
-                value: Number(item.rentMoney),
               };
             });
             break;
@@ -1149,7 +1435,7 @@ export default {
         .table_container {
           width: 100%;
           flex: 1 0;
-          overflow: scroll;
+          overflow: auto;
           min-height: calc(100% - 63px);
 
           table {
