@@ -150,6 +150,7 @@ export default {
     echarts.dispose(
       document.getElementById("asset_classification_statistics2")
     );
+    bus.off('onDepartChange')
   },
   methods: {
     onClickOutside1() {

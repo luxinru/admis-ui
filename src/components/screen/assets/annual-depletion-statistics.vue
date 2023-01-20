@@ -152,6 +152,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("annual_depletion_statistics"));
+    bus.off('onDepartChange')
   },
 
   methods: {

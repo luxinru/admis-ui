@@ -36,32 +36,8 @@
                 :key="index"
               >
                 <img src="@/assets/images/screen/mark.png" alt="" />
-                <span
-                  :title="
-                    [
-                      '资产总量统计',
-                      '实物资产统计',
-                      '本年业务统计',
-                      '业务数据统计',
-                      '油气产量统计',
-                      '年折耗统计',
-                    ].indexOf(type) > -1
-                      ? item.groupName
-                      : item.usedNatureName
-                  "
-                >
-                  {{
-                    [
-                      "资产总量统计",
-                      "实物资产统计",
-                      "本年业务统计",
-                      "业务数据统计",
-                      "油气产量统计",
-                      "年折耗统计",
-                    ].indexOf(type) > -1
-                      ? item.groupName
-                      : item.usedNatureName
-                  }}
+                <span :title="item.groupName">
+                  {{ item.groupName }}
                 </span>
                 <p
                   v-if="
@@ -70,13 +46,17 @@
                       '实物资产统计',
                       '本年业务统计',
                       '业务数据统计',
-                      '油气产量统计',
-                      '年折耗统计',
                     ].indexOf(type) > -1
                   "
                   :title="item.groupCount"
                 >
                   {{ item.groupCount }}
+                </p>
+                <p
+                  v-if="['油气产量统计', '年折耗统计'].indexOf(type) > -1"
+                  :title="item.groupValue"
+                >
+                  {{ item.groupValue }}
                 </p>
               </div>
             </div>
@@ -105,18 +85,8 @@
                 :key="index"
               >
                 <img src="@/assets/images/screen/mark.png" alt="" />
-                <span
-                  :title="
-                    ['资产总量统计', '实物资产统计'].indexOf(type) > -1
-                      ? item.groupName
-                      : item.usedNatureName
-                  "
-                >
-                  {{
-                    ["资产总量统计", "实物资产统计"].indexOf(type) > -1
-                      ? item.groupName
-                      : item.usedNatureName
-                  }}
+                <span :title="item.groupName">
+                  {{ item.groupName }}
                 </span>
                 <p
                   v-if="['资产总量统计', '实物资产统计'].indexOf(type) > -1"
@@ -357,6 +327,72 @@
                   </tr>
                 </tbody>
               </template>
+            </table>
+
+            <table
+              v-else-if="['油气产量统计', '业务数据统计'].indexOf(type) > -1"
+            >
+              <thead>
+                <tr>
+                  <th>业务类型</th>
+                  <th>所属单位</th>
+                  <th>单据编号</th>
+                  <th>资产编码</th>
+                  <th>资产类别编码</th>
+                  <th>资产名称</th>
+                  <th>资产类型</th>
+                  <th>业务状态</th>
+                  <th>变动日期</th>
+                  <th>原值</th>
+                  <th>净值</th>
+                  <th>累计折旧</th>
+                  <th>减值准备</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr v-for="(item, index) in list" :key="index">
+                  <td :title="item.businessType || '-'">
+                    {{ item.businessType || "-" }}
+                  </td>
+                  <td :title="item.departCode || '-'">
+                    {{ item.departCode || "-" }}
+                  </td>
+                  <td :title="item.invoiceNumber || '-'">
+                    {{ item.invoiceNumber || "-" }}
+                  </td>
+                  <td :title="item.assetsCode || '-'">
+                    {{ item.assetsCode || "-" }}
+                  </td>
+                  <td :title="item.contentAssetsCode || '-'">
+                    {{ item.contentAssetsCode || "-" }}
+                  </td>
+                  <td :title="item.assetsName || '-'">
+                    {{ item.assetsName || "-" }}
+                  </td>
+                  <td :title="item.assetsTypeName || '-'">
+                    {{ item.assetsTypeName || "-" }}
+                  </td>
+                  <td :title="item.markStatus || '-'">
+                    {{ item.markStatus || "-" }}
+                  </td>
+                  <td :title="item.varDate || '-'">
+                    {{ item.varDate || "-" }}
+                  </td>
+                  <td :title="item.originalValue || '-'">
+                    {{ item.originalValue || "-" }}
+                  </td>
+                  <td :title="item.nowValue || '-'">
+                    {{ item.nowValue || "-" }}
+                  </td>
+                  <td :title="item.addDepreciate || '-'">
+                    {{ item.addDepreciate || "-" }}
+                  </td>
+                  <td :title="item.devalueValue || '-'">
+                    {{ item.devalueValue || "-" }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
 
             <table v-else-if="['本年业务统计'].indexOf(type) > -1">
@@ -634,6 +670,7 @@ export default {
         this.initChart();
       }
     } else if (["油气产量统计"].indexOf(this.type) > -1) {
+      console.log("this.type :>> ", this.type);
       this.fetchProductionList();
       await this.fetchProductionValue();
 
@@ -928,7 +965,6 @@ export default {
         case "实物资产统计":
         case "本年业务统计":
         case "业务数据统计":
-        case "油气产量统计":
           data1 = this.chart1Data.map((item) => {
             return {
               name: item.groupName,
@@ -936,6 +972,7 @@ export default {
             };
           });
           break;
+        case "油气产量统计":
         case "年折耗统计":
           data1 = this.chart1Data.map((item) => {
             return {
