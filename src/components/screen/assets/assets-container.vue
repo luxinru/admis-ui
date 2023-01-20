@@ -34,7 +34,7 @@
 
           <div class="item" @click="onMapChange()">
             <img src="@/assets/images/screen/icon-7.png" alt="" />
-            <span>{{ this.map }}</span>
+            <span>{{ map }}</span>
           </div>
         </div>
 
@@ -101,6 +101,10 @@ export default {
         : 2
       : 1;
     localStorage.setItem("normType", this.type === 1 ? 0 : 1);
+
+    bus.on("onMapDown", () => {
+      this.map = "四川省";
+    });
   },
 
   methods: {

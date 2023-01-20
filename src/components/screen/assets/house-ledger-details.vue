@@ -26,7 +26,6 @@
             </div>
 
             <div class="chart_box">
-              <div class="bac"></div>
               <div id="chart4" class="chart4"></div>
             </div>
 
@@ -96,7 +95,6 @@
             </div>
 
             <div class="chart_box">
-              <div class="bac"></div>
               <div id="chart5" class="chart4"></div>
             </div>
 
@@ -507,15 +505,6 @@ import Moment from "moment";
 import bus from "vue3-eventbus";
 
 import {
-  fetchVisualList,
-  fetchVisualRentHouse,
-  fetchVisualAmountNature,
-  fetchVisualValueNature,
-  fetchVisualValueRentDepart,
-  fetchVisualAmountRentDepart,
-} from "@/api/screen/house";
-
-import {
   fetchAssetsList,
   fetchAssetsAmount,
   fetchAssetsValue,
@@ -545,7 +534,6 @@ export default {
       total: 0,
       list: [],
       currentDepart: {}, // 当前单位
-      currentHouse: {}, // 当前房屋
       chart1Data: [], // 左侧上边图表
       chart2Data: [], // 左侧下边图表
     };
@@ -588,10 +576,6 @@ export default {
           return "资产分类价值量占比";
         case "实物资产统计":
           return "房屋出租承租单位性质价值量占比";
-        case "净值":
-          return "使用性质分类净值占比";
-        case "折旧":
-          return "使用性质分类折旧占比";
 
         default:
           break;
@@ -630,7 +614,6 @@ export default {
     } else if (["本年业务统计", "业务数据统计"].indexOf(this.type) > -1) {
       this.fetchBusinessList();
       await this.fetchBusinessAmount();
-      // await this.fetchVisualAmountRentDepartFun();
       this.initChart();
     } else if (["实物资产统计"].indexOf(this.type) > -1) {
       if (this.physicalType === "0") {
@@ -648,7 +631,6 @@ export default {
       } else {
         this.fetchBusinessList();
         await this.fetchBusinessAmount();
-        // await this.fetchVisualAmountRentDepartFun();
         this.initChart();
       }
     } else if (["油气产量统计"].indexOf(this.type) > -1) {
@@ -869,7 +851,6 @@ export default {
       if (["资产总量统计", "实物资产统计"].indexOf(this.type) > -1) {
         this.fetchAssetsList();
       } else {
-        this.fetchVisualRentHouseFun();
       }
     },
 
@@ -937,135 +918,9 @@ export default {
       this.chart2Data = data || [];
     },
 
-    /**
-     * 房屋出租承租单位性质数量占比查询
-     */
-    async fetchVisualValueRentDepartFun() {
-      const options = {
-        departCode: this.currentDepart.departCode,
-      };
-
-      if (this.type === "出租总收入" && localStorage.getItem("出租总收入")) {
-        options.statisticalDate = localStorage.getItem("出租总收入");
-      }
-
-      if (
-        (this.type === "租金增长率" || this.type === "租金收入占比") &&
-        localStorage.getItem("租金增长率")
-      ) {
-        options.city = localStorage.getItem("租金增长率");
-      }
-
-      const { data } = await fetchVisualValueRentDepart(options);
-
-      this.chart2Data = data || [];
-    },
-
-    /**
-     * 房屋出租承租单位性质价值量占比查询
-     */
-    async fetchVisualAmountRentDepartFun() {
-      const options = {
-        departCode: this.currentDepart.departCode,
-      };
-
-      if (this.type === "出租总收入" && localStorage.getItem("出租总收入")) {
-        options.statisticalDate = localStorage.getItem("出租总收入");
-      }
-
-      if (
-        (this.type === "租金增长率" || this.type === "租金收入占比") &&
-        localStorage.getItem("租金增长率")
-      ) {
-        options.city = localStorage.getItem("租金增长率");
-      }
-
-      const { data } = await fetchVisualAmountRentDepart(options);
-
-      this.chart1Data = data || [];
-    },
-
     initChart() {
       echarts.dispose(document.getElementById("chart4"));
       const myChart1 = echarts.init(document.getElementById("chart4"));
-      const gradList = [
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#03c",
-          },
-          {
-            offset: 1,
-            color: "#18f",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#46f",
-          },
-          {
-            offset: 1,
-            color: "#4cd",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#3a7",
-          },
-          {
-            offset: 1,
-            color: "#4db",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#03c",
-          },
-          {
-            offset: 1,
-            color: "#9db",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#06b",
-          },
-          {
-            offset: 1,
-            color: "#4bf",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#06b",
-          },
-          {
-            offset: 1,
-            color: "#0bb",
-          },
-        ]),
-
-        new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-          {
-            offset: 0,
-            color: "#8ec",
-          },
-          {
-            offset: 1,
-            color: "#dea",
-          },
-        ]),
-      ];
 
       let data1 = [];
       switch (this.type) {
@@ -1094,25 +949,137 @@ export default {
           break;
       }
 
+      let total = 0;
+      let data = data1.map((item) => item.value);
+      let getsjjg = [">100000", "50000-100000", "10000-50000", "<10000"];
+      let getsjjgrs = data;
+      let syjgdata = [];
+      for (let i in getsjjgrs) {
+        total += getsjjgrs[i];
+      }
+      for (let i = 0; i < getsjjg.length; i++) {
+        syjgdata.push(
+          {
+            name: getsjjg[i],
+            value: getsjjgrs[i],
+          },
+          {
+            value: total / 150,
+            name: "",
+          }
+        );
+      }
+
+      const colorList1 = [
+        ["rgba(0,132,255,1)", "rgba(0,132,255,0.7)"],
+        ["", ""],
+        ["rgba(55,255,201,1)", "rgba(55,255,201,0.7)"],
+        ["", ""],
+        ["rgba(25,214,255,1)", "rgba(25,214,255,0.7)"],
+        ["", ""],
+        ["rgba(255,231,119,1)", "rgba(255,231,119,0.7)"],
+        ["", ""],
+      ];
+
       const options1 = {
+        grid: {
+          left: "0",
+          top: 0,
+          right: "0",
+          bottom: 0,
+        },
+        tooltip: {
+          trigger: "item",
+        },
         series: [
           {
-            name: "数据统计",
+            itemStyle: {
+              normal: {
+                color: "rgba(0,0,0,0.6)",
+              },
+            },
             type: "pie",
+            hoverAnimation: false,
+            radius: ["53%", "62%"],
             center: ["50%", "50%"],
-            radius: ["20%", "75%"],
-            roseType: true,
+            label: {
+              normal: {
+                show: false,
+              },
+            },
+            data: [
+              {
+                value: 1,
+              },
+            ],
+            z: 100,
+          },
+          {
+            itemStyle: {
+              normal: {
+                color: "rgba(0,0,0,0.6)",
+              },
+            },
+            type: "pie",
+            hoverAnimation: false,
+            radius: ["53%", "71%"],
+            center: ["50%", "50%"],
+            label: {
+              normal: {
+                show: false,
+              },
+            },
+            data: [
+              {
+                value: 1,
+              },
+            ],
+            z: 100,
+          },
+          {
             itemStyle: {
               normal: {
                 color: function (params) {
-                  return gradList[params.dataIndex];
+                  if (params.dataIndex == 0) {
+                    return new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                      {
+                        offset: 0,
+                        color: colorList1[params.dataIndex][0],
+                      },
+                      {
+                        offset: 1,
+                        color: colorList1[params.dataIndex][1],
+                      },
+                    ]);
+                  } else {
+                    if (params.dataIndex % 2 == 0) {
+                      return new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                        {
+                          offset: 0,
+                          color: colorList1[params.dataIndex][0],
+                        },
+                        {
+                          offset: 1,
+                          color: colorList1[params.dataIndex][1],
+                        },
+                      ]);
+                    }
+                  }
                 },
               },
+            },
+            labelLine: {
+              show: false,
             },
             label: {
               show: false,
             },
-            data: data1,
+            hoverAnimation: true,
+            type: "pie",
+            radius: ["53%", "80%"],
+            center: ["50%", "50%"],
+            data: syjgdata,
+            z: 10,
           },
         ],
       };
@@ -1144,25 +1111,74 @@ export default {
             break;
         }
 
+        let names = data2.map((item) => item.name);
+        let values = data2.map((item) => item.value);
+
+        let colorList2 = [
+          "rgba(134, 118, 250, 1)",
+          "rgba(254, 69, 114, 1)",
+          "rgba(255, 182, 106, 1)",
+          "rgba(95, 148, 255, 1)",
+          "rgba(96, 218, 170, 1) ",
+        ];
+
+        let leftCenter = ["50%", "50%"];
+        let radius1 = ["60%", "65%"]; // 饼图
+        let radius3 = ["79%", "80%"]; // 线圈
+        // 公用调整-end
+
         const options2 = {
+          tooltip: {
+            trigger: "item",
+          },
           series: [
+            // 左饼图
             {
-              name: "数据统计",
+              // 饼图圈
               type: "pie",
-              center: ["50%", "50%"],
-              radius: ["20%", "75%"],
-              roseType: true,
+              zlevel: 3,
+              radius: radius1,
+              center: leftCenter,
               itemStyle: {
                 normal: {
                   color: function (params) {
-                    return gradList[params.dataIndex];
+                    return colorList2[params.dataIndex];
                   },
                 },
               },
               label: {
                 show: false,
               },
-              data: data2,
+              data: names.map((item, index) => {
+                return {
+                  name: item,
+                  value: values[index],
+                };
+              }),
+            },
+            {
+              // 最外圆圈
+              type: "pie",
+              zlevel: 1,
+              silent: true, //取消高亮
+              radius: radius3,
+              center: leftCenter,
+              itemStyle: {
+                normal: {
+                  color: function (params) {
+                    return colorList2[params.dataIndex];
+                  },
+                },
+              },
+              label: {
+                show: false,
+              },
+              data: names.map((item, index) => {
+                return {
+                  name: item,
+                  value: values[index],
+                };
+              }),
             },
           ],
         };
@@ -1173,40 +1189,6 @@ export default {
 
     onModalClose() {
       bus.emit("onAssetsModalShow", false);
-    },
-
-    /**
-     * 房屋信息台账明细查询
-     */
-    async fetchVisualHouseAccountFun() {
-      const { rows, total } = await fetchVisualList({
-        houseName: "",
-        houseCode: this.currentHouse ? this.currentHouse.id : "",
-        departCode: this.currentDepart.departCode,
-        assetsCode: "",
-        pageNum: this.page.pageNum,
-        pageSize: this.page.pageSize,
-      });
-
-      this.list = rows || [];
-      this.total = total;
-    },
-
-    /**
-     * 房屋出租信息查询
-     */
-    async fetchVisualRentHouseFun() {
-      const { rows, total } = await fetchVisualRentHouse({
-        houseName: "",
-        houseCode: this.currentHouse ? this.currentHouse.id : "",
-        departCode: this.currentDepart.departCode,
-        assetsCode: "",
-        pageNum: this.page.pageNum,
-        pageSize: this.page.pageSize,
-      });
-
-      this.list = rows || [];
-      this.total = total;
     },
   },
 };
@@ -1364,14 +1346,6 @@ export default {
             padding: 5px;
             box-sizing: border-box;
             margin: 10px 0;
-
-            .bac {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              border-radius: 50%;
-              border: 1px dashed rgba(0, 246, 255, 0.2);
-            }
 
             .chart4 {
               position: absolute;

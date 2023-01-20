@@ -23,6 +23,25 @@
       </div>
 
       <div class="content" v-if="isDepartListShow">
+        <template v-if="historyList.length">
+          <section class="road">
+            <span class="sub_title">路径</span>
+            <span
+              class="content_item"
+              :class="{
+                content_item_active:
+                  currentDepart.departCode === item.departCode,
+              }"
+              v-for="(item, index) in historyList"
+              :key="index"
+              @click="onHistoryClick(item, index)"
+            >
+              {{ item.departName || "未命名单位" }}
+            </span>
+          </section>
+          <div class="sub_title">单位列表</div>
+        </template>
+
         <span
           class="content_item"
           :class="{
@@ -96,6 +115,7 @@ export default {
       isDepartListShow: false,
       currentDepart: {},
       getCurrentInstance: getCurrentInstance(),
+      historyList: [],
     };
   },
 
@@ -106,14 +126,21 @@ export default {
   mounted() {
     this.fetchMyrelationListFun();
 
-    bus.on('updateDepart', (departCode) => {
-      sessionStorage.setItem('departCode', departCode)
+    bus.on("updateDepart", (depart) => {
+      this.historyList.push(depart);
+      sessionStorage.setItem("departCode", depart.departCode);
       this.fetchMyrelationListFun();
-    })
+    });
     // bus.emit("onDepartChange", this.currentDepart); // todo
   },
 
   methods: {
+    onHistoryClick(depart, index) {
+      const i = index + 1;
+      console.log("i :>> ", i);
+      this.historyList = this.historyList.splice(0, i);
+      this.onDepartClick(depart, false);
+    },
     /**
      * 点击头部右侧房屋可视化按钮、资产可是换按钮
      */
@@ -153,12 +180,16 @@ export default {
      * 返回首页
      * 传播单位切换事件
      */
-    onDepartClick(depart) {
+    onDepartClick(depart, isClear = true) {
+      if (isClear) {
+        this.historyList = [];
+      }
+
       this.currentDepart = depart;
       this.isDepartListShow = false;
       bus.emit("onTopbarClick", 1);
       localStorage.removeItem("currentHouse");
-      localStorage.setItem('currentDepart', JSON.stringify(depart))
+      localStorage.setItem("currentDepart", JSON.stringify(depart));
       bus.emit("onDepartChange", depart);
     },
 
@@ -169,13 +200,17 @@ export default {
 
       const departCode = sessionStorage.getItem("departCode") || "";
 
-      if (departCode) {
-        const depart = this.departList.find(
-          (item) => item.departCode === departCode
-        );
-        this.currentDepart = depart ? depart : rows[0];
+      if (this.historyList.length) {
+        this.currentDepart = this.historyList[this.historyList.length - 1];
       } else {
-        this.currentDepart = rows[0];
+        if (departCode) {
+          const depart = this.departList.find(
+            (item) => item.departCode === departCode
+          );
+          this.currentDepart = depart ? depart : rows[0];
+        } else {
+          this.currentDepart = rows[0];
+        }
       }
 
       localStorage.setItem("currentDepart", JSON.stringify(this.currentDepart));
@@ -316,6 +351,27 @@ export default {
       padding: 10px 10px;
       box-sizing: border-box;
 
+      .road {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sub_title {
+        width: 100%;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #ffffff;
+        border-bottom: 1px solid rgba(55, 130, 255, 0.2);
+        padding: 10px 10px;
+        box-sizing: border-box;
+        margin-left: 0;
+      }
+
       .content_item {
         width: 100%;
         height: 43px;
@@ -326,7 +382,7 @@ export default {
         font-weight: 400;
         color: #ffffff;
         border-bottom: 1px solid rgba(55, 130, 255, 0.2);
-        padding: 10px 10px;
+        padding: 10px 24px;
         box-sizing: border-box;
         margin-left: 0;
         cursor: pointer;

@@ -1,6 +1,7 @@
 <template>
   <div class="assets_map_root">
-    <img src="@/assets/images/screen/base-1.png" alt="" />
+    <!-- <img src="@/assets/images/screen/base-1.png" alt="" /> -->
+    <img src="@/assets/images/screen/微信图片_20230120181648.png" alt="" />
 
     <div id="mapChart" class="chart"></div>
   </div>
@@ -76,38 +77,17 @@ export default {
   },
 
   methods: {
-    async init(str = '') {
+    async init(str = "") {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
-      const { data: data1 } = await fetchDepartList({
+      const { rows } = await fetchDepartList({
         departCode: depart.departCode,
         // departName: "成都市",
         levelSearch: 0,
       });
 
-      console.log("AssetsMap :>> ", data1);
-      let data = [
-        {
-          departLevel: "2",
-          departCode: "11700",
-          departName: "中国石油西南油气田分公司",
-        },
-        {
-          latitude: 30.6629614,
-          departLevel: "3",
-          departCode: "117000002",
-          departName: "西南油气田/重庆气矿",
-          longitude: 104.0987796,
-        },
-        {
-          latitude: 30.502384,
-          departLevel: "4",
-          departCode: "1170000020001",
-          departName: "西南油气田/重庆气矿/机关",
-          longitude: 104.0638337,
-        },
-      ];
+      let data = rows.filter((item) => item.longitude && item.latitude);
 
-      data = data.filter(item => item.departName.indexOf(str) > -1)
+      data = data.filter((item) => item.departName.indexOf(str) > -1);
 
       if (this.chart) {
         this.chart.dispose(document.getElementById("mapChart"));
@@ -251,16 +231,15 @@ export default {
             data: data.map((item) => {
               return {
                 name: item.departName,
-                departCode: item.departCode,
-                departLevel: item.departLevel,
                 value: [Number(item.longitude), Number(item.latitude)],
                 symbolSize: 50 / Number(item.departLevel),
                 select: {
                   disabled: item.departLevel === "4",
                 },
                 tooltip: {
-                  formatter: '{b}'
-                }
+                  formatter: "{b}",
+                },
+                ...item
               };
             }),
           },
@@ -279,7 +258,7 @@ export default {
           this.$modal
             .confirm("是否更改统计单位？")
             .then(() => {
-              bus.emit('updateDepart', params.data.departCode)
+              bus.emit("updateDepart", params.data);
             })
             .catch(() => {
               this.init();
@@ -406,6 +385,7 @@ export default {
       }
 
       if (echarts.getMap(name) && isChange) {
+        bus.emit("onMapDown");
         this.options.geo.map = name;
         this.options.series[0].map = name;
         this.chart.setOption(this.options);
