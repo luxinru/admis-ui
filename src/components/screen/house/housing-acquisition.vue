@@ -8,320 +8,339 @@
   </div>
 </template>
 
-<script setup name="HousingAcquisition">
+<script>
 import bus from "vue3-eventbus";
 import Box from "./box.vue";
 import { fetchVisualPaper } from "@/api/screen/house";
 
 import * as echarts from "echarts";
 
-const currentDepart = ref({});
+export default {
+  name: "HousingAcquisition",
 
-function onItemClick(value) {
-  localStorage.setItem("tableType", value);
-  bus.emit("onModalShow");
-}
+  components: {
+    Box,
+  },
 
-function initChart(data) {
-  echarts.dispose(document.getElementById("chart6"));
-  const myChart = echarts.init(document.getElementById("chart6"));
-
-  const { housePaperData, housePaperValue } = data;
-  const results = housePaperData.map((item, index) => {
+  data() {
     return {
-      name: item,
-      value: housePaperValue[index],
+      currentDepart: {},
     };
-  });
+  },
 
-  let dataPie2 = results;
-  let dataColor2 = [
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(5, 75, 170, 1)" },
-        { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
-        { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
-        { offset: 1, color: "rgba(11, 151, 232, 1)" },
-      ],
-    },
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(3, 120, 134, 1)" },
-        { offset: 1, color: "rgba(0, 200, 188, 1)" },
-      ],
-    },
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(241, 108, 114, 1)" },
-        { offset: 1, color: "rgba(169, 14, 69, 1)" },
-      ],
-    },
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(5, 75, 170, 1)" },
-        { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
-        { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
-        { offset: 1, color: "rgba(11, 151, 232, 1)" },
-      ],
-    },
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(3, 120, 134, 1)" },
-        { offset: 1, color: "rgba(0, 200, 188, 1)" },
-      ],
-    },
-    {
-      type: "linear",
-      x: 0,
-      x2: 0,
-      y: 1,
-      y2: 0,
-      colorStops: [
-        { offset: 0, color: "rgba(241, 108, 114, 1)" },
-        { offset: 1, color: "rgba(169, 14, 69, 1)" },
-      ],
-    },
-  ];
-  let legendData = [],
-    seriesData = [],
-    radiusValue = 70, // 图形大小
-    total = 0;
-  let startAngle = [];
+  mounted() {
+    bus.on("onDepartChange", (depart) => {
+      this.currentDepart = depart;
+      this.fetchVisualPaperFun();
+    });
 
-  total = dataPie2.reduce((a, c) => a + c.value, 0);
+    const depart = localStorage.getItem("currentDepart")
+      ? JSON.parse(localStorage.getItem("currentDepart"))
+      : "";
 
-  dataPie2.reduce((a, c) => {
-    startAngle.push((a / total) * 360);
-    return a + c.value;
-  }, 0);
-  for (var i = 0; i < dataPie2.length; i++) {
-    legendData.push(dataPie2[i].name);
-    seriesData.push({
-      type: "pie",
-      clockWise: true, //饼图的扇区是否是顺时针排布
-      radius: [radiusValue - 8 * i + "%", radiusValue - 4 - 8 * i + 15 + "%"],
-      center: ["30%", "50%"],
-      label: {
-        normal: {
-          show: false, //隐藏引导线标识
-        },
-      },
-      hoverAnimation: false, //关闭 hover 在扇区上的放大动画效果
-      startAngle: 180 + startAngle[i], //起始角度
-      data: [
+    if (depart) {
+      this.currentDepart = depart;
+      this.fetchVisualPaperFun();
+    }
+  },
+
+  beforeUnmount() {
+    echarts.dispose(document.getElementById("chart6"));
+  },
+
+  methods: {
+    onItemClick(value) {
+      localStorage.setItem("tableType", value);
+      bus.emit("onModalShow");
+    },
+
+    initChart(data) {
+      echarts.dispose(document.getElementById("chart6"));
+      const myChart = echarts.init(document.getElementById("chart6"));
+
+      const { housePaperData, housePaperValue } = data;
+      const results = housePaperData.map((item, index) => {
+        return {
+          name: item,
+          value: housePaperValue[index],
+        };
+      });
+
+      let dataPie2 = results;
+      let dataColor2 = [
         {
-          //透明伞形
-          z: 1,
-          value: total - dataPie2[i].value,
-          tooltip: {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(5, 75, 170, 1)" },
+            { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
+            { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
+            { offset: 1, color: "rgba(11, 151, 232, 1)" },
+          ],
+        },
+        {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(3, 120, 134, 1)" },
+            { offset: 1, color: "rgba(0, 200, 188, 1)" },
+          ],
+        },
+        {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(241, 108, 114, 1)" },
+            { offset: 1, color: "rgba(169, 14, 69, 1)" },
+          ],
+        },
+        {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(5, 75, 170, 1)" },
+            { offset: 0.3, color: "rgba(10, 138, 222, 1)" },
+            { offset: 0.6, color: "rgba(6, 91, 184, 1)" },
+            { offset: 1, color: "rgba(11, 151, 232, 1)" },
+          ],
+        },
+        {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(3, 120, 134, 1)" },
+            { offset: 1, color: "rgba(0, 200, 188, 1)" },
+          ],
+        },
+        {
+          type: "linear",
+          x: 0,
+          x2: 0,
+          y: 1,
+          y2: 0,
+          colorStops: [
+            { offset: 0, color: "rgba(241, 108, 114, 1)" },
+            { offset: 1, color: "rgba(169, 14, 69, 1)" },
+          ],
+        },
+      ];
+      let legendData = [],
+        seriesData = [],
+        radiusValue = 70, // 图形大小
+        total = 0;
+      let startAngle = [];
+
+      total = dataPie2.reduce((a, c) => a + c.value, 0);
+
+      dataPie2.reduce((a, c) => {
+        startAngle.push((a / total) * 360);
+        return a + c.value;
+      }, 0);
+      for (var i = 0; i < dataPie2.length; i++) {
+        legendData.push(dataPie2[i].name);
+        seriesData.push({
+          type: "pie",
+          clockWise: true, //饼图的扇区是否是顺时针排布
+          radius: [
+            radiusValue - 8 * i + "%",
+            radiusValue - 4 - 8 * i + 15 + "%",
+          ],
+          center: ["30%", "50%"],
+          label: {
+            normal: {
+              show: false, //隐藏引导线标识
+            },
+          },
+          hoverAnimation: false, //关闭 hover 在扇区上的放大动画效果
+          startAngle: 180 + startAngle[i], //起始角度
+          data: [
+            {
+              //透明伞形
+              z: 1,
+              value: total - dataPie2[i].value,
+              tooltip: {
+                show: false,
+              },
+              itemStyle: {
+                //设置透明伞形
+                color: "rgba(60, 79, 154, 0.2)", //伞形颜色
+                // borderWidth: 10,
+                // borderColor: 'rgba(60, 79, 154, 0.2)',
+                label: {
+                  show: false,
+                },
+              },
+            },
+            {
+              z: 2,
+              value: dataPie2[i].value,
+              name: dataPie2[i].name,
+
+              itemStyle: {
+                // borderWidth: 10,
+                borderRadius: "50%",
+                // borderColor: dataColor2[i],
+                color: dataColor2[i],
+              },
+            },
+          ],
+        });
+      }
+      seriesData.push(
+        {
+          type: "pie",
+          name: "内层细圆环",
+          radius: ["26%", "27%"],
+          center: ["30%", "50%"],
+          hoverAnimation: false,
+          clockWise: false,
+          itemStyle: {
+            //   opacity: 0.5,
+            color: "rgba(160,160,160,0.5)",
+          },
+          label: {
             show: false,
           },
-          itemStyle: {
-            //设置透明伞形
-            color: "rgba(60, 79, 154, 0.2)", //伞形颜色
-            // borderWidth: 10,
-            // borderColor: 'rgba(60, 79, 154, 0.2)',
-            label: {
-              show: false,
+          data: [100],
+        },
+        {
+          name: "大环",
+          type: "gauge",
+          splitNumber: 15,
+          radius: "27%",
+          center: ["30%", "50%"],
+          startAngle: 90,
+          endAngle: -269.9999,
+          axisLine: {
+            show: false,
+            lineStyle: {
+              opacity: 0.5,
+              color: [[0, "rgba(160,160,160,0.5)"]],
+            },
+          },
+          axisTick: {
+            show: false,
+          },
+          splitLine: {
+            show: true,
+            length: 22,
+            lineStyle: {
+              color: "auto",
+              width: 3.5,
+            },
+          },
+          axisLabel: {
+            show: false,
+          },
+          detail: {
+            show: false,
+          },
+        }
+        // {
+        //   name: "小环",
+        //   type: "gauge",
+        //   splitNumber: 15,
+        //   radius: "32%",
+        //   center: ["25%", "50%"],
+        //   startAngle: 90,
+        //   endAngle: -269.9999,
+        //   axisLine: {
+        //     show: false,
+        //   },
+        //   axisTick: {
+        //     show: true,
+        //     lineStyle: {
+        //       opacity: 0.5,
+        //       color: "rgba(160,160,160,1)",
+        //       width: 3,
+        //     },
+        //     length: 20,
+        //     splitNumber: 5,
+        //   },
+        //   splitLine: {
+        //     show: false,
+        //   },
+        //   axisLabel: {
+        //     show: false,
+        //   },
+        //   detail: {
+        //     show: false,
+        //   },
+        // }
+      );
+
+      myChart.setOption({
+        tooltip: {
+          show: false,
+        },
+        legend: {
+          data: legendData,
+          orient: "vertical",
+          top: "center",
+          right: '5%',
+          itemWidth: 8,
+          itemHeight: 6,
+          selectedMode: false,
+          formatter: function (name) {
+            let target, percent;
+            for (let i = 0; i < dataPie2.length; i++) {
+              if (dataPie2[i].name === name) {
+                target = dataPie2[i].value;
+                percent = ((target / total) * 100).toFixed(2);
+              }
+            }
+            let arr = [
+              "{blue|" + name + "}" + " " + " {white|" + percent + "%}",
+            ];
+            return arr;
+          },
+          textStyle: {
+            color: "#a5dbff",
+            align: "right",
+            rich: {
+              white: {
+                color: "#4bb9f4",
+                align: "right",
+                fontWeight: "bold",
+                fontSize: this.vw(14),
+              },
+              blue: {
+                color: "#fff",
+                align: "left",
+                fontSize: this.vw(12),
+                width: 50,
+              },
             },
           },
         },
-        {
-          z: 2,
-          value: dataPie2[i].value,
-          name: dataPie2[i].name,
-
-          itemStyle: {
-            // borderWidth: 10,
-            borderRadius: "50%",
-            // borderColor: dataColor2[i],
-            color: dataColor2[i],
-          },
-        },
-      ],
-    });
-  }
-  seriesData.push(
-    {
-      type: "pie",
-      name: "内层细圆环",
-      radius: ["26%", "27%"],
-      center: ["30%", "50%"],
-      hoverAnimation: false,
-      clockWise: false,
-      itemStyle: {
-        //   opacity: 0.5,
-        color: "rgba(160,160,160,0.5)",
-      },
-      label: {
-        show: false,
-      },
-      data: [100],
+        series: seriesData,
+      });
     },
-    {
-      name: "大环",
-      type: "gauge",
-      splitNumber: 15,
-      radius: "27%",
-      center: ["30%", "50%"],
-      startAngle: 90,
-      endAngle: -269.9999,
-      axisLine: {
-        show: false,
-        lineStyle: {
-          opacity: 0.5,
-          color: [[0, "rgba(160,160,160,0.5)"]],
-        },
-      },
-      axisTick: {
-        show: false,
-      },
-      splitLine: {
-        show: true,
-        length: 22,
-        lineStyle: {
-          color: "auto",
-          width: 3.5,
-        },
-      },
-      axisLabel: {
-        show: false,
-      },
-      detail: {
-        show: false,
-      },
-    }
-    // {
-    //   name: "小环",
-    //   type: "gauge",
-    //   splitNumber: 15,
-    //   radius: "32%",
-    //   center: ["25%", "50%"],
-    //   startAngle: 90,
-    //   endAngle: -269.9999,
-    //   axisLine: {
-    //     show: false,
-    //   },
-    //   axisTick: {
-    //     show: true,
-    //     lineStyle: {
-    //       opacity: 0.5,
-    //       color: "rgba(160,160,160,1)",
-    //       width: 3,
-    //     },
-    //     length: 20,
-    //     splitNumber: 5,
-    //   },
-    //   splitLine: {
-    //     show: false,
-    //   },
-    //   axisLabel: {
-    //     show: false,
-    //   },
-    //   detail: {
-    //     show: false,
-    //   },
-    // }
-  );
 
-  myChart.setOption({
-    tooltip: {
-      show: false,
+    async fetchVisualPaperFun() {
+      const { data } = await fetchVisualPaper({
+        departCode: this.currentDepart.departCode,
+      });
+
+      this.initChart(data);
     },
-    legend: {
-      data: legendData,
-      orient: "vertical",
-      top: "center",
-      right: 30,
-      itemWidth: 8,
-      itemHeight: 6,
-      selectedMode: false,
-      formatter: function (name) {
-        let target, percent;
-        for (let i = 0; i < dataPie2.length; i++) {
-          if (dataPie2[i].name === name) {
-            target = dataPie2[i].value;
-            percent = ((target / total) * 100).toFixed(2);
-          }
-        }
-        let arr = ["{blue|" + name + "}" + " " + " {white|" + percent + "%}"];
-        return arr;
-      },
-      textStyle: {
-        color: "#a5dbff",
-        align: "right",
-        rich: {
-          white: {
-            color: "#4bb9f4",
-            align: "right",
-            fontWeight: "bold",
-            fontSize: 14,
-          },
-          blue: {
-            color: "#fff",
-            align: "left",
-            fontSize: 12,
-            width: 50,
-          },
-        },
-      },
-    },
-    series: seriesData,
-  });
-}
-
-async function fetchVisualPaperFun() {
-  const { data } = await fetchVisualPaper({
-    departCode: currentDepart.value.departCode,
-  });
-
-  initChart(data);
-}
-
-onMounted(() => {
-  bus.on("onDepartChange", (depart) => {
-    currentDepart.value = depart;
-    fetchVisualPaperFun();
-  });
-
-  const depart = localStorage.getItem("currentDepart")
-    ? JSON.parse(localStorage.getItem("currentDepart"))
-    : "";
-
-  if (depart) {
-    currentDepart.value = depart;
-    fetchVisualPaperFun();
-  }
-});
-
-onBeforeUnmount(() => {
-  echarts.dispose(document.getElementById("chart6"));
-});
+  },
+};
 </script>
 
 <style scoped lang="scss">

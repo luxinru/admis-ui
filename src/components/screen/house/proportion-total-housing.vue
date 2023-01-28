@@ -481,16 +481,7 @@ export default {
       const option = {
         // animation: false,
         tooltip: {
-          formatter: (params) => {
-            if (params.seriesName !== "mouseoutSeries") {
-              return `${
-                params.seriesName
-              }<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
-                params.color
-              };"></span>${option.series[params.seriesIndex].pieData.value}`;
-            }
-            return "";
-          },
+          show: true,
         },
         xAxis3D: {
           min: -2,

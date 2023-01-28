@@ -173,6 +173,10 @@ export default {
     });
   },
 
+  beforeUnmount() {
+    bus.off('onDepartChange')
+  },
+
   methods: {
     onClickOutside1() {
       this.isShow1 = false;

@@ -37,6 +37,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("production_statistics"));
+    bus.off('onDepartChange')
   },
 
   methods: {
@@ -72,7 +73,7 @@ export default {
           top: "0%",
           textStyle: {
             color: "rgba(255, 255, 255, 1)",
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
           icon: "rect",
           itemWidth: 8,
@@ -101,7 +102,7 @@ export default {
               //坐标轴刻度标签的相关设置
               textStyle: {
                 color: "rgba(196, 225, 255, 1)",
-                fontSize: 14,
+                fontSize: this.vw(14),
               },
             },
             splitLine: {
@@ -135,7 +136,7 @@ export default {
             show: false,
           },
           axisLabel: {
-            fontSize: 12,
+            fontSize: this.vw(12),
             color: "rgba(196, 225, 255, 1)",
           },
         },

@@ -107,6 +107,10 @@ export default {
     });
   },
 
+  beforeUnmount () {
+    bus.off('onMapDown')
+  },
+
   methods: {
     onItemClick(value) {
       this.type = value;

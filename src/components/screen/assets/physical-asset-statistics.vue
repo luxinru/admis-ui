@@ -113,6 +113,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("physical_asset_statistics"));
+    bus.off("onDepartChange");
   },
 
   methods: {
@@ -178,7 +179,7 @@ export default {
         },
         xAxis: {
           nameTextStyle: {
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
           axisLine: {
             lineStyle: {
@@ -191,7 +192,7 @@ export default {
           axisLabel: {
             show: true,
             color: "#fff",
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
           data: xData,
         },
@@ -204,12 +205,12 @@ export default {
           axisTick: { show: false },
           nameTextStyle: {
             color: "#fff",
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
           //轴线上的字
           axisLabel: {
             color: "#fff",
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
           axisLine: { show: false },
           //网格线

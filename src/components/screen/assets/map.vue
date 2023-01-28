@@ -29,6 +29,11 @@ export default {
     }
   },
 
+  beforeUnmount() {
+    bus.off('onSearchInputClick')
+    bus.off('onDepartChange')
+  },
+
   methods: {
     initMap() {
       const self = this;

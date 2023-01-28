@@ -241,6 +241,7 @@ export default {
           trigger: "item",
         },
         legend: {
+          type: 'scroll',
           orient: "vertical",
           right: "15%",
           top: "center",
@@ -250,6 +251,7 @@ export default {
           data: data1,
           textStyle: {
             color: "#fff",
+            fontSize: this.vw(12)
           },
           icon: "rect",
         },
@@ -348,7 +350,7 @@ export default {
           name: {
             textStyle: {
               color: "rgba(255, 255, 255, 1)",
-              fontSize: 13,
+              fontSize: this.vw(13),
             },
           },
           axisLine: {

@@ -38,6 +38,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("total_assets_statistics"));
+    bus.off('onDepartChange')
   },
 
   methods: {

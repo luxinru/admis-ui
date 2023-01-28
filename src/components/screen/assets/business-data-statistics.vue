@@ -104,6 +104,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("business_data_statistics"));
+    bus.off('onDepartChange')
   },
 
   methods: {
@@ -143,9 +144,9 @@ export default {
           show: false,
         },
         grid: {
-          top: "4%",
+          top: "6%",
           left: "2%",
-          right: "4%",
+          right: "5%",
           bottom: "5%",
           containLabel: true,
         },
@@ -167,7 +168,7 @@ export default {
               //坐标轴刻度标签的相关设置
               textStyle: {
                 color: "rgba(196, 225, 255, 1)",
-                fontSize: 12,
+                fontSize: this.vw(12),
               },
             },
             splitLine: {
@@ -201,7 +202,7 @@ export default {
             show: false,
           },
           axisLabel: {
-            fontSize: 12,
+            fontSize: this.vw(12),
             color: "rgba(196, 225, 255, 1)",
           },
         },

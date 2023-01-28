@@ -74,6 +74,9 @@ export default {
     if (this.chart) {
       this.chart.dispose(document.getElementById("mapChart"));
     }
+    bus.off('onDepartChange')
+    bus.off('onMapChange')
+    bus.off('onSearchInputBlur')
   },
 
   methods: {

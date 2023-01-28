@@ -152,7 +152,7 @@ export default {
 
   beforeUnmount() {
     echarts.dispose(document.getElementById("annual_depletion_statistics"));
-    bus.off('onDepartChange')
+    bus.off("onDepartChange");
   },
 
   methods: {
@@ -185,7 +185,6 @@ export default {
           this.currentType2.value === "all" ? "" : this.currentType2.value,
         normType: 0, // 0财务准则 1会计准则
       });
-      console.log("data :>> ", data);
 
       data.forEach((item) => {
         this.all += Number(item.cumulativeValue);
@@ -213,26 +212,26 @@ export default {
       };
       const legend = {
         data: ["月计提", "月补提", "累计折旧"],
-        textStyle: { fontSize: 14, color: "#fff" },
+        textStyle: { fontSize: this.vw(12), color: "#fff" },
         itemWidth: 8,
         itemHeight: 4,
         top: "0%",
         right: "2%",
         selectedMode: false,
       };
-      const grid = { top: "20%", left: "15%", right: "6%", bottom: "15%" };
+      const grid = { top: "20%", left: "16%", right: "6%", bottom: "15%" };
       // xAxis
       const xAxis = {
         name: "(月)",
         nameGap: 0,
         nameTextStyle: {
-          fontSize: 12,
+          fontSize: this.vw(12),
           color: "rgba(196, 225, 255, 1)",
         },
         axisTick: { show: false },
         axisLine: { lineStyle: { color: "rgba(87, 107, 139, 0.66)" } },
         axisLabel: {
-          textStyle: { fontSize: 12, color: "rgba(196, 225, 255, 1)" },
+          textStyle: { fontSize: this.vw(12), color: "rgba(196, 225, 255, 1)" },
           interval: 0,
         },
         data: dataArr.xdata,
@@ -247,7 +246,10 @@ export default {
             lineStyle: { color: "rgba(255,255,255, .05)", type: "dashed" },
           },
           axisLabel: {
-            textStyle: { fontSize: 12, color: "rgba(196, 225, 255, 1)" },
+            textStyle: {
+              fontSize: this.vw(12),
+              color: "rgba(196, 225, 255, 1)",
+            },
           },
         },
         {
@@ -257,7 +259,7 @@ export default {
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
-            textStyle: { fontSize: 16, color: "#fff" },
+            textStyle: { fontSize: this.vw(16), color: "#fff" },
             formatter: (params) => {
               return `${params}%`;
             },

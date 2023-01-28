@@ -102,7 +102,7 @@ export default {
           ],
           textStyle: {
             color: "#fff",
-            fontSize: 14,
+            fontSize: this.vw(14),
           },
           itemWidth: 10,
           itemHeight: 10,
@@ -140,6 +140,7 @@ export default {
           },
           axisLabel: {
             color: "rgba(196, 225, 255, 1)",
+            fontSize: this.vw(12),
           },
         },
         yAxis: {
@@ -160,6 +161,7 @@ export default {
           },
           axisLabel: {
             color: "rgba(255, 255, 255, 0.6)",
+            fontSize: this.vw(12),
           },
           /**
            * 坐标轴最大值为数据最大值的1.5倍 为了美观

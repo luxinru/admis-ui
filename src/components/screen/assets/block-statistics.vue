@@ -63,6 +63,8 @@
 import bus from "vue3-eventbus";
 import Box from "../house/box.vue";
 import clickOutSide from "@mahdikhashan/vue3-click-outside";
+import * as echarts from "echarts";
+import "echarts-gl";
 import { fetchBlockCount } from "@/api/screen/assets/index";
 
 import Highcharts from "highcharts/highstock";
@@ -127,6 +129,11 @@ export default {
     });
   },
 
+  beforeUnmount() {
+    bus.off("onDepartChange");
+    echarts.dispose(document.getElementById("container"));
+  },
+
   methods: {
     onClickOutside1() {
       this.isShow1 = false;
@@ -149,6 +156,7 @@ export default {
     },
 
     async init() {
+      const self = this;
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});
       const { data } = await fetchBlockCount({
         departCode: depart.departCode,
@@ -156,76 +164,456 @@ export default {
         normType: this.currentType2, // 0财务准则 1会计准则
       });
 
-      console.log("data :>> ", data);
-
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
       const arr = data.map((item) => {
         return {
-          label: item.groupName,
+          name: item.groupName,
           value: Number(item.groupValue),
         };
       });
-      const self = this;
-      // 初始化 Highcharts 图表
-      this.chart = Highcharts.chart("container", {
-        chart: {
-          type: "pie",
-          backgroundColor: null,
-          options3d: {
-            enabled: true,
-            alpha: 65,
-          },
-        },
-        colors: [
-          "#4b90fe",
-          "#3ad0ff",
-          "#8dfabc",
-          "#ffc178",
-          "#2ba5ea",
-          "#0074ff",
-        ],
-        title: {
-          text: null,
-        },
-        legend: {
-          itemStyle: {
-            color: "#fff",
-          },
-          itemMarginBottom: 10,
-          labelFormatter: function () {
-            /*
-             *  格式化函数可用的变量：this， 可以用 console.log(this) 来查看包含的详细信息
-             *  this 代表当前数据列对象，所以默认的实现是 return this.name
-             */
-            const finded = arr.find((item) => item.label === this.name);
-            return this.name + " " + finded.value;
-          },
-        },
-        plotOptions: {
-          pie: {
-            size: "130%",
-            innerSize: "40%",
-            depth: 45,
-            allowPointSelect: true,
-            cursor: "pointer",
-            dataLabels: {
-              enabled: false,
-            },
-            showInLegend: true,
-          },
-        },
-        series: [
-          {
-            name: "货物金额",
-            data: arr.map((item) => {
-              return [item.label, item.value];
-            }),
-          },
-        ],
+
+      echarts.dispose(document.getElementById("container"));
+      const myChart = echarts.init(document.getElementById("container"));
+      // 传入数据生成 option
+      const option = self.getPie3D(arr, 0.59);
+
+      // 监听鼠标事件，实现饼图选中效果（单选），近似实现高亮（放大）效果。
+      let selectedIndex = "";
+      let hoveredIndex = "";
+
+      // 监听点击事件，实现选中效果（单选）
+      myChart.on("click", function (params) {
+        // 从 option.series 中读取重新渲染扇形所需的参数，将是否选中取反。
+        let isSelected = !option.series[params.seriesIndex].pieStatus.selected;
+        let isHovered = option.series[params.seriesIndex].pieStatus.hovered;
+        let k = option.series[params.seriesIndex].pieStatus.k;
+        let startRatio = option.series[params.seriesIndex].pieData.startRatio;
+        let endRatio = option.series[params.seriesIndex].pieData.endRatio;
+
+        // 如果之前选中过其他扇形，将其取消选中（对 option 更新）
+        if (selectedIndex !== "" && selectedIndex !== params.seriesIndex) {
+          option.series[selectedIndex].parametricEquation =
+            self.getParametricEquation(
+              option.series[selectedIndex].pieData.startRatio,
+              option.series[selectedIndex].pieData.endRatio,
+              false,
+              false,
+              k,
+              option.series[selectedIndex].pieData.value
+            );
+          option.series[selectedIndex].pieStatus.selected = false;
+        }
+
+        // 对当前点击的扇形，执行选中/取消选中操作（对 option 更新）
+        option.series[params.seriesIndex].parametricEquation =
+          self.getParametricEquation(
+            startRatio,
+            endRatio,
+            isSelected,
+            isHovered,
+            k,
+            option.series[selectedIndex].pieData.value
+          );
+        option.series[params.seriesIndex].pieStatus.selected = isSelected;
+
+        // 如果本次是选中操作，记录上次选中的扇形对应的系列号 seriesIndex
+        isSelected ? (selectedIndex = params.seriesIndex) : null;
+
+        // 使用更新后的 option，渲染图表
+        myChart.setOption(option);
       });
+
+      // 监听 mouseover，近似实现高亮（放大）效果
+      myChart.on("mouseover", function (params) {
+        // 准备重新渲染扇形所需的参数
+        let isSelected;
+        let isHovered;
+        let startRatio;
+        let endRatio;
+        let k;
+
+        // 如果触发 mouseover 的扇形当前已高亮，则不做操作
+        if (hoveredIndex === params.seriesIndex) {
+          return;
+
+          // 否则进行高亮及必要的取消高亮操作
+        } else {
+          // 如果当前有高亮的扇形，取消其高亮状态（对 option 更新）
+          if (hoveredIndex !== "") {
+            // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 false。
+            isSelected = option.series[hoveredIndex].pieStatus.selected;
+            isHovered = false;
+            startRatio = option.series[hoveredIndex].pieData.startRatio;
+            endRatio = option.series[hoveredIndex].pieData.endRatio;
+            k = option.series[hoveredIndex].pieStatus.k;
+
+            // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
+            option.series[hoveredIndex].parametricEquation =
+              self.getParametricEquation(
+                startRatio,
+                endRatio,
+                isSelected,
+                isHovered,
+                k,
+                option.series[hoveredIndex].pieData.value
+              );
+            option.series[hoveredIndex].pieStatus.hovered = isHovered;
+
+            // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
+            hoveredIndex = "";
+          }
+
+          // 如果触发 mouseover 的扇形不是透明圆环，将其高亮（对 option 更新）
+          if (params.seriesName !== "mouseoutSeries") {
+            // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
+            isSelected = option.series[params.seriesIndex].pieStatus.selected;
+            isHovered = true;
+            startRatio = option.series[params.seriesIndex].pieData.startRatio;
+            endRatio = option.series[params.seriesIndex].pieData.endRatio;
+            k = option.series[params.seriesIndex].pieStatus.k;
+
+            // 对当前点击的扇形，执行高亮操作（对 option 更新）
+            option.series[params.seriesIndex].parametricEquation =
+              self.getParametricEquation(
+                startRatio,
+                endRatio,
+                isSelected,
+                isHovered,
+                k,
+                option.series[params.seriesIndex].pieData.value + 5
+              );
+            option.series[params.seriesIndex].pieStatus.hovered = isHovered;
+
+            // 记录上次高亮的扇形对应的系列号 seriesIndex
+            hoveredIndex = params.seriesIndex;
+          }
+
+          // 使用更新后的 option，渲染图表
+          myChart.setOption(option);
+        }
+      });
+
+      // 修正取消高亮失败的 bug
+      myChart.on("globalout", function () {
+        let isSelected;
+        let isHovered;
+        let startRatio;
+        let endRatio;
+        let k;
+
+        if (hoveredIndex !== "") {
+          // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
+          isSelected = option.series[hoveredIndex].pieStatus.selected;
+          isHovered = false;
+          k = option.series[hoveredIndex].pieStatus.k;
+          startRatio = option.series[hoveredIndex].pieData.startRatio;
+          endRatio = option.series[hoveredIndex].pieData.endRatio;
+
+          // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
+          option.series[hoveredIndex].parametricEquation =
+            self.getParametricEquation(
+              startRatio,
+              endRatio,
+              isSelected,
+              isHovered,
+              k,
+              option.series[hoveredIndex].pieData.value
+            );
+          option.series[hoveredIndex].pieStatus.hovered = isHovered;
+
+          // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
+          hoveredIndex = "";
+        }
+
+        // 使用更新后的 option，渲染图表
+        myChart.setOption(option);
+      });
+    },
+
+    getPie3D(pieData, internalDiameterRatio) {
+      const self = this;
+      let series = [];
+      let sumValue = 0;
+      let startValue = 0;
+      let endValue = 0;
+      let legendData = [];
+      let k =
+        typeof internalDiameterRatio !== "undefined"
+          ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
+          : 1 / 3;
+
+      // 为每一个饼图数据，生成一个 series-surface 配置
+      for (let i = 0; i < pieData.length; i++) {
+        sumValue += pieData[i].value;
+
+        let seriesItem = {
+          name:
+            typeof pieData[i].name === "undefined"
+              ? `series${i}`
+              : pieData[i].name,
+          type: "surface",
+          parametric: true,
+          wireframe: {
+            show: false,
+          },
+          pieData: pieData[i],
+          pieStatus: {
+            selected: false,
+            hovered: false,
+            k: k,
+          },
+        };
+
+        if (typeof pieData[i].itemStyle != "undefined") {
+          let itemStyle = {};
+
+          typeof pieData[i].itemStyle.opacity != "undefined"
+            ? (itemStyle.opacity = pieData[i].itemStyle.opacity)
+            : null;
+
+          seriesItem.itemStyle = itemStyle;
+        }
+        series.push(seriesItem);
+      }
+
+      // 使用上一次遍历时，计算出的数据和 sumValue，调用 getParametricEquation 函数，
+      // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
+      let linesSeries = [];
+      for (let i = 0; i < series.length; i++) {
+        endValue = startValue + series[i].pieData.value;
+
+        series[i].pieData.startRatio = startValue / sumValue;
+        series[i].pieData.endRatio = endValue / sumValue;
+        series[i].parametricEquation = self.getParametricEquation(
+          series[i].pieData.startRatio,
+          series[i].pieData.endRatio,
+          false,
+          false,
+          k,
+          series[i].pieData.value
+        );
+
+        startValue = endValue;
+        let midRadian =
+          (series[i].pieData.endRatio + series[i].pieData.startRatio) * Math.PI;
+        let posX = Math.cos(midRadian) * (1 + Math.cos(Math.PI / 2));
+        let posY = Math.sin(midRadian) * (1 + Math.cos(Math.PI / 2));
+        let posZ = Math.log(Math.abs(series[i].pieData.value + 1)) * 0.1;
+        let flag =
+          (midRadian >= 0 && midRadian <= Math.PI / 2) ||
+          (midRadian >= (3 * Math.PI) / 2 && midRadian <= Math.PI * 2)
+            ? 1
+            : -1;
+        let endPosArr = [
+          posX * 1.8 + i * 0.1 * flag + (flag < 0 ? -0.5 : 0),
+          posY * 1.8 + i * 0.1 * flag + (flag < 0 ? -0.5 : 0),
+          posZ * 2,
+        ];
+        linesSeries.push(
+          {
+            type: "line3D",
+            data: [[posX, posY, posZ], endPosArr],
+            lineStyle: {
+              opacity: 0,
+            },
+          },
+          {
+            type: "scatter3D",
+            label: {
+              show: false,
+            },
+            symbolSize: 0,
+            data: [
+              {
+                name: series[i].name + "\n" + series[i].pieData.value,
+                value: endPosArr,
+              },
+            ],
+          }
+        );
+        legendData.push(series[i].name);
+      }
+      series = series.concat(linesSeries);
+
+      // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
+      series.push({
+        name: "mouseoutSeries",
+        type: "surface",
+        parametric: true,
+        wireframe: {
+          show: false,
+        },
+        itemStyle: {
+          opacity: 0,
+        },
+        parametricEquation: {
+          u: {
+            min: 0,
+            max: Math.PI * 2,
+            step: Math.PI / 20,
+          },
+          v: {
+            min: 0,
+            max: Math.PI,
+            step: Math.PI / 20,
+          },
+          x: function (u, v) {
+            return Math.sin(v) * Math.sin(u) + Math.sin(u);
+          },
+          y: function (u, v) {
+            return Math.sin(v) * Math.cos(u) + Math.cos(u);
+          },
+          z: function (u, v) {
+            return Math.cos(v) > 0 ? 0.1 : -0.1;
+          },
+        },
+      });
+
+      // 准备待返回的配置项，把准备好的 legendData、series 传入。
+      let option = {
+        //animation: false,
+        legend: {
+          bottom: "10%",
+          data: legendData,
+          itemWidth: 16,
+          itemHeight: 8,
+          textStyle: {
+            color: "#fff",
+            fontSize: this.vw(12),
+          },
+        },
+        tooltip: {
+          formatter: (params) => {
+            if (params.seriesName !== "mouseoutSeries") {
+              return `${
+                params.seriesName
+              }<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
+                params.color
+              };"></span>${option.series[params.seriesIndex].pieData.value}`;
+            }
+          },
+        },
+        xAxis3D: {
+          min: -1,
+          max: 1,
+        },
+        yAxis3D: {
+          min: -1,
+          max: 1,
+        },
+        zAxis3D: {
+          min: -1,
+          max: "dataMax",
+        },
+        grid3D: {
+          show: false,
+          boxHeight: 30,
+          top: "-15%",
+          viewControl: {
+            //3d效果可以放大、旋转等，请自己去查看官方配置
+            alpha: 25,
+            // beta: 40,
+            rotateSensitivity: 0,
+            zoomSensitivity: 0,
+            panSensitivity: 0,
+            autoRotate: false,
+          },
+          //后处理特效可以为画面添加高光、景深、环境光遮蔽（SSAO）、调色等效果。可以让整个画面更富有质感。
+          postEffect: {
+            //配置这项会出现锯齿，请自己去查看官方配置有办法解决
+            enable: true,
+            bloom: {
+              enable: true,
+              bloomIntensity: 0.1,
+            },
+            SSAO: {
+              enable: true,
+              quality: "medium",
+              radius: 2,
+            },
+          },
+        },
+        series: series,
+      };
+      return option;
+    },
+
+    getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h) {
+      // 计算
+      let midRatio = (startRatio + endRatio) / 2;
+
+      let startRadian = startRatio * Math.PI * 2;
+      let endRadian = endRatio * Math.PI * 2;
+      let midRadian = midRatio * Math.PI * 2;
+
+      // 如果只有一个扇形，则不实现选中效果。
+      if (startRatio === 0 && endRatio === 1) {
+        isSelected = false;
+      }
+
+      // 通过扇形内径/外径的值，换算出辅助参数 k（默认值 1/3）
+      k = typeof k !== "undefined" ? k : 1 / 3;
+
+      // 计算选中效果分别在 x 轴、y 轴方向上的位移（未选中，则位移均为 0）
+      let offsetX = isSelected ? Math.cos(midRadian) * 0.1 : 0;
+      let offsetY = isSelected ? Math.sin(midRadian) * 0.1 : 0;
+
+      // 计算高亮效果的放大比例（未高亮，则比例为 1）
+      let hoverRate = isHovered ? 1.05 : 1;
+
+      // 返回曲面参数方程
+      return {
+        u: {
+          min: -Math.PI,
+          max: Math.PI * 3,
+          step: Math.PI / 32,
+        },
+
+        v: {
+          min: 0,
+          max: Math.PI * 2,
+          step: Math.PI / 20,
+        },
+
+        x: function (u, v) {
+          if (u < startRadian) {
+            return (
+              offsetX +
+              Math.cos(startRadian) * (1 + Math.cos(v) * k) * hoverRate
+            );
+          }
+          if (u > endRadian) {
+            return (
+              offsetX + Math.cos(endRadian) * (1 + Math.cos(v) * k) * hoverRate
+            );
+          }
+          return offsetX + Math.cos(u) * (1 + Math.cos(v) * k) * hoverRate;
+        },
+
+        y: function (u, v) {
+          if (u < startRadian) {
+            return (
+              offsetY +
+              Math.sin(startRadian) * (1 + Math.cos(v) * k) * hoverRate
+            );
+          }
+          if (u > endRadian) {
+            return (
+              offsetY + Math.sin(endRadian) * (1 + Math.cos(v) * k) * hoverRate
+            );
+          }
+          return offsetY + Math.sin(u) * (1 + Math.cos(v) * k) * hoverRate;
+        },
+
+        z: function (u, v) {
+          if (u < -Math.PI * 0.5) {
+            return Math.sin(u);
+          }
+          if (u > Math.PI * 2.5) {
+            return Math.sin(u) * h * 0.1;
+          }
+          return Math.sin(v) > 0 ? 1 * h * 0.1 : -1;
+        },
+      };
     },
   },
 };

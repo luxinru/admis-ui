@@ -79,6 +79,10 @@ export default {
     });
   },
 
+  beforeUnmount () {
+    bus.off('onDepartChange')
+  },
+
   methods: {
     async init() {
       const depart = JSON.parse(localStorage.getItem("currentDepart") || {});

@@ -138,6 +138,10 @@ export default {
     });
   },
 
+  beforeUnmount() {
+    bus.off("onDepartChange");
+  },
+
   methods: {
     onOptionsClick2(data) {
       this.currentType2 = data;
@@ -164,9 +168,9 @@ export default {
      * value 表明入口
      */
     onItemClick(data) {
-      localStorage.setItem("assetsTableType", '本年业务统计');
+      localStorage.setItem("assetsTableType", "本年业务统计");
       localStorage.setItem("dimension", this.currentType2.value);
-      localStorage.setItem("assetsType",data.groupName);
+      localStorage.setItem("assetsType", data.groupName);
       bus.emit("onAssetsModalShow", true);
     },
   },

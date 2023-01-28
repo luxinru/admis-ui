@@ -301,12 +301,12 @@ export default {
           textStyle: {
             rich: {
               a: {
-                fontSize: 12,
+                fontSize: this.vw(12),
                 color: "#fff",
                 fontWeight: "normal",
               },
               b: {
-                fontSize: 16,
+                fontSize: this.vw(16),
                 color: "RGBA(77, 174, 244, 1)",
                 fontWeight: "bold",
                 padding: [0, 5, 0, 3],
@@ -346,7 +346,7 @@ export default {
             interval: 0,
             interval: 0,
             rotate: 35,
-            fontSize: 12,
+            fontSize: this.vw(12),
           },
         },
         yAxis: {
@@ -370,6 +370,7 @@ export default {
           axisLabel: {
             color: "rgba(255, 255, 255, 0.6)",
             formatter: "{value}%",
+            fontSize: this.vw(12),
           },
           /**
            * 坐标轴最大值为数据最大值的1.3倍 为了美观
