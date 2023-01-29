@@ -271,6 +271,7 @@ export default {
     overflow: hidden;
 
     .imgs {
+      position: relative;
       width: 129px;
       height: 100%;
       display: flex;
@@ -279,13 +280,16 @@ export default {
 
       img {
         position: absolute;
+        // width: 100%;
 
         &:first-child {
-          margin-top: 20%;
+          width: 100%;
+          top: 55%;
         }
 
         &:last-child {
-          margin-bottom: 20%;
+          width: 76px;
+          top: 15%;
           animation: animation1 5s linear infinite;
         }
       }
