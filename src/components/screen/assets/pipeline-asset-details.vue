@@ -31,14 +31,14 @@
 
             <tbody>
               <tr class="td" v-for="item in list" :key="item.keyCode">
-                <td>{{ item.assetsCode || '-' }}</td>
-                <td>{{ item.assetsName || '-' }}</td>
-                <td>{{ item.assetsTypeName || '-' }}</td>
-                <td>{{ item.addVoucherDate || '-' }}</td>
-                <td>{{ item.originalValue || '-' }}</td>
-                <td>{{ item.nowValue || '-' }}</td>
-                <td>{{ item.addDepreciate || '-' }}</td>
-                <td>{{ item.devalueValue || '-' }}</td>
+                <td>{{ item.assetsCode || "-" }}</td>
+                <td>{{ item.assetsName || "-" }}</td>
+                <td>{{ item.assetsTypeName || "-" }}</td>
+                <td>{{ item.addVoucherDate || "-" }}</td>
+                <td>{{ item.originalValue || "-" }}</td>
+                <td>{{ item.nowValue || "-" }}</td>
+                <td>{{ item.addDepreciate || "-" }}</td>
+                <td>{{ item.devalueValue || "-" }}</td>
               </tr>
             </tbody>
           </table>
@@ -79,8 +79,8 @@ export default {
     });
   },
 
-  beforeUnmount () {
-    bus.off('onDepartChange')
+  beforeUnmount() {
+    bus.off("onDepartChange");
   },
 
   methods: {
@@ -90,10 +90,10 @@ export default {
       const { rows, total } = await fetchAssetsList({
         departCode: depart.departCode,
         pageNum: this.page.pageNum,
-        pageSize: this.page.pageSize
+        pageSize: this.page.pageSize,
       });
       this.list = rows || [];
-      this.total = total
+      this.total = total;
 
       console.log("rows :>> ", rows);
     },
@@ -178,6 +178,7 @@ export default {
         border-collapse: collapse;
         display: flex;
         flex-direction: column;
+        overflow: visible;
         tr {
           width: 100%;
           height: 34px;
@@ -218,7 +219,9 @@ export default {
 
         thead {
           width: 100%;
-          background-color: #153456;
+          position: sticky;
+          background-color: #195198;
+          top: 0;
         }
 
         tbody {

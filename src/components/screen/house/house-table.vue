@@ -751,6 +751,7 @@ export default {
         border-collapse: collapse;
         display: flex;
         flex-direction: column;
+        overflow: visible;
         tr {
           width: 100%;
           height: 34px;
@@ -791,7 +792,9 @@ export default {
 
         thead {
           width: 100%;
-          background-color: #153456;
+          position: sticky;
+          background-color: #195198;
+          top: 0;
         }
 
         tbody {

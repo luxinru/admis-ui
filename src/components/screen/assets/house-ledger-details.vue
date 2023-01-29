@@ -1453,12 +1453,15 @@ export default {
             width: max-content;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             border: 1px solid rgba(57, 158, 233, 0.2);
             border-collapse: collapse;
+            overflow: visible;
 
             thead {
               height: 33px;
+              position: sticky;
+              background-color: #195198;
+              top: 0;
 
               tr {
                 width: max-content;

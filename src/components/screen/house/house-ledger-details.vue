@@ -171,34 +171,10 @@
                 <tr>
                   <th>资产编码</th>
                   <th>资产类型</th>
-                  <th>
-                    资产名称
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    资产类别编码
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    租赁期实际开始日期
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    预计租赁终止日
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
+                  <th>资产名称</th>
+                  <th>资产类别编码</th>
+                  <th>租赁期实际开始日期</th>
+                  <th>预计租赁终止日</th>
                   <th>承租方单位类型</th>
                   <th>承租方单位</th>
                   <th>租赁金额</th>
@@ -243,47 +219,13 @@
                 <tr>
                   <th>资产编码</th>
                   <th>资产类型</th>
-                  <th>
-                    资产名称
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    资产类别编码
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    规格型号
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
-                  <th>
-                    所属单位
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
+                  <th>资产名称</th>
+                  <th>资产类别编码</th>
+                  <th>规格型号</th>
+                  <th>所属单位</th>
                   <th>宗地编码</th>
                   <th>权属情况</th>
-                  <th>
-                    使用权类型
-
-                    <div class="sort">
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                      <img src="@/assets/images/screen/triangular.png" alt="" />
-                    </div>
-                  </th>
+                  <th>使用权类型</th>
                   <th v-if="type === '原值'">原值</th>
                   <th v-if="type === '净值'">净值</th>
                   <th v-if="type === '折旧'">折旧</th>
@@ -364,7 +306,6 @@ import {
   fetchVisualValueRentDepart,
   fetchVisualAmountRentDepart,
 } from "@/api/screen/house";
-
 
 /**
  * 表格弹窗组件
@@ -471,7 +412,7 @@ export default {
       this.initChart();
     }
   },
-  
+
   beforeUnmount() {
     echarts.dispose(document.getElementById("chart4"));
     echarts.dispose(document.getElementById("chart5"));
@@ -937,7 +878,6 @@ export default {
     .table {
       width: 100%;
       flex: 1 0;
-      overflow: hidden;
       display: flex;
       padding: 0 17px;
       box-sizing: border-box;
@@ -1071,12 +1011,15 @@ export default {
             width: max-content;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             border: 1px solid rgba(57, 158, 233, 0.2);
             border-collapse: collapse;
+            overflow: visible;
 
             thead {
               height: 33px;
+              position: sticky;
+              background-color: #195198;
+              top: 0;
 
               tr {
                 width: max-content;
