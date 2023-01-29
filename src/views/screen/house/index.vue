@@ -200,7 +200,49 @@ export default {
     type: {
       handler(newVal) {
         if (newVal === 1) {
+          this.isRightClose = false;
+          this.isLeftClose = false;
           localStorage.removeItem("currentHouse");
+        } else {
+          this.isTableClose = false;
+          this.$nextTick(() => {
+            /**
+             * 点击打开房屋可视化副业时 根据底部表格计算房屋信息、房屋图片高度
+             */
+            const elements =
+              document.getElementsByClassName("rental_info_root");
+            console.log("elements :>> ", elements);
+            if (elements && elements.length) {
+              const element = elements[0];
+              const height = element.clientHeight;
+              const houseTable = document.getElementById("house_table");
+              if (houseTable) {
+                houseTable.style.height = height + "px";
+              }
+
+              const $bottomImgs = document.getElementsByClassName("bottom_img");
+              if ($bottomImgs && $bottomImgs.length) {
+                const $bottomImg = $bottomImgs[0];
+
+                const bottom =
+                  houseTable.clientHeight + $bottomImg.clientHeight;
+
+                const $houseImgs =
+                  document.getElementsByClassName("house_imgs");
+                if ($houseImgs && $houseImgs.length) {
+                  const $houseImg = $houseImgs[0];
+                  $houseImg.style.bottom = bottom + 5 + "px";
+                }
+
+                const $houseInfos =
+                  document.getElementsByClassName("house_info");
+                if ($houseInfos && $houseInfos.length) {
+                  const $houseInfo = $houseInfos[0];
+                  $houseInfo.style.bottom = bottom + 5 + "px";
+                }
+              }
+            }
+          });
         }
       },
       immediate: true,
@@ -219,43 +261,6 @@ export default {
 
     bus.on("onTopbarClick", (value) => {
       self.type = value;
-
-      if (value === 2) {
-        self.isTableClose = false;
-        nextTick(() => {
-          /**
-           * 点击打开房屋可视化副业时 根据底部表格计算房屋信息、房屋图片高度
-           */
-          const elements = document.getElementsByClassName("rental_info_root");
-          if (elements && elements.length) {
-            const element = elements[0];
-            const height = element.clientHeight;
-            const houseTable = document.getElementById("house_table");
-            if (houseTable) {
-              houseTable.style.height = height + "px";
-            }
-
-            const $bottomImgs = document.getElementsByClassName("bottom_img");
-            if ($bottomImgs && $bottomImgs.length) {
-              const $bottomImg = $bottomImgs[0];
-
-              const bottom = houseTable.clientHeight + $bottomImg.clientHeight;
-
-              const $houseImgs = document.getElementsByClassName("house_imgs");
-              if ($houseImgs && $houseImgs.length) {
-                const $houseImg = $houseImgs[0];
-                $houseImg.style.bottom = bottom + 5 + "px";
-              }
-
-              const $houseInfos = document.getElementsByClassName("house_info");
-              if ($houseInfos && $houseInfos.length) {
-                const $houseInfo = $houseInfos[0];
-                $houseInfo.style.bottom = bottom + 5 + "px";
-              }
-            }
-          }
-        });
-      }
     });
 
     bus.on("onHouseInfoOperate", (show) => {
@@ -509,6 +514,7 @@ export default {
 
   .left_close {
     width: 0;
+    // display: none;
   }
 
   .house_imgs {

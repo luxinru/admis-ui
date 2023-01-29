@@ -337,7 +337,10 @@ export default {
         departCode: this.currentDepart.departCode,
       });
 
-      this.initChart(data);
+      // this.initChart(data);
+      this.$nextTick(() => {
+        this.initChart(data);
+      })
     },
   },
 };

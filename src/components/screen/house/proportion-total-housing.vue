@@ -321,7 +321,10 @@ export default {
       });
 
       this.list = data;
-      this.initChart(data);
+      // this.initChart(data);
+      this.$nextTick(() => {
+        this.initChart(data);
+      })
     },
 
     // 生成扇形的曲面参数方程

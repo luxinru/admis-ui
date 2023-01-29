@@ -284,7 +284,10 @@ export default {
         groupType: this.currentType,
       });
 
-      this.initChart(data);
+      // this.initChart(data);
+      this.$nextTick(() => {
+        this.initChart(data);
+      })
     },
   },
 };

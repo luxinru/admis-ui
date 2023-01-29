@@ -55,7 +55,9 @@ export default {
       const { rentalIncome: value } = data;
       this.rentalIncome = Number(value) || 0;
 
-      this.initChart(data);
+      this.$nextTick(() => {
+        this.initChart(data);
+      })
     });
   },
 
