@@ -3,6 +3,13 @@
     <img class="img1" src="@/assets/images/screen/base-1.png" alt="" />
     <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
 
+    <div class="tips">
+      <img src="@/assets/images/screen/light-spot.png" alt="" />
+      <img src="@/assets/images/screen/light-spot.png" alt="" />
+      <img src="@/assets/images/screen/light-spot.png" alt="" />
+      <img src="@/assets/images/screen/light-spot.png" alt="" />
+    </div>
+
     <div id="mapChart" class="chart"></div>
   </div>
 </template>
@@ -436,6 +443,60 @@ export default {
 
     to {
       transform: rotateX(78deg) rotate(360deg);
+    }
+  }
+
+  .tips {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 14.5%;
+    box-sizing: border-box;
+
+    img {
+      &:nth-child(1) {
+        margin-bottom: 13.5%;
+        animation: opacitykf1 2s infinite linear;
+      }
+      &:nth-child(4) {
+        margin-bottom: 13.5%;
+        animation: opacitykf2 2s infinite linear;
+      }
+
+      &:nth-child(2) {
+        margin-bottom: 3.5%;
+        animation: opacitykf2 2s infinite linear;
+      }
+      &:nth-child(3) {
+        margin-bottom: 3.5%;
+        animation: opacitykf1 2s infinite linear;
+      }
+    }
+
+    @keyframes opacitykf1 {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes opacitykf2 {
+      0% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.3;
+      }
     }
   }
 }
