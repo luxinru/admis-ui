@@ -1,7 +1,7 @@
 <template>
   <div class="assets_map_root">
-    <!-- <img src="@/assets/images/screen/base-1.png" alt="" /> -->
-    <img src="@/assets/images/screen/微信图片_20230120181648.png" alt="" />
+    <img class="img1" src="@/assets/images/screen/base-1.png" alt="" />
+    <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
 
     <div id="mapChart" class="chart"></div>
   </div>
@@ -74,9 +74,9 @@ export default {
     if (this.chart) {
       this.chart.dispose(document.getElementById("mapChart"));
     }
-    bus.off('onDepartChange')
-    bus.off('onMapChange')
-    bus.off('onSearchInputBlur')
+    bus.off("onDepartChange");
+    bus.off("onMapChange");
+    bus.off("onSearchInputBlur");
   },
 
   methods: {
@@ -139,8 +139,8 @@ export default {
             },
           },
           roam: true, //设置为false,不启动roam就无所谓缩放拖曳同步了
-          layoutCenter: ["50%", "40%"],
-          layoutSize: "100%",
+          layoutCenter: ["50%", "50%"],
+          layoutSize: "160%",
           itemStyle: {
             normal: {
               color: "#0362bd", //地图块颜色
@@ -242,7 +242,7 @@ export default {
                 tooltip: {
                   formatter: "{b}",
                 },
-                ...item
+                ...item,
               };
             }),
           },
@@ -391,7 +391,7 @@ export default {
         bus.emit("onMapDown");
         this.options.geo.map = name;
         this.options.series[0].map = name;
-        this.chart.setOption(this.options);
+        this.chart.setOption(this.options, true);
       }
     },
   },
@@ -402,12 +402,11 @@ export default {
 .assets_map_root {
   width: 100%;
   height: 100%;
-  background: url("@/assets/images/screen/bj.jpg") no-repeat;
-  background-size: 100% 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto;
 
   .chart {
     position: absolute;
@@ -417,11 +416,27 @@ export default {
     height: 100%;
   }
 
-  img {
+  .img1 {
     position: absolute;
-    width: 1461px;
-    height: 301px;
-    margin-top: 15%;
+    bottom: 0;
+    width: 80%;
+  }
+
+  .img2 {
+    position: absolute;
+    top: 27.5%;
+    width: 73.5%;
+    animation: move 20s infinite linear;
+  }
+
+  @keyframes move {
+    from {
+      transform: rotateX(78deg) rotate(0deg);
+    }
+
+    to {
+      transform: rotateX(78deg) rotate(360deg);
+    }
   }
 }
 </style>

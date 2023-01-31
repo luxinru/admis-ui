@@ -324,7 +324,7 @@ export default {
       // this.initChart(data);
       this.$nextTick(() => {
         this.initChart(data);
-      })
+      });
     },
 
     // 生成扇形的曲面参数方程
@@ -485,6 +485,16 @@ export default {
         // animation: false,
         tooltip: {
           show: true,
+          appendToBody: true,
+          formatter: (params) => {
+            if (params.seriesName !== "mouseoutSeries") {
+              return `${
+                params.seriesName
+              }<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
+                params.color
+              };"></span>${option.series[params.seriesIndex].pieData.value}`;
+            }
+          },
         },
         xAxis3D: {
           min: -2,

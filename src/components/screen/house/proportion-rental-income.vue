@@ -176,7 +176,6 @@ export default {
       areaValue.forEach((item) => {
         max += Number(item);
       });
-      
 
       const colorList1 = [
         "#00A3F0",
@@ -281,12 +280,12 @@ export default {
         ? areaName.map((item, index) => {
             return {
               name:
-                item.length > 3
+                item && item.length > 3
                   ? item.slice(item.length - 3, item.length)
                   : item,
               value: ((Number(areaValue[index]) / max) * 100).toFixed(2),
               label:
-                item.length > 3
+                item && item.length > 3
                   ? item.slice(item.length - 3, item.length)
                   : item,
             };
@@ -464,10 +463,12 @@ export default {
         groupType: this.currentType,
       });
 
+      // console.log('data :>> ', data);
+
       // this.initChart(data);
       this.$nextTick(() => {
         this.initChart(data);
-      })
+      });
     },
   },
 };

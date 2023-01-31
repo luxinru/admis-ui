@@ -158,7 +158,7 @@ export default {
           clockWise: true, //饼图的扇区是否是顺时针排布
           radius: [
             radiusValue - 8 * i + "%",
-            radiusValue - 4 - 8 * i + 15 + "%",
+            radiusValue - 4 - 8 * i + 10 + "%",
           ],
           center: ["30%", "50%"],
           label: {
@@ -222,7 +222,7 @@ export default {
           name: "大环",
           type: "gauge",
           splitNumber: 15,
-          radius: "27%",
+          radius: "15%",
           center: ["30%", "50%"],
           startAngle: 90,
           endAngle: -269.9999,

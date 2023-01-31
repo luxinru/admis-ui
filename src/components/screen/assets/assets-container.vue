@@ -14,6 +14,8 @@
 
     <section class="center">
       <div class="bar">
+        <AssetsMap />
+
         <div class="btns_root">
           <div
             class="item"
@@ -72,6 +74,7 @@ import AssetClassificationStatistics from "./asset-classification-statistics.vue
 import PhysicalAssetStatistics from "./physical-asset-statistics.vue";
 import ProductionStatistics from "./production-statistics.vue";
 import AnnualDepletionStatistics from "./annual-depletion-statistics.vue";
+import AssetsMap from "@/components/screen/assets/assets-map.vue";
 
 export default {
   name: "AssetsContainer",
@@ -85,6 +88,7 @@ export default {
     PhysicalAssetStatistics,
     ProductionStatistics,
     AnnualDepletionStatistics,
+    AssetsMap,
   },
 
   data() {
@@ -107,8 +111,8 @@ export default {
     });
   },
 
-  beforeUnmount () {
-    bus.off('onMapDown')
+  beforeUnmount() {
+    bus.off("onMapDown");
   },
 
   methods: {
@@ -161,7 +165,7 @@ export default {
     margin: 0 13px;
     display: grid;
     grid-template-rows: 600fr 272fr;
-    grid-row-gap: 16px;
+    grid-row-gap: 8px;
     overflow: hidden;
 
     .bar {

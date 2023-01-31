@@ -4,10 +4,6 @@
       <Map />
     </section>
 
-    <section v-if="isLoading && assetsType === 1" class="map">
-      <AssetsMap />
-    </section>
-
     <img class="top" src="@/assets/images/screen/on.png" alt="" />
     <img class="right" src="@/assets/images/screen/图层1000.png" alt="" />
 
@@ -89,7 +85,6 @@ import Map from "@/components/screen/assets/map.vue";
 import Btns from "@/components/screen/assets/btns.vue";
 import AssetsInfo from "@/components/screen/assets/assets-info.vue";
 import AssetsContainer from "@/components/screen/assets/assets-container.vue";
-import AssetsMap from "@/components/screen/assets/assets-map.vue";
 import HouseLedgerDetails from "@/components/screen/assets/house-ledger-details.vue";
 
 import bottomImg from "@/assets/images/screen/bottom.png";
@@ -107,7 +102,6 @@ export default {
     Btns,
     AssetsInfo,
     AssetsContainer,
-    AssetsMap,
     HouseLedgerDetails,
   },
 
@@ -120,7 +114,7 @@ export default {
       isBottomHover: false,
       bottomImg: bottomImg,
       bottomImgActive: bottomImgActive,
-      isShowModal: false
+      isShowModal: false,
     };
   },
 
@@ -151,7 +145,7 @@ export default {
     });
 
     bus.on("onAssetsModalShow", (value) => {
-      console.log('value :>> ', value);
+      console.log("value :>> ", value);
       self.isShowModal = value;
     });
   },
@@ -198,6 +192,9 @@ export default {
 
 <style lang="scss">
 .page_root {
+  background: url("@/assets/images/screen/bj.jpg") no-repeat;
+  background-size: 100% 100%;
+
   ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
