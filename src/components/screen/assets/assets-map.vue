@@ -1,13 +1,15 @@
 <template>
   <div class="assets_map_root">
-    <img class="img1" src="@/assets/images/screen/circle11.png" alt="" />
-    <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
+    <div class="img">
+      <img class="img1" src="@/assets/images/screen/circle11.png" alt="" />
+      <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
 
-    <div class="tips">
-      <img src="@/assets/images/screen/light-spot.png" alt="" />
-      <img src="@/assets/images/screen/light-spot.png" alt="" />
-      <img src="@/assets/images/screen/light-spot.png" alt="" />
-      <img src="@/assets/images/screen/light-spot.png" alt="" />
+      <div class="tips">
+        <img src="@/assets/images/screen/light-spot.png" alt="" />
+        <img src="@/assets/images/screen/light-spot.png" alt="" />
+        <img src="@/assets/images/screen/light-spot.png" alt="" />
+        <img src="@/assets/images/screen/light-spot.png" alt="" />
+      </div>
     </div>
 
     <div id="mapChart" class="chart"></div>
@@ -423,82 +425,92 @@ export default {
     height: 100%;
   }
 
-  .img1 {
+  .img {
     position: absolute;
-    top: 27%;
-    width: 80%;
-    transform: rotateX(78deg)
-  }
-
-  .img2 {
-    position: absolute;
-    top: 27%;
-    width: 80%;
-    animation: move 20s infinite linear;
-  }
-
-  @keyframes move {
-    from {
-      transform: rotateX(78deg) rotate(0deg);
-    }
-
-    to {
-      transform: rotateX(78deg) rotate(360deg);
-    }
-  }
-
-  .tips {
-    position: absolute;
-    bottom: 0;
     width: 100%;
+    height: 100%;
+    top: calc(50% - 156px / 2);
+    overflow: hidden;
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 0 14.5%;
-    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
 
-    img {
-      height: 68px;
-      &:nth-child(1) {
-        margin-bottom: 13.5%;
-        animation: opacitykf1 2s infinite linear;
-      }
-      &:nth-child(4) {
-        margin-bottom: 13.5%;
-        animation: opacitykf2 2s infinite linear;
+    .img1 {
+      position: absolute;
+      width: 80%;
+      transform: rotateX(78deg);
+    }
+
+    .img2 {
+      position: absolute;
+      width: 80%;
+      animation: move 20s infinite linear;
+    }
+
+    @keyframes move {
+      from {
+        transform: rotateX(78deg) rotate(0deg);
       }
 
-      &:nth-child(2) {
-        margin-bottom: 5%;
-        animation: opacitykf2 2s infinite linear;
-      }
-      &:nth-child(3) {
-        margin-bottom: 5%;
-        animation: opacitykf1 2s infinite linear;
+      to {
+        transform: rotateX(78deg) rotate(360deg);
       }
     }
 
-    @keyframes opacitykf1 {
-      0% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.3;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
+    .tips {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14.5%;
+      box-sizing: border-box;
 
-    @keyframes opacitykf2 {
-      0% {
-        opacity: 0.3;
+      img {
+        height: 68px;
+        margin-bottom: 50px;
+        &:nth-child(1) {
+          // margin-bottom: 13.5%;
+          animation: opacitykf1 2s infinite linear;
+        }
+        &:nth-child(4) {
+          // margin-bottom: 13.5%;
+          animation: opacitykf2 2s infinite linear;
+        }
+
+        &:nth-child(2) {
+          margin-top: 18%;
+          animation: opacitykf2 2s infinite linear;
+        }
+        &:nth-child(3) {
+          margin-top: 18%;
+          animation: opacitykf1 2s infinite linear;
+        }
       }
-      50% {
-        opacity: 1;
+
+      @keyframes opacitykf1 {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
       }
-      100% {
-        opacity: 0.3;
+
+      @keyframes opacitykf2 {
+        0% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.3;
+        }
       }
     }
   }
