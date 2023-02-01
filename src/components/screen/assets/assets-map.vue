@@ -474,26 +474,26 @@ export default {
         height: 68px;
         margin-bottom: 50px;
         &:nth-child(1) {
-          left: 14%;
+          left: 13.5%;
           animation: opacitykf1 2s infinite linear;
         }
 
         &:nth-child(2) {
-          left: 26%;
-          margin-top: 10%;
+          left: 25%;
+          margin-top: 10.5%;
           animation: opacitykf2 2s infinite linear;
         }
 
 
         &:nth-child(3) {
-          left: 38%;
-          margin-top: 13%;
+          left: 39%;
+          margin-top: 13.5%;
           animation: opacitykf1 2s infinite linear;
         }
 
         &:nth-child(4) {
           left: 26%;
-          margin-bottom: 15%;
+          margin-bottom: 16%;
           animation: opacitykf2 2s infinite linear;
         }
 
@@ -510,25 +510,25 @@ export default {
         }
 
         &:nth-child(7) {
-          margin-top: 13%;
-          right: 38%;
+          margin-top: 13.5%;
+          right: 39%;
           animation: opacitykf1 2s infinite linear;
         }
 
         &:nth-child(8) {
-          margin-bottom: 15%;
+          margin-bottom: 16%;
           right: 26%;
           animation: opacitykf2 2s infinite linear;
         }
 
         &:nth-child(9) {
-          margin-top: 10%;
-          right: 26%;
+          margin-top: 10.5%;
+          right: 25%;
           animation: opacitykf1 2s infinite linear;
         }
 
         &:nth-child(10) {
-          right: 14%;
+          right: 13.5%;
           animation: opacitykf2 2s infinite linear;
         }
       }
