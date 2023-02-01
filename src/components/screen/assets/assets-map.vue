@@ -451,11 +451,13 @@ export default {
     bottom: 0;
     width: 100%;
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
     padding: 0 14.5%;
     box-sizing: border-box;
 
     img {
+      height: 68px;
       &:nth-child(1) {
         margin-bottom: 13.5%;
         animation: opacitykf1 2s infinite linear;
@@ -466,11 +468,11 @@ export default {
       }
 
       &:nth-child(2) {
-        margin-bottom: 3.5%;
+        margin-bottom: 5%;
         animation: opacitykf2 2s infinite linear;
       }
       &:nth-child(3) {
-        margin-bottom: 3.5%;
+        margin-bottom: 5%;
         animation: opacitykf1 2s infinite linear;
       }
     }
