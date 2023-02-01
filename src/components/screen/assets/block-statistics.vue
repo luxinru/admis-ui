@@ -175,6 +175,7 @@ export default {
       const myChart = echarts.init(document.getElementById("container"));
       // 传入数据生成 option
       const option = self.getPie3D(arr, 0.59);
+      myChart.setOption(option);
 
       // 监听鼠标事件，实现饼图选中效果（单选），近似实现高亮（放大）效果。
       let selectedIndex = "";

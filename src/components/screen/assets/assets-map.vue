@@ -5,10 +5,12 @@
       <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
 
       <div class="tips">
-        <img src="@/assets/images/screen/light-spot.png" alt="" />
-        <img src="@/assets/images/screen/light-spot.png" alt="" />
-        <img src="@/assets/images/screen/light-spot.png" alt="" />
-        <img src="@/assets/images/screen/light-spot.png" alt="" />
+        <img
+          v-for="index in 10"
+          :key="index"
+          src="@/assets/images/screen/light-spot.png"
+          alt=""
+        />
       </div>
     </div>
 
@@ -468,24 +470,66 @@ export default {
       box-sizing: border-box;
 
       img {
+        position: absolute;
         height: 68px;
         margin-bottom: 50px;
         &:nth-child(1) {
-          // margin-bottom: 13.5%;
+          left: 14%;
           animation: opacitykf1 2s infinite linear;
-        }
-        &:nth-child(4) {
-          // margin-bottom: 13.5%;
-          animation: opacitykf2 2s infinite linear;
         }
 
         &:nth-child(2) {
-          margin-top: 18%;
+          left: 26%;
+          margin-top: 10%;
           animation: opacitykf2 2s infinite linear;
         }
+
+
         &:nth-child(3) {
-          margin-top: 18%;
+          left: 38%;
+          margin-top: 13%;
           animation: opacitykf1 2s infinite linear;
+        }
+
+        &:nth-child(4) {
+          left: 26%;
+          margin-bottom: 15%;
+          animation: opacitykf2 2s infinite linear;
+        }
+
+        &:nth-child(5) {
+          left: 38%;
+          margin-bottom: 19%;
+          animation: opacitykf1 2s infinite linear;
+        }
+
+        &:nth-child(6) {
+          right: 38%;
+          margin-bottom: 19%;
+          animation: opacitykf2 2s infinite linear;
+        }
+
+        &:nth-child(7) {
+          margin-top: 13%;
+          right: 38%;
+          animation: opacitykf1 2s infinite linear;
+        }
+
+        &:nth-child(8) {
+          margin-bottom: 15%;
+          right: 26%;
+          animation: opacitykf2 2s infinite linear;
+        }
+
+        &:nth-child(9) {
+          margin-top: 10%;
+          right: 26%;
+          animation: opacitykf1 2s infinite linear;
+        }
+
+        &:nth-child(10) {
+          right: 14%;
+          animation: opacitykf2 2s infinite linear;
         }
       }
 
