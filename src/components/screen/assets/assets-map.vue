@@ -1,6 +1,6 @@
 <template>
   <div class="assets_map_root">
-    <img class="img1" src="@/assets/images/screen/base-1.png" alt="" />
+    <img class="img1" src="@/assets/images/screen/circle11.png" alt="" />
     <img class="img2" src="@/assets/images/screen/circle.png" alt="" />
 
     <div class="tips">
@@ -425,14 +425,15 @@ export default {
 
   .img1 {
     position: absolute;
-    bottom: 0;
+    top: 27%;
     width: 80%;
+    transform: rotateX(78deg)
   }
 
   .img2 {
     position: absolute;
-    top: 27.5%;
-    width: 73.5%;
+    top: 27%;
+    width: 80%;
     animation: move 20s infinite linear;
   }
 
