@@ -149,7 +149,7 @@ export default {
               },
             },
           },
-          roam: true, //设置为false,不启动roam就无所谓缩放拖曳同步了
+          roam: false, //设置为false,不启动roam就无所谓缩放拖曳同步了
           layoutCenter: ["50%", "50%"],
           layoutSize: "160%",
           itemStyle: {
