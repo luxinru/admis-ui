@@ -75,18 +75,19 @@
                       '出租总收入',
                       '租金增长率',
                       '租金收入占比',
+                      '房屋面积',
                     ].indexOf(type) > -1
                   "
                   :title="item.countValue"
                 >
                   {{ item.countValue }}
                 </p>
-                <p
+                <!-- <p
                   v-if="['房屋面积'].indexOf(type) > -1"
                   :title="item.landArea"
                 >
                   {{ item.landArea }}
-                </p>
+                </p> -->
               </div>
             </div>
           </div>
@@ -454,6 +455,7 @@ export default {
       }
 
       const { data } = await fetchVisualAmountNature(options);
+      console.log('data :>> ', data);
 
       this.chart1Data = data || [];
     },
@@ -750,14 +752,25 @@ export default {
      * 房屋信息台账明细查询
      */
     async fetchVisualHouseAccountFun() {
-      const { rows, total } = await fetchVisualList({
+      const options = {
         houseName: "",
-        houseCode: this.currentHouse ? this.currentHouse.id : "",
+        houseCode: this.currentHouse ? this.currentHouse.keyCode : "",
         departCode: this.currentDepart.departCode,
         assetsCode: "",
         pageNum: this.page.pageNum,
         pageSize: this.page.pageSize,
-      });
+      }
+
+      if (this.type === "房屋分类占比") {
+        const type = localStorage.getItem('tableOptionType')
+        if (type === '0') {
+          options.city = localStorage.getItem('tableValue')
+        } else {
+          options.departName = localStorage.getItem('tableValue')
+        }
+      }
+
+      const { rows, total } = await fetchVisualList(options);
 
       this.list = rows || [];
       this.total = total;
@@ -769,7 +782,7 @@ export default {
     async fetchVisualRentHouseFun() {
       const { rows, total } = await fetchVisualRentHouse({
         houseName: "",
-        houseCode: this.currentHouse ? this.currentHouse.id : "",
+        houseCode: this.currentHouse ? this.currentHouse.keyCode : "",
         departCode: this.currentDepart.departCode,
         assetsCode: "",
         pageNum: this.page.pageNum,

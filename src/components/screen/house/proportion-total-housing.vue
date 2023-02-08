@@ -166,6 +166,11 @@ export default {
      * value 表明入口
      */
     onItemClick(value) {
+      if (this.currentType === 0) {
+        localStorage.setItem("city", value);
+      } else {
+        localStorage.setItem("departName", value);
+      }
       localStorage.setItem("tableType", value);
       bus.emit("onModalShow");
     },
@@ -309,7 +314,8 @@ export default {
       });
 
       myChart.on("click", (params) => {
-        console.log("params :>> ", params.seriesName);
+        localStorage.setItem('tableOptionType', this.currentType)
+        localStorage.setItem('tableValue', params.seriesName)
         this.onItemClick("房屋分类占比");
       });
     },

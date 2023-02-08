@@ -102,211 +102,212 @@
           <div class="details">
             <div class="item">
               <span class="label"> 省(直辖市) </span>
-              <span class="value" title="四川省">
-                <!-- {{ item.province || "-" }} -->
-                四川省
+              <span class="value" :title="currentHouse.province || '-'">
+                {{ currentHouse.province || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 市 </span>
-              <span class="value" title="遂宁市">
-                <!-- {{ item.city || "-" }} -->
-                遂宁市
+              <span class="value" :title="currentHouse.city || '-'">
+                {{ currentHouse.city || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 区(县) </span>
-              <span class="value" title="船山区">
-                <!-- {{ item.county || "-" }} -->
-                船山区
+              <span class="value" :title="currentHouse.county || '-'">
+                {{ currentHouse.county || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 房屋结构 </span>
-              <span class="value" title="钢混">
-                <!-- {{ item.houseStructureName || "-" }} -->
-                钢混
+              <span
+                class="value"
+                :title="currentHouse.houseStructureName || '-'"
+              >
+                {{ currentHouse.houseStructureName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 建筑面积 </span>
-              <span class="value" title="2308㎡">
-                <!-- {{ item.buildArea || "-" }} -->
-                2308㎡
+              <span class="value" :title="(currentHouse.buildArea || '-') + '㎡'">
+                {{ currentHouse.buildArea || "-" }}㎡
               </span>
             </div>
             <div class="item">
               <span class="label"> 地上总层 </span>
-              <span class="value" :title="'-'">
-                <!-- {{ item.floorsUpName || "-" }} -->
-                -
+              <span class="value" ::title="currentHouse.floorsUpName || '-'">
+                {{ currentHouse.floorsUpName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 地下总层 </span>
-              <span class="value" :title="'-'">
-                <!-- {{ item.floorsDownName || "-" }} -->
-                -
+              <span class="value" ::title="currentHouse.floorsDownName || '-'">
+                {{ currentHouse.floorsDownName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 备注 </span>
-              <span class="value" :title="'0'">
-                <!-- {{ item.remark || "-" }} -->
-                0
+              <span class="value" ::title="currentHouse.remark || '-'">
+                {{ currentHouse.remark || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 资产编号 </span>
-              <span class="value" title="101000011464">
-                <!-- {{ item.assetsCode || "-" }} -->
-                101000011464
+              <span class="value" :title="currentHouse.assetsCode || '-'">
+                {{ currentHouse.assetsCode || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 资产名称 </span>
-              <span class="value" title="二井沟通讯站房屋">
-                <!-- {{ item.assetsName || "-" }} -->
-                二井沟通讯站房屋
+              <span class="value" :title="currentHouse.assetsName || '-'">
+                {{ currentHouse.assetsName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 计量单位 </span>
-              <span class="value" title="台">
-                <!-- {{ item.unitCodeName || "-" }} -->
-                台
+              <span class="value" :title="currentHouse.unitCodeName || '-'">
+                {{ currentHouse.unitCodeName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 贮存数量 </span>
-              <span class="value" :title="'-'">
+              <span class="value" ::title="'-'">
                 {{ "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 投产日期 </span>
-              <span class="value" title="1990-12-30">
-                <!-- {{ item.operateDate || "-" }} -->
-                1990-12-30
+              <span class="value" :title="currentHouse.operateDate || '-'">
+                {{ currentHouse.operateDate || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 规格型号 </span>
-              <span class="value" title="混合结枸(4栋)">
-                <!-- {{ item.assetsStandard || "-" }} -->
-                混合结枸(4栋)
+              <span class="value" :title="currentHouse.assetsStandard || '-'">
+                {{ currentHouse.assetsStandard || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 原值 </span>
-              <span class="value" title="2992877.13">
-                <!-- {{ item.originalValue || "-" }} -->
-                2992877.13
+              <span class="value" :title="currentHouse.originalValue || '-'">
+                {{ currentHouse.originalValue || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 净值 </span>
-              <span class="value" title="1699307.43">
-                <!-- {{ item.nowValue || "-" }} -->
-                1699307.43
+              <span class="value" :title="currentHouse.nowValue || '-'">
+                {{ currentHouse.nowValue || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 已提减值准备 </span>
-              <span class="value" title="1549663.57">
-                <!-- {{ item.devalueValue || "-" }} -->
-                1549663.57
+              <span class="value" :title="currentHouse.devalueValue || '-'">
+                {{ currentHouse.devalueValue || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 宗地编码 </span>
-              <span class="value" title="010616015">
-                <!-- {{ item.parcelCode || "-" }} -->
-                010616015
+              <span class="value" :title="currentHouse.parcelCode || '-'">
+                {{ currentHouse.parcelCode || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 权属状况 </span>
-              <span class="value" title="土地登记">
-                <!-- {{ item.ownershipConditionName || "-" }} -->
-                土地登记
+              <span
+                class="value"
+                :title="currentHouse.ownershipConditionName || '-'"
+              >
+                {{ currentHouse.ownershipConditionName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 使用权资产 </span>
-              <span class="value" title="划拨">
-                <!-- {{ item.usedrightTypeName || "-" }} -->
-                划拨
+              <span
+                class="value"
+                :title="currentHouse.usedrightTypeName || '-'"
+              >
+                {{ currentHouse.usedrightTypeName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 土地面积 </span>
-              <span class="value" title="4935.7">
-                <!-- {{ item.landArea || "-" }} -->
-                4935.7
+              <span class="value" :title="currentHouse.landArea || '-'">
+                {{ currentHouse.landArea || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 土地证号 </span>
-              <span class="value" title="川国用（96）018572号">
-                <!-- {{ item.landCertificateNo || "-" }} -->
-                川国用（96）018572号
+              <span
+                class="value"
+                :title="currentHouse.landCertificateNo || '-'"
+              >
+                {{ currentHouse.landCertificateNo || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 土地使用人 </span>
-              <span class="value" title="川中油气公司（通信公司）">
-                <!-- {{ item.landUsedHolder || "-" }} -->
-                川中油气公司（通信公司）
+              <span class="value" :title="currentHouse.landUsedHolder || '-'">
+                {{ currentHouse.landUsedHolder || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 房产证号 </span>
-              <span class="value" :title="'-'">
-                <!-- {{ item.houseCertificateNo || "-" }} -->
-                -
+              <span
+                class="value"
+                ::title="currentHouse.houseCertificateNo || '-'"
+              >
+                {{ currentHouse.houseCertificateNo || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 证载所有权人 </span>
-              <span class="value" :title="'-'">
-                <!-- {{ item.certificateHolder || "-" }} -->
-                -
+              <span
+                class="value"
+                ::title="currentHouse.certificateHolder || '-'"
+              >
+                {{ currentHouse.certificateHolder || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 办证情况 </span>
-              <span class="value" :title="'无法办理'">
-                <!-- {{ item.certificateHandlingName || "-" }} -->
-                无法办理
+              <span
+                class="value"
+                ::title="currentHouse.certificateHandlingName || '-'"
+              >
+                {{ currentHouse.certificateHandlingName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 记账是否相符 </span>
-              <span class="value" :title="'否'">
-                <!-- {{ item.bookkeeping || "-" }} -->
-                否
+              <span class="value" ::title="currentHouse.bookkeeping || '-'">
+                {{ currentHouse.bookkeeping || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 无证原因 </span>
-              <span class="value" title="单位自行修建无地方建设批文">
-                <!-- {{ item.noCertificateReason || "-" }} -->
-                单位自行修建无地方建设批文
+              <span
+                class="value"
+                :title="currentHouse.noCertificateReason || '-'"
+              >
+                {{ currentHouse.noCertificateReason || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 管理单位情况 </span>
-              <span class="value" title="四川石油管理局/矿服/川中公管中心">
-                <!-- {{ item.managerDepartThreeName || "-" }} -->
-                四川石油管理局/矿服/川中公管中心
+              <span
+                class="value"
+                :title="currentHouse.managerDepartThreeName || '-'"
+              >
+                {{ currentHouse.managerDepartThreeName || "-" }}
               </span>
             </div>
             <div class="item">
               <span class="label"> 使用单位情况 </span>
-              <span class="value" title="四川石油管理局/矿服/川中公管中心">
-                <!-- {{ item.usedDepartThreeName || "-" }} -->
-                四川石油管理局/矿服/川中公管中心
+              <span
+                class="value"
+                :title="currentHouse.usedDepartThreeName || '-'"
+              >
+                {{ currentHouse.usedDepartThreeName || "-" }}
               </span>
             </div>
           </div>
@@ -470,6 +471,7 @@ export default {
         pageSize: 20,
       },
       total: 0,
+      currentHouse: {},
     };
   },
 
@@ -491,7 +493,8 @@ export default {
 
       this.list = [];
       const depart = JSON.parse(localStorage.getItem("currentDepart"));
-      const house = JSON.parse(localStorage.getItem("currentHouse"));
+      this.currentHouse =
+        JSON.parse(localStorage.getItem("currentHouse")) || {};
       /**
        * 根据不同的tab调不同的方法
        */
@@ -499,7 +502,7 @@ export default {
         case 1:
           // 房屋信息查询接口
           const { rows: rows1, total: total1 } = await fetchVisualList({
-            parentHouseCode: house.id,
+            houseCode: this.currentHouse.keyCode,
             pageNum: this.page.pageNum,
             pageSize: this.page.pageSize,
           });
@@ -509,7 +512,7 @@ export default {
         case 2:
           // todo 不请求接口，后续客户自己调整
           // const { rows: rows4, total: total4 } = await fetchVisualList({
-          //   houseCode: house.id,
+          //   houseCode: house.keyCode,
           //   pageNum: this.page.pageNum,
           //   pageSize: this.page.pageSize,
           // });
@@ -519,7 +522,7 @@ export default {
         case 3:
           // 获取房屋图片信息
           const { rows: rows5, total: total5 } = await fetchListFilesByKeyCode({
-            keyCode: house.keyCode,
+            keyCode: this.currentHouse.keyCode,
           });
           this.list = rows5 || [];
           this.total = total5 || 0;
@@ -527,7 +530,7 @@ export default {
         case 4:
           // 房屋出租信息查询接口
           const { rows: rows2, total: total2 } = await fetchVisualRentHouse({
-            houseCode: house.id,
+            houseCode: this.currentHouse.keyCode,
             pageNum: this.page.pageNum,
             pageSize: this.page.pageSize,
           });
@@ -537,7 +540,7 @@ export default {
         case 5:
           // 房屋改造信息接口
           const { rows: rows3, total: total3 } = await fetchVisualReformHouse({
-            houseCode: house.id,
+            houseCode: this.currentHouse.keyCode,
             pageNum: this.page.pageNum,
             pageSize: this.page.pageSize,
           });
@@ -822,8 +825,11 @@ export default {
         overflow-x: hidden;
 
         .item {
+          width: 100%;
+          height: 30px;
           display: flex;
           align-items: center;
+          overflow: hidden;
 
           .label {
             width: 90px;
