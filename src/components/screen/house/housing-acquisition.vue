@@ -1,7 +1,7 @@
 <template>
   <div class="housing_acquisition_root">
     <Box title="房产证取得情况">
-      <div class="container" @click="onItemClick('房屋取得情况')">
+      <div class="container">
         <div id="chart6" class="chart6"></div>
       </div>
     </Box>
@@ -329,6 +329,11 @@ export default {
           },
         },
         series: seriesData,
+      });
+
+      myChart.on("click", (params) => {
+        console.log('params :>> ', params);
+        this.onItemClick("房屋取得情况");
       });
     },
 
