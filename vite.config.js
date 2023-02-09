@@ -56,10 +56,10 @@ export default defineConfig(({ mode, command }) => {
       open: true,
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
-        '/dev-api': {
+        '/prod-api': {
           // target: 'http://192.168.0.5:23161',
           //target: 'http://localhost:8010',
-           target: 'http://weiapp.pw:23068',
+           target: 'http://weiapp.pw:23061',
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/dev-api/, '')
         }

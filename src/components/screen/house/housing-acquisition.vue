@@ -62,7 +62,7 @@ export default {
       const results = housePaperData.map((item, index) => {
         return {
           name: item,
-          value: housePaperValue[index],
+          value: Number(housePaperValue[index]),
         };
       });
 
@@ -145,7 +145,9 @@ export default {
         total = 0;
       let startAngle = [];
 
-      total = dataPie2.reduce((a, c) => a + c.value, 0);
+      results.forEach(item => {
+        total += item.value
+      });
 
       dataPie2.reduce((a, c) => {
         startAngle.push((a / total) * 360);
@@ -333,6 +335,7 @@ export default {
 
       myChart.on("click", (params) => {
         console.log('params :>> ', params);
+        localStorage.setItem('tableValue', params.name)
         this.onItemClick("房屋取得情况");
       });
     },
